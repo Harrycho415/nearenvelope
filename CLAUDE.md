@@ -72,7 +72,7 @@ nearenvelope/
 | **C — Frontend Core** | 지갑, 체인 계층, 내 봉투/채우기/보내기/열기 | `frontend/src/lib/near/**`, `app/` 중 `/`, `/envelopes/**`, `/send/**`, `components/ui/**` |
 | **D — Frontend Experience & Delivery** | 봉투 디자인, 강화 화면·연출, 배포, README, 데모 | `components/envelope/**`, `app/enhance/**`, `public/**`, `scripts/**`, `README.md` |
 
-> 실제 이름/GitHub 아이디는 `.github/CODEOWNERS`에 기입한다.
+> 머지 승인권자는 역할과 관계없이 **@Harrycho415 한 명**이다 (`.github/CODEOWNERS`).
 
 **규칙**
 - 남의 소유 파일은 수정하지 않는다. 필요하면 소유자에게 요청하거나, PR에 소유자를 리뷰어로 지정한다.
@@ -92,8 +92,8 @@ nearenvelope/
 - 커밋 메시지: Conventional Commits. `feat(contract): add enhance probability table`
 - PR
   - **Squash merge**만 사용. PR 제목이 곧 main의 커밋 메시지.
-  - 자기 소유 파일만 바꾼 PR: CI 통과 + 아무나 1명 승인 → 머지.
-  - 공유 파일을 바꾼 PR: 관련 영역 소유자 전원 승인 필요.
+  - 모든 PR: CI 통과 + **@Harrycho415 승인** → 머지. 다른 팀원 리뷰는 권장하지만 머지 조건은 아니다.
+  - 공유 파일을 바꾼 PR은 관련 영역 담당자도 리뷰어로 지정해 내용을 확인받는다.
   - PR 템플릿(`.github/pull_request_template.md`)의 체크리스트를 채운다.
 - 충돌이 나면 **나중에 머지하는 사람**이 rebase로 해결한다. 남의 코드를 지워서 해결하지 않는다.
 
@@ -104,7 +104,7 @@ nearenvelope/
 1. 메서드 시그니처·인자·반환 JSON·이벤트를 바꾸려면 **하나의 PR에서 함께** 수정한다:
    `docs/INTERFACE.md` + `contracts/envelope/src/types.rs` + `frontend/src/lib/near/types.ts` (+ `mock.ts`)
 2. PR 제목에 `[interface]` 접두어를 붙이고 팀 채널에 공지한다.
-3. A·B 중 1명 + C 승인 후 머지한다.
+3. A·B 중 1명과 C가 리뷰한 뒤 @Harrycho415 승인으로 머지한다.
 4. 추가(필드/메서드 신규)는 언제든 가능. **삭제·이름 변경은 11/13 00:00 KST 이후 금지.**
 
 ## 6. 환경
