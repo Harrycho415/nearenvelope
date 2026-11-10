@@ -32,3 +32,9 @@ export function displayName(accountId: string): string {
   const name = accountId.split(".")[0];
   return name.length > 16 ? shortAccount(accountId) : name.charAt(0).toUpperCase() + name.slice(1);
 }
+
+const ACCOUNT_ID_RE = /^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$/;
+
+/** NEAR 계정 ID 형식 검사 (존재 여부는 api.accountExists) */
+export const isValidAccountId = (accountId: string) =>
+  accountId.length >= 2 && accountId.length <= 64 && ACCOUNT_ID_RE.test(accountId);

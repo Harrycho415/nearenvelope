@@ -3,6 +3,7 @@
 // 소유자: C (인터페이스 변경 시 types.ts와 함께 갱신)
 
 import { NFT_CONTRACT_ID } from "./config";
+import { isValidAccountId, nearToYocto } from "./format";
 import type { EnvelopeApi, EnvelopeView, MissionId, Rarity, VaultBalances } from "./types";
 
 /** 지갑이 연결되면 setMockAccount로 실제 계정으로 바뀐다. 시드 봉투도 그 계정 소유가 된다. */
@@ -15,6 +16,14 @@ const rarityOf = (level: number): Rarity =>
   level <= 3 ? "Basic" : level <= 6 ? "Rare" : level <= 9 ? "Epic" : "Legendary";
 
 const delay = () => new Promise<void>((r) => setTimeout(r, 400));
+
+/** 연결된 지갑의 목업 잔액 (25 NEAR, 124.32 USDC) */
+const walletBalance: VaultBalances = { near: nearToYocto("25"), usdc: "124320000" };
+
+function spend(key: keyof VaultBalances, amount: bigint) {
+  if (BigInt(walletBalance[key]) < amount) throw new Error("ERR_INSUFFICIENT_BALANCE");
+  walletBalance[key] = (BigInt(walletBalance[key]) - amount).toString();
+}
 
 const envelopes = new Map<string, EnvelopeView>();
 const balances = new Map<string, VaultBalances>();
@@ -116,6 +125,8 @@ export const mockApi: EnvelopeApi = {
     check_in_cooldown_ms: 600_000,
   }),
   vaultBalances: async (vaultId) => (await delay(), balances.get(vaultId) ?? { near: "0", usdc: "0" }),
+  walletBalances: async () => (await delay(), { ...walletBalance }),
+  accountExists: async (accountId) => (await delay(), isValidAccountId(accountId)),
 
   mint: async (design) => {
     await delay();
@@ -171,5 +182,18 @@ export const mockApi: EnvelopeApi = {
     if (Date.now() - e.last_check_in_ms < 600_000) throw new Error("ERR_CHECK_IN_COOLDOWN");
     e.last_check_in_ms = Date.now();
     e.enhance_tickets += 1;
+  },
+  sealAndSend: async ({ tokenId, vaultId, near, usdc, receiverId, message }) => {
+    await delay();
+    const e = owned(tokenId);
+    if (message && [...message].length > 280) throw new Error("ERR_MESSAGE_TOO_LONG");
+    for (const [key, amount] of [["near", BigInt(near)], ["usdc", BigInt(usdc)]] as const) {
+      if (amount === BigInt(0)) continue;
+      spend(key, amount);
+      addBalance(vaultId, key, amount);
+      grant(e, "FirstFill");
+    }
+    transfer(e, receiverId, message || null);
+    return null;
   },
 };

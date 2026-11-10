@@ -2,6 +2,7 @@ export const NETWORK = (process.env.NEXT_PUBLIC_NETWORK ?? "testnet") as "testne
 export const NFT_CONTRACT_ID = process.env.NEXT_PUBLIC_NFT_CONTRACT_ID ?? "nearenvelope.testnet";
 export const FT_CONTRACT_ID = process.env.NEXT_PUBLIC_FT_CONTRACT_ID ?? "usdc.nearenvelope.testnet";
 export const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL ?? "https://test.rpc.fastnear.com";
+export const EXPLORER_URL = NETWORK === "mainnet" ? "https://nearblocks.io" : "https://testnet.nearblocks.io";
 export const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true";
 
 export const FT_DECIMALS = 6;

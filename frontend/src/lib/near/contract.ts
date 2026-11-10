@@ -5,33 +5,42 @@ import type { Wallet } from "@near-wallet-selector/core";
 import { actionCreators } from "@near-js/transactions";
 
 import { FT_CONTRACT_ID, GAS_TGAS, NFT_CONTRACT_ID, ONE_YOCTO, RPC_URL } from "./config";
+import { nearToYocto } from "./format";
 import type { ContractConfig, EnhanceResult, EnvelopeApi, EnvelopeView } from "./types";
 
 const TGAS = BigInt(10 ** 12);
+const STORAGE_PRICE_PER_BYTE = BigInt(10 ** 19);
+/** 지갑 잔액에서 가스용으로 남겨 두는 NEAR */
+const GAS_RESERVE = BigInt(nearToYocto("0.05"));
 
-export async function viewCall<T>(contractId: string, method: string, args: object = {}): Promise<T> {
+const functionCall = (method: string, args: object, tgas: number, deposit = "0") =>
+  actionCreators.functionCall(method, args, BigInt(tgas) * TGAS, BigInt(deposit));
+
+async function query<T>(params: object): Promise<T> {
   const res = await fetch(RPC_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      jsonrpc: "2.0",
-      id: "envelope",
-      method: "query",
-      params: {
-        request_type: "call_function",
-        finality: "optimistic",
-        account_id: contractId,
-        method_name: method,
-        args_base64: btoa(JSON.stringify(args)),
-      },
-    }),
+    body: JSON.stringify({ jsonrpc: "2.0", id: "envelope", method: "query", params: { finality: "optimistic", ...params } }),
   });
   const json = await res.json();
   if (json.error || json.result?.error) {
     throw new Error(JSON.stringify(json.error ?? json.result.error));
   }
-  return JSON.parse(new TextDecoder().decode(new Uint8Array(json.result.result))) as T;
+  return json.result as T;
 }
+
+export async function viewCall<T>(contractId: string, method: string, args: object = {}): Promise<T> {
+  const result = await query<{ result: number[] }>({
+    request_type: "call_function",
+    account_id: contractId,
+    method_name: method,
+    args_base64: btoa(JSON.stringify(args)),
+  });
+  return JSON.parse(new TextDecoder().decode(new Uint8Array(result.result))) as T;
+}
+
+const viewAccount = (accountId: string) =>
+  query<{ amount: string; storage_usage: number }>({ request_type: "view_account", account_id: accountId });
 
 type Outcome = Awaited<ReturnType<Wallet["signAndSendTransaction"]>>;
 
@@ -51,10 +60,7 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
     deposit = "0",
   ) => {
     if (!wallet) throw new Error("Wallet not connected");
-    return wallet.signAndSendTransaction({
-      receiverId,
-      actions: [actionCreators.functionCall(method, args, BigInt(tgas) * TGAS, BigInt(deposit))],
-    });
+    return wallet.signAndSendTransaction({ receiverId, actions: [functionCall(method, args, tgas, deposit)] });
   };
   const nft = (method: string, args: object, tgas: number, deposit?: string) =>
     call(NFT_CONTRACT_ID, method, args, tgas, deposit);
@@ -75,6 +81,19 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
       ]);
       return { near, usdc };
     },
+    walletBalances: async (accountId) => {
+      const [account, usdc] = await Promise.all([
+        viewAccount(accountId),
+        viewCall<string>(FT_CONTRACT_ID, "ft_balance_of", { account_id: accountId }).catch(() => "0"),
+      ]);
+      const free = BigInt(account.amount) - BigInt(account.storage_usage) * STORAGE_PRICE_PER_BYTE - GAS_RESERVE;
+      return { near: (free > BigInt(0) ? free : BigInt(0)).toString(), usdc };
+    },
+    accountExists: (accountId) =>
+      viewAccount(accountId).then(
+        () => true,
+        () => false,
+      ),
 
     mint: async (design) => {
       const { mint_deposit } = await config();
@@ -129,6 +148,58 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
       parseSuccessValue<EnhanceResult>(await nft("enhance", { token_id: tokenId }, GAS_TGAS.enhance, ONE_YOCTO)),
     checkIn: async (tokenId) => {
       await nft("check_in", { token_id: tokenId }, GAS_TGAS.checkIn);
+    },
+    sealAndSend: async ({ tokenId, vaultId, near, usdc, receiverId, message }) => {
+      if (!wallet) throw new Error("Wallet not connected");
+      const addNear = BigInt(near) > BigInt(0);
+      const addUsdc = BigInt(usdc) > BigInt(0);
+
+      // 1) NFT 컨트랙트: fill, (필요하면) register_ft
+      const prepare = [];
+      if (addNear) prepare.push(functionCall("fill", { token_id: tokenId }, GAS_TGAS.fill, near));
+      if (addUsdc) {
+        const registered = await viewCall<unknown>(FT_CONTRACT_ID, "storage_balance_of", {
+          account_id: vaultId,
+        }).catch(() => null);
+        if (!registered) {
+          const { ft_storage_deposit } = await config();
+          prepare.push(
+            functionCall(
+              "register_ft",
+              { token_id: tokenId, ft_contract_id: FT_CONTRACT_ID },
+              GAS_TGAS.registerFt,
+              ft_storage_deposit,
+            ),
+          );
+        }
+      }
+
+      const transactions = [];
+      if (prepare.length) transactions.push({ receiverId: NFT_CONTRACT_ID, actions: prepare });
+      // 2) FT 컨트랙트: Vault로 ft_transfer_call
+      if (addUsdc) {
+        transactions.push({
+          receiverId: FT_CONTRACT_ID,
+          actions: [
+            functionCall("ft_transfer_call", { receiver_id: vaultId, amount: usdc, msg: "" }, GAS_TGAS.fillFt, ONE_YOCTO),
+          ],
+        });
+      }
+      // 3) 전송
+      transactions.push({
+        receiverId: NFT_CONTRACT_ID,
+        actions: [
+          functionCall(
+            "send_envelope",
+            { token_id: tokenId, receiver_id: receiverId, message: message || null },
+            GAS_TGAS.sendEnvelope,
+            ONE_YOCTO,
+          ),
+        ],
+      });
+
+      const outcomes = await wallet.signAndSendTransactions({ transactions });
+      return outcomes?.at(-1)?.transaction_outcome.id ?? null;
     },
   };
 }

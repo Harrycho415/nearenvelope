@@ -49,6 +49,18 @@ export interface VaultBalances {
   usdc: string;
 }
 
+/** 프런트 전용: 보내기 마지막 단계에서 채우기 + send_envelope를 한 번에 서명 */
+export interface SealAndSendParams {
+  tokenId: string;
+  vaultId: string;
+  /** 더 넣을 NEAR (yocto). "0"이면 생략 */
+  near: string;
+  /** 더 넣을 USDC (최소 단위). "0"이면 생략 */
+  usdc: string;
+  receiverId: string;
+  message?: string;
+}
+
 /**
  * 페이지·컴포넌트가 쓰는 유일한 체인 API. 실제 구현(contract.ts)과 목업(mock.ts)이 같은 모양을 가진다.
  * change 메서드가 `null`을 반환하면 리다이렉트형 지갑이라 결과를 즉시 알 수 없다는 뜻이다. 화면은 다시 조회한다.
@@ -59,6 +71,10 @@ export interface EnvelopeApi {
   enhanceTable(): Promise<number[]>;
   config(): Promise<ContractConfig>;
   vaultBalances(vaultId: string): Promise<VaultBalances>;
+  /** 프런트 전용: 지갑 계정의 사용 가능 잔액. NEAR는 스토리지·가스 예약분을 뺀 값 */
+  walletBalances(accountId: string): Promise<VaultBalances>;
+  /** 프런트 전용: 체인에 존재하는 계정인지 */
+  accountExists(accountId: string): Promise<boolean>;
 
   mint(design: number): Promise<string | null>;
   fill(tokenId: string, yocto: string): Promise<void>;
@@ -70,4 +86,6 @@ export interface EnvelopeApi {
   sendEnvelope(tokenId: string, receiverId: string, message?: string): Promise<void>;
   enhance(tokenId: string): Promise<EnhanceResult | null>;
   checkIn(tokenId: string): Promise<void>;
+  /** fill / register_ft / ft_transfer_call / send_envelope를 지갑 승인 한 번으로 보낸다. send 트랜잭션 해시 (모르면 null) */
+  sealAndSend(params: SealAndSendParams): Promise<string | null>;
 }
