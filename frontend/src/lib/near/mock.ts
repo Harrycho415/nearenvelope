@@ -5,7 +5,8 @@
 import { NFT_CONTRACT_ID } from "./config";
 import type { EnvelopeApi, EnvelopeView, MissionId, Rarity, VaultBalances } from "./types";
 
-export const MOCK_ACCOUNT_ID = "alice.testnet";
+/** 지갑이 연결되면 setMockAccount로 실제 계정으로 바뀐다. 시드 봉투도 그 계정 소유가 된다. */
+let currentAccount = "you.testnet";
 
 const ENHANCE_TABLE = [10000, 9000, 8000, 7000, 6000, 5000, 4000, 3000, 2000, 1000];
 const REWARD: Record<MissionId, number> = { Welcome: 1, FirstFill: 1, FirstGift: 1, Regift: 2 };
@@ -19,7 +20,13 @@ const envelopes = new Map<string, EnvelopeView>();
 const balances = new Map<string, VaultBalances>();
 let nextId = 1;
 
-function seed(owner: string, level: number, design: number, history: EnvelopeView["history"] = []) {
+function seed(
+  owner: string,
+  level: number,
+  design: number,
+  history: EnvelopeView["history"] = [],
+  balance: VaultBalances = { near: "1000000000000000000000000", usdc: "50000000" },
+) {
   const token_id = String(nextId++);
   const vault_id = `${token_id}.${NFT_CONTRACT_ID}`;
   envelopes.set(token_id, {
@@ -37,14 +44,29 @@ function seed(owner: string, level: number, design: number, history: EnvelopeVie
     created_at_ms: Date.now() - 86_400_000 * 3,
     history,
   });
-  balances.set(vault_id, { near: "1000000000000000000000000", usdc: "50000000" });
+  balances.set(vault_id, balance);
   return token_id;
 }
 
-seed(MOCK_ACCOUNT_ID, 0, 0);
-seed(MOCK_ACCOUNT_ID, 8, 1, [
-  { from: "bob.testnet", to: MOCK_ACCOUNT_ID, at_ms: Date.now() - 3_600_000, message: "생일 축하해! 🎉" },
-]);
+const EMPTY: VaultBalances = { near: "0", usdc: "0" };
+const received = (from: string, hoursAgo: number, message: string | null) => [
+  { from, to: currentAccount, at_ms: Date.now() - hoursAgo * 3_600_000, message },
+];
+
+// design: 0 Classic, 1 Golden, 2 Midnight (components/envelope/designs.ts)
+seed(currentAccount, 5, 1, received("maya.testnet", 2, "생일 축하해! 🎉"));
+seed(currentAccount, 0, 0, received("jin.testnet", 26, "고마워"), EMPTY);
+seed(currentAccount, 8, 2, received("maya.testnet", 72, null), EMPTY);
+seed(currentAccount, 2, 0);
+
+export function setMockAccount(accountId: string) {
+  if (accountId === currentAccount) return;
+  for (const e of envelopes.values()) {
+    if (e.owner_id === currentAccount) e.owner_id = accountId;
+    for (const r of e.history) if (r.to === currentAccount) r.to = accountId;
+  }
+  currentAccount = accountId;
+}
 
 function get(tokenId: string) {
   const e = envelopes.get(tokenId);
@@ -54,7 +76,7 @@ function get(tokenId: string) {
 
 function owned(tokenId: string) {
   const e = get(tokenId);
-  if (e.owner_id !== MOCK_ACCOUNT_ID) throw new Error("ERR_NOT_OWNER");
+  if (e.owner_id !== currentAccount) throw new Error("ERR_NOT_OWNER");
   return e;
 }
 
@@ -97,7 +119,7 @@ export const mockApi: EnvelopeApi = {
 
   mint: async (design) => {
     await delay();
-    const id = seed(MOCK_ACCOUNT_ID, 0, design);
+    const id = seed(currentAccount, 0, design);
     const e = get(id);
     e.enhance_tickets = 1;
     e.enhance_attempts = 0;

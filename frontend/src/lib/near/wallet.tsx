@@ -1,25 +1,31 @@
 "use client";
 
 // 지갑 연결 Provider. 앱 전체에서 `useNear()`로 accountId·api를 얻는다.
+// 지갑은 Meteor만 지원한다. NEXT_PUBLIC_USE_MOCK은 데이터(api)만 목업으로 바꾸고 지갑 연결은 항상 실제로 한다.
 // 소유자: C
 
-import "@near-wallet-selector/modal-ui/styles.css";
-
-import { setupWalletSelector, type Wallet, type WalletSelector } from "@near-wallet-selector/core";
+import {
+  setupWalletSelector,
+  type InjectedWallet,
+  type Wallet,
+  type WalletSelector,
+} from "@near-wallet-selector/core";
 import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
-import { setupModal, type WalletSelectorModal } from "@near-wallet-selector/modal-ui";
-import { setupMyNearWallet } from "@near-wallet-selector/my-near-wallet";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { NETWORK, NFT_CONTRACT_ID, USE_MOCK } from "./config";
 import { createContractApi } from "./contract";
-import { MOCK_ACCOUNT_ID, mockApi } from "./mock";
+import { mockApi, setMockAccount } from "./mock";
 import type { EnvelopeApi } from "./types";
+
+const METEOR_WALLET_ID = "meteor-wallet";
 
 interface NearContextValue {
   accountId: string | null;
+  /** 지갑 초기화가 끝났는지. false인 동안 연결 버튼을 비활성화한다. */
+  ready: boolean;
   api: EnvelopeApi;
-  signIn: () => void;
+  signIn: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -27,20 +33,14 @@ const NearContext = createContext<NearContextValue | null>(null);
 
 export function NearProvider({ children }: { children: ReactNode }) {
   const [selector, setSelector] = useState<WalletSelector | null>(null);
-  const [modal, setModal] = useState<WalletSelectorModal | null>(null);
   const [wallet, setWallet] = useState<Wallet | null>(null);
-  const [accountId, setAccountId] = useState<string | null>(USE_MOCK ? MOCK_ACCOUNT_ID : null);
+  const [accountId, setAccountId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (USE_MOCK) return;
     let unsubscribe: (() => void) | undefined;
 
-    setupWalletSelector({
-      network: NETWORK,
-      modules: [setupMeteorWallet(), setupMyNearWallet()],
-    }).then((s) => {
+    setupWalletSelector({ network: NETWORK, modules: [setupMeteorWallet()] }).then((s) => {
       setSelector(s);
-      setModal(setupModal(s, { contractId: NFT_CONTRACT_ID }));
       const subscription = s.store.observable.subscribe(async (state) => {
         const active = state.accounts.find((a) => a.active)?.accountId ?? null;
         setAccountId(active);
@@ -52,17 +52,25 @@ export function NearProvider({ children }: { children: ReactNode }) {
     return () => unsubscribe?.();
   }, []);
 
+  useEffect(() => {
+    if (USE_MOCK && accountId) setMockAccount(accountId);
+  }, [accountId]);
+
   const value = useMemo<NearContextValue>(
     () => ({
       accountId,
+      ready: selector !== null,
       api: USE_MOCK ? mockApi : createContractApi(wallet),
-      signIn: () => (USE_MOCK ? setAccountId(MOCK_ACCOUNT_ID) : modal?.show()),
+      signIn: async () => {
+        if (!selector) return;
+        const meteor = await selector.wallet<InjectedWallet>(METEOR_WALLET_ID);
+        await meteor.signIn({ contractId: NFT_CONTRACT_ID });
+      },
       signOut: async () => {
-        if (USE_MOCK) return setAccountId(null);
         if (selector) await (await selector.wallet()).signOut();
       },
     }),
-    [accountId, wallet, modal, selector],
+    [accountId, wallet, selector],
   );
 
   return <NearContext.Provider value={value}>{children}</NearContext.Provider>;

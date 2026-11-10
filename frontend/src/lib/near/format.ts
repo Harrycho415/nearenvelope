@@ -21,3 +21,14 @@ export const nearToYocto = (near: string) => toUnits(near, NEAR_DECIMALS);
 export const yoctoToNear = (yocto: string, maxFraction = 4) => fromUnits(yocto, NEAR_DECIMALS, maxFraction);
 export const usdcToUnits = (usdc: string) => toUnits(usdc, FT_DECIMALS);
 export const unitsToUsdc = (units: string, maxFraction = 2) => fromUnits(units, FT_DECIMALS, maxFraction);
+
+/** 긴 계정(암묵적 계정 64자 hex 등)은 앞뒤만 보여 준다. harry.near처럼 짧은 이름은 그대로. */
+export function shortAccount(accountId: string, head = 6, tail = 4): string {
+  return accountId.length <= 24 ? accountId : `${accountId.slice(0, head)}…${accountId.slice(-tail)}`;
+}
+
+/** maya.testnet → Maya */
+export function displayName(accountId: string): string {
+  const name = accountId.split(".")[0];
+  return name.length > 16 ? shortAccount(accountId) : name.charAt(0).toUpperCase() + name.slice(1);
+}

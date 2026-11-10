@@ -1,26 +1,23 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* 디자인 토큰. 색은 여기서만 정의하고 컴포넌트는 bg-canvas, text-ink 같은 유틸리티로 쓴다. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-canvas: #f5f7f3;
+  --color-surface: #ffffff;
+  --color-paper: #efebe4;
+  --color-line: #e3e6e0;
+  --color-sketch: #b9bcb3;
+  --color-seal: #d3dccf;
+  --color-ink: #23382e;
+  --color-ink-muted: #66706a;
+  --color-brand: #2f5d4a;
+  --color-brand-hover: #264d3d;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
 }
