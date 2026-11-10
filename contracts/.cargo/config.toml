@@ -1,0 +1,3 @@
+[alias]
+# near-sdk는 호스트 타깃 cargo check를 막는다. 컨트랙트 타입 체크는 이 alias를 쓴다.
+check-contracts = "check --target wasm32-unknown-unknown -p envelope -p vault -p mock-ft"

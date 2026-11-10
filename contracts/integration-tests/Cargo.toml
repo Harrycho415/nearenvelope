@@ -1,0 +1,11 @@
+[package]
+name = "integration-tests"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+
+[dev-dependencies]
+near-workspaces = { workspace = true, features = ["unstable"] }
+tokio.workspace = true
+anyhow.workspace = true
+serde_json.workspace = true

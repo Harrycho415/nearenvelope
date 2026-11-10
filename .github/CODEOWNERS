@@ -1,0 +1,31 @@
+# 각 역할의 GitHub 아이디로 바꿔 주세요. (루트 CLAUDE.md §3)
+# A = @TODO-A  B = @TODO-B  C = @TODO-C  D = @TODO-D
+
+# 공유 파일: 관련 소유자 전원 리뷰
+/CLAUDE.md                              @TODO-A @TODO-B @TODO-C @TODO-D
+/docs/INTERFACE.md                      @TODO-A @TODO-B @TODO-C
+/contracts/envelope/src/types.rs        @TODO-A @TODO-B @TODO-C
+/frontend/src/lib/near/types.ts         @TODO-A @TODO-B @TODO-C
+
+# Contracts
+/contracts/                             @TODO-A
+/contracts/vault/                       @TODO-A
+/contracts/envelope/src/gift.rs         @TODO-B
+/contracts/envelope/src/enhance.rs      @TODO-B
+/contracts/envelope/src/mission.rs      @TODO-B
+/contracts/envelope/src/views.rs        @TODO-B
+/contracts/envelope/src/events.rs       @TODO-B
+/contracts/mock-ft/                     @TODO-B
+/contracts/integration-tests/           @TODO-B
+
+# Frontend
+/frontend/                              @TODO-C
+/frontend/src/app/enhance/              @TODO-D
+/frontend/src/components/envelope/      @TODO-D
+/frontend/public/                       @TODO-D
+/frontend/src/app/layout.tsx            @TODO-C @TODO-D
+/frontend/src/app/globals.css           @TODO-C @TODO-D
+
+# Delivery
+/scripts/                               @TODO-D
+/README.md                              @TODO-D
