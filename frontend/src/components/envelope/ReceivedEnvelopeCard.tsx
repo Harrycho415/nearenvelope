@@ -1,4 +1,4 @@
-// 홈 "Recently received" 카드.
+// 홈 "Recently received" 카드. 안 열어 본 봉투는 받기 화면으로 보낸다.
 // 소유자: D
 
 import Link from "next/link";
@@ -13,7 +13,7 @@ export function ReceivedEnvelopeCard({ envelope, opened }: { envelope: EnvelopeV
 
   return (
     <Link
-      href={`/envelopes/${envelope.token_id}`}
+      href={`/envelopes/${envelope.token_id}${opened ? "" : "/open"}`}
       className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-5 transition hover:border-sketch"
     >
       <EnvelopeIllustration className="w-28 shrink-0" />

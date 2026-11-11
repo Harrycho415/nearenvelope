@@ -1,6 +1,6 @@
 "use client";
 
-// Home: 히어로, 최근 받은 봉투, 4단계 안내.
+// Home: 새 선물 배너, 히어로, 최근 받은 봉투, 4단계 안내.
 // 소유자: C
 
 import Link from "next/link";
@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
 import { ReceivedEnvelopeCard } from "@/components/envelope/ReceivedEnvelopeCard";
+import { GiftBanner } from "@/components/ui/GiftBanner";
 import { useNear, type EnvelopeView } from "@/lib/near";
+import { isOpened, isReceivedBy } from "@/lib/opened";
 
 const STEPS = ["Choose Envelope", "Put Something Inside", "Write a Message", "Seal & Send"];
 const RECENT_LIMIT = 3;
@@ -18,14 +20,64 @@ interface ReceivedItem {
   opened: boolean;
 }
 
+interface Received {
+  /** 최근 받은 순 */
+  items: ReceivedItem[];
+  /** 불러온 시각 (상대 시간 기준) */
+  loadedAt: number;
+}
+
 export default function Home() {
+  const received = useReceived();
+  const unopened = received?.items.filter((i) => !i.opened) ?? [];
+
   return (
     <div className="pt-14">
+      {unopened.length > 0 && (
+        <div className="mb-10">
+          <GiftBanner
+            envelope={unopened[0].envelope}
+            now={received!.loadedAt}
+            more={unopened.length - 1}
+            viewHref={`/envelopes/${unopened[0].envelope.token_id}/open`}
+          />
+        </div>
+      )}
       <Hero />
-      <RecentlyReceived />
+      <RecentlyReceived items={received?.items.slice(0, RECENT_LIMIT) ?? null} />
       <Steps />
     </div>
   );
+}
+
+/** 지금 내가 가진 봉투 중 나에게 전달된 것. 지갑 미연결이면 null */
+function useReceived() {
+  const { accountId, api } = useNear();
+  const [received, setReceived] = useState<(Received & { accountId: string }) | null>(null);
+
+  useEffect(() => {
+    if (!accountId) return;
+    let cancelled = false;
+
+    api
+      .envelopesForOwner(accountId)
+      .catch(() => [])
+      .then((owned) => {
+        if (cancelled) return;
+        // "Opened" = 이 브라우저에서 받기 화면을 열어 봄 (lib/opened.ts). 온체인 opened 플래그는 없다.
+        const items = owned
+          .filter((e) => isReceivedBy(e, accountId))
+          .sort((a, b) => b.history.at(-1)!.at_ms - a.history.at(-1)!.at_ms)
+          .map((envelope) => ({ envelope, opened: isOpened(envelope, accountId) }));
+        setReceived({ accountId, items, loadedAt: Date.now() });
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [accountId, api]);
+
+  return received && received.accountId === accountId ? received : null;
 }
 
 function Hero() {
@@ -64,34 +116,8 @@ function Hero() {
   );
 }
 
-function RecentlyReceived() {
-  const { accountId, api } = useNear();
-  const [items, setItems] = useState<ReceivedItem[] | null>(null);
-
-  useEffect(() => {
-    if (!accountId) return;
-    let cancelled = false;
-
-    (async () => {
-      const owned = await api.envelopesForOwner(accountId);
-      const received = owned
-        .filter((e) => e.history.at(-1)?.to === accountId)
-        .sort((a, b) => b.history.at(-1)!.at_ms - a.history.at(-1)!.at_ms)
-        .slice(0, RECENT_LIMIT);
-      // "Opened" = Vault가 비어 있음 (받은 사람이 자산을 꺼냄). 온체인 opened 플래그는 아직 없다.
-      const withState = await Promise.all(
-        received.map(async (envelope) => {
-          const { near, usdc } = await api.vaultBalances(envelope.vault_id);
-          return { envelope, opened: BigInt(near) === BigInt(0) && BigInt(usdc) === BigInt(0) };
-        }),
-      );
-      if (!cancelled) setItems(withState);
-    })().catch(() => !cancelled && setItems([]));
-
-    return () => {
-      cancelled = true;
-    };
-  }, [accountId, api]);
+function RecentlyReceived({ items }: { items: ReceivedItem[] | null }) {
+  const { accountId } = useNear();
 
   return (
     <section className="mt-12">

@@ -38,3 +38,12 @@ const ACCOUNT_ID_RE = /^(([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+$/;
 /** NEAR 계정 ID 형식 검사 (존재 여부는 api.accountExists) */
 export const isValidAccountId = (accountId: string) =>
   accountId.length >= 2 && accountId.length <= 64 && ACCOUNT_ID_RE.test(accountId);
+
+/** "Just now", "5m ago", "3h ago", "2d ago" */
+export function timeAgo(ms: number, now: number): string {
+  const minutes = Math.floor((now - ms) / 60_000);
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  return hours < 24 ? `${hours}h ago` : `${Math.floor(hours / 24)}d ago`;
+}
