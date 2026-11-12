@@ -17,6 +17,10 @@ const INACTIVE = "border-transparent text-ink-muted hover:text-ink";
 
 export const tabPanelId = (tab: Tab) => `envelope-panel-${tab}`;
 
+/** `?tab=assets` 같은 쿼리 값 → 탭. 모르는 값은 Overview */
+export const parseTab = (value: string | null): Tab =>
+  TABS.find((t) => t.id === value)?.id ?? "overview";
+
 export function DetailTabs({
   tokenId,
   current,

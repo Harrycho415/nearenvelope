@@ -1,5 +1,8 @@
-// Assets 탭: Vault 잔액 (api.vaultBalances). 채우기·출금 동작은 이번 범위가 아니라 버튼만 비활성으로 둔다.
+// Assets 탭: Vault 잔액 (api.vaultBalances). Withdraw는 출금 화면(/envelopes/[tokenId]/withdraw)으로 이동.
+// 채우기(Add Assets)는 아직 연결하지 않아 비활성으로 둔다.
 // 소유자: C
+
+import Link from "next/link";
 
 import type { VaultBalances } from "@/lib/near";
 
@@ -17,10 +20,12 @@ const ASSETS: { symbol: string; name: string; format: (b: VaultBalances) => stri
 ];
 
 export function AssetsTab({
+  tokenId,
   balances,
   isOwner,
   onRetry,
 }: {
+  tokenId: string;
   /** null = 로딩 중 */
   balances: BalancesResult | null;
   isOwner: boolean;
@@ -39,9 +44,9 @@ export function AssetsTab({
               Add Assets
             </button>
             {isOwner && (
-              <button disabled title="Coming soon" className={BUTTON_SECONDARY}>
+              <Link href={`/envelopes/${tokenId}/withdraw`} className={BUTTON_SECONDARY}>
                 Withdraw
-              </button>
+              </Link>
             )}
           </div>
         </div>
