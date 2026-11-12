@@ -1,11 +1,12 @@
 "use client";
 
-// 봉투 상세: 개요, 자산(Vault 잔액), 전달 기록 타임라인. 강화는 /enhance/[tokenId], 보내기는 /send/[tokenId].
-// 채우기(fill)·열기(claim)는 아직 연결하지 않았다.
+// 봉투 상세: 개요, 자산(Vault 잔액), 전달 기록 타임라인. 강화는 /enhance/[tokenId], 보내기는 /send/[tokenId],
+// 출금은 /envelopes/[tokenId]/withdraw. `?tab=assets|history`로 처음 열 탭을 고를 수 있다.
+// 채우기(fill)는 아직 연결하지 않았다.
 // 소유자: C
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { useNear, type EnvelopeView } from "@/lib/near";
@@ -19,7 +20,7 @@ import {
   type Keyed,
 } from "../_components/shared";
 import { AssetsTab } from "./_components/AssetsTab";
-import { DetailTabs, tabPanelId, type Tab } from "./_components/DetailTabs";
+import { DetailTabs, parseTab, tabPanelId, type Tab } from "./_components/DetailTabs";
 import { EnvelopeHero } from "./_components/EnvelopeHero";
 import { HistoryTab } from "./_components/HistoryTab";
 import { OverviewTab } from "./_components/OverviewTab";
@@ -28,12 +29,13 @@ type EnvelopeResult = EnvelopeView | "missing" | "error";
 
 export default function EnvelopeDetailPage() {
   const { tokenId } = useParams<{ tokenId: string }>();
+  const searchParams = useSearchParams();
   const { accountId, ready, api } = useNear();
 
   const [attempt, setAttempt] = useState(0);
   const [envelopeResult, setEnvelopeResult] = useState<Keyed<EnvelopeResult> | null>(null);
   const [balancesResult, setBalancesResult] = useState<Keyed<BalancesResult> | null>(null);
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] = useState<Tab>(() => parseTab(searchParams.get("tab")));
 
   // 계정·토큰·재시도가 바뀌면 키가 바뀌고, 이전 키의 결과는 무시된다 (= 로딩 상태)
   const key = `${accountId}:${tokenId}:${attempt}`;
@@ -123,7 +125,9 @@ export default function EnvelopeDetailPage() {
         {tab === "overview" && (
           <OverviewTab envelope={envelope} isOwner={isOwner} onViewAssets={() => setTab("assets")} />
         )}
-        {tab === "assets" && <AssetsTab balances={balances} isOwner={isOwner} onRetry={retry} />}
+        {tab === "assets" && (
+          <AssetsTab tokenId={envelope.token_id} balances={balances} isOwner={isOwner} onRetry={retry} />
+        )}
         {tab === "history" && <HistoryTab envelope={envelope} />}
       </div>
     </Frame>
