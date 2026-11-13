@@ -4,7 +4,6 @@
 use near_sdk::env;
 use near_sdk::serde_json::{json, Value};
 
-#[allow(dead_code)]
 pub(crate) fn emit(event: &str, data: Value) {
     let log = json!({
         "standard": "near_envelope",

@@ -6,7 +6,7 @@ use near_contract_standards::non_fungible_token::metadata::{
 };
 use near_contract_standards::non_fungible_token::{NonFungibleToken, TokenId};
 use near_sdk::collections::LazyOption;
-use near_sdk::store::LookupMap;
+use near_sdk::store::{IterableMap, LookupMap, LookupSet};
 use near_sdk::{env, near, require, AccountId, BorshStorageKey, NearToken, PanicOnDefault};
 
 mod enhance;
@@ -28,6 +28,8 @@ pub const MESSAGE_MAX_LEN: usize = 280;
 pub const CHECK_IN_COOLDOWN_MS: u64 = 600_000;
 /// 프런트 `public/designs/{design}/` 개수와 맞춘다 (D)
 pub const DESIGN_COUNT: u8 = 3;
+/// 민트 첨부액 중 컨트랙트에 남겨 두는 여유분. 이후 전달 기록·메시지 저장 비용에 쓴다.
+pub const ENVELOPE_STORAGE_BUFFER: NearToken = NearToken::from_millinear(50);
 
 #[derive(BorshStorageKey)]
 #[near]
@@ -38,6 +40,9 @@ pub(crate) enum StorageKey {
     Enumeration,
     Approval,
     Envelopes,
+    KnownAccounts,
+    NearEvents,
+    NearEventRedeemed,
 }
 
 #[near(contract_state)]
@@ -47,6 +52,11 @@ pub struct Contract {
     pub(crate) metadata: LazyOption<NFTContractMetadata>,
     pub(crate) envelopes: LookupMap<TokenId, EnvelopeState>,
     pub(crate) next_token_id: u64,
+    /// 봉투를 민트했거나 받은 적 있는 계정 (NewConnection 판정)
+    pub(crate) known_accounts: LookupSet<AccountId>,
+    pub(crate) near_events: IterableMap<String, NearEvent>,
+    /// (event_id, account_id): 행사 코드는 계정당 1회
+    pub(crate) near_event_redeemed: LookupSet<(String, AccountId)>,
 }
 
 #[near]
@@ -74,6 +84,9 @@ impl Contract {
             metadata: LazyOption::new(StorageKey::Metadata, Some(&metadata)),
             envelopes: LookupMap::new(StorageKey::Envelopes),
             next_token_id: 1,
+            known_accounts: LookupSet::new(StorageKey::KnownAccounts),
+            near_events: IterableMap::new(StorageKey::NearEvents),
+            near_event_redeemed: LookupSet::new(StorageKey::NearEventRedeemed),
         }
     }
 }

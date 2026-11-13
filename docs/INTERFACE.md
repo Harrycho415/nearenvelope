@@ -17,7 +17,7 @@
 
 | 이름 | 값 | 설명 |
 |---|---|---|
-| `MINT_DEPOSIT` | 2 NEAR | 민트 최소 첨부액. NFT 저장 비용을 뺀 나머지는 Vault로 이동 |
+| `MINT_DEPOSIT` | 2 NEAR | 민트 최소 첨부액. NFT 저장 비용과 여유분 0.05 NEAR(이후 전달 기록 저장용)를 뺀 나머지는 Vault로 이동 |
 | `FT_STORAGE_DEPOSIT` | 0.00125 NEAR | `register_ft` 최소 첨부액 |
 | `MAX_LEVEL` | 10 | |
 | `MESSAGE_MAX_LEN` | 280 | 문자 수 |
@@ -141,7 +141,7 @@ interface NearEventView {
 - **서로 다른 소유자 수** = `{creator_id} ∪ history[].to`의 크기. 전송 처리(`on_envelope_transferred`)에서 기록을 추가한 뒤 판정한다. 기준을 여러 개 동시에 넘으면 모두 지급한다.
 - **봉투를 가져 본 계정**: 민트한 계정과 봉투를 받은 계정을 컨트랙트가 기록한다 (`known_accounts`). 받는 계정이 여기에 없으면 `NewConnection`을 판정한 뒤 등록한다. 자기 자신에게 보내는 경우는 해당하지 않는다.
 - 여정·신규 유입 보상은 전송 직후 판정되므로 **새 소유자가 받은 봉투**에 쌓인다 (봉투가 성장하며 이동).
-- `NearEvent`: 코드 sha256이 일치하고 `now < ends_at_ms`이며 호출 계정이 그 행사를 아직 사용하지 않았을 때 지급. 사용 기록은 `(event_id, account_id)` 단위.
+- `NearEvent`: 입력 코드의 앞뒤 공백을 제거한 sha256이 일치하고 `now < ends_at_ms`이며 호출 계정이 그 행사를 아직 사용하지 않았을 때 지급. 사용 기록은 `(event_id, account_id)` 단위.
 - 한 번 사용된 코드 원문은 트랜잭션에 공개된다. `ends_at_ms`를 행사 시간으로 짧게 잡아 완화한다.
 
 ### 강화
@@ -169,7 +169,7 @@ interface NearEventView {
 
 | event | data |
 |---|---|
-| `envelope_fill` | `{ token_id, sender_id, asset: "NEAR" \| ft_contract_id, amount }` |
+| `envelope_fill` | `{ token_id, sender_id, asset: "NEAR" \| ft_contract_id, amount }` (FT 입금은 Vault가 보낸 사람을 전달하지 않아 `sender_id = null`) |
 | `envelope_gift` | `{ token_id, from, to, has_message }` |
 | `envelope_enhance` | `{ token_id, success, level_before, level_after }` |
 | `mission_complete` | `{ token_id, mission, tickets, event_id? }` (`event_id`는 `NearEvent`일 때만) |
