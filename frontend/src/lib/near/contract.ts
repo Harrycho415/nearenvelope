@@ -135,12 +135,44 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
       );
     },
     claimFt: async (tokenId, amount, receiverId) => {
-      await nft(
-        "claim_ft",
-        { token_id: tokenId, ft_contract_id: FT_CONTRACT_ID, amount, receiver_id: receiverId },
-        GAS_TGAS.claimFt,
-        ONE_YOCTO,
-      );
+      if (!wallet) throw new Error("Wallet not connected");
+      // 수령자가 FT에 storage 등록이 안 되어 있으면 ft_transfer가 실패하므로 같은 서명에서 먼저 등록한다
+      const receiver = receiverId ?? (await wallet.getAccounts())[0]?.accountId;
+      const registered = receiver
+        ? await viewCall<unknown>(FT_CONTRACT_ID, "storage_balance_of", { account_id: receiver }).catch(() => null)
+        : true;
+      const claim = {
+        receiverId: NFT_CONTRACT_ID,
+        actions: [
+          functionCall(
+            "claim_ft",
+            { token_id: tokenId, ft_contract_id: FT_CONTRACT_ID, amount, receiver_id: receiverId },
+            GAS_TGAS.claimFt,
+            ONE_YOCTO,
+          ),
+        ],
+      };
+      if (registered) {
+        await wallet.signAndSendTransaction(claim);
+        return;
+      }
+      const { ft_storage_deposit } = await config();
+      await wallet.signAndSendTransactions({
+        transactions: [
+          {
+            receiverId: FT_CONTRACT_ID,
+            actions: [
+              functionCall(
+                "storage_deposit",
+                { account_id: receiver, registration_only: true },
+                GAS_TGAS.registerFt,
+                ft_storage_deposit,
+              ),
+            ],
+          },
+          claim,
+        ],
+      });
     },
     sendEnvelope: async (tokenId, receiverId, message) => {
       await nft(
