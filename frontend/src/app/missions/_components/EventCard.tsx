@@ -57,7 +57,11 @@ export function EventCard({
         Attending? Enter the code shown at the event. {ended ? "Ended" : "Open until"} {formatDate(event.ends_at_ms)}.
       </p>
       <div className="mt-5 text-sm font-semibold text-brand">Reward: +{attemptsText(event.tickets)}</div>
-      <p className="mt-2 text-xs text-ink-muted">Once per account. The reward goes to {envelopeLabel}.</p>
+      <p className="mt-2 text-xs text-ink-muted">
+        {redeemed
+          ? "You've used this event's code. Each account can use it once."
+          : `Once per account. The reward goes to ${envelopeLabel}.`}
+      </p>
 
       {!redeemed && !ended && (
         <form
