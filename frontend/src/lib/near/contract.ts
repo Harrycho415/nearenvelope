@@ -6,7 +6,7 @@ import { actionCreators } from "@near-js/transactions";
 
 import { FT_CONTRACT_ID, GAS_TGAS, NFT_CONTRACT_ID, ONE_YOCTO, RPC_URL } from "./config";
 import { nearToYocto } from "./format";
-import type { ContractConfig, EnhanceResult, EnvelopeApi, EnvelopeView } from "./types";
+import type { ContractConfig, EnhanceResult, EnvelopeApi, EnvelopeView, NearEventView } from "./types";
 
 const TGAS = BigInt(10 ** 12);
 const STORAGE_PRICE_PER_BYTE = BigInt(10 ** 19);
@@ -74,6 +74,12 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
       viewCall<EnvelopeView[]>(NFT_CONTRACT_ID, "envelopes_for_owner", { account_id: accountId }),
     enhanceTable: () => viewCall<number[]>(NFT_CONTRACT_ID, "enhance_table"),
     config,
+    // v0.2 미배포 컨트랙트에서는 메서드가 없으므로 빈 값으로 둔다
+    nearEvents: () => viewCall<NearEventView[]>(NFT_CONTRACT_ID, "near_events").catch(() => []),
+    nearEventRedeemed: (eventId, accountId) =>
+      viewCall<boolean>(NFT_CONTRACT_ID, "near_event_redeemed", { event_id: eventId, account_id: accountId }).catch(
+        () => false,
+      ),
     vaultBalances: async (vaultId) => {
       const [near, usdc] = await Promise.all([
         viewCall<string>(vaultId, "withdrawable").catch(() => "0"),
@@ -148,6 +154,13 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
       parseSuccessValue<EnhanceResult>(await nft("enhance", { token_id: tokenId }, GAS_TGAS.enhance, ONE_YOCTO)),
     checkIn: async (tokenId) => {
       await nft("check_in", { token_id: tokenId }, GAS_TGAS.checkIn);
+    },
+    redeemNearEvent: async (tokenId, eventId, code) => {
+      await nft(
+        "redeem_near_event",
+        { token_id: tokenId, event_id: eventId, code },
+        GAS_TGAS.redeemNearEvent,
+      );
     },
     sealAndSend: async ({ tokenId, vaultId, near, usdc, receiverId, message }) => {
       if (!wallet) throw new Error("Wallet not connected");

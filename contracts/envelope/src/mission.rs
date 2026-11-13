@@ -28,7 +28,10 @@ impl Contract {
 #[allow(dead_code)]
 pub(crate) fn mission_reward(mission: MissionId) -> u32 {
     match mission {
-        MissionId::Welcome | MissionId::FirstFill | MissionId::FirstGift => 1,
-        MissionId::Regift => 2,
+        MissionId::Welcome | MissionId::FirstFill | MissionId::FirstGift | MissionId::Journey3 => 1,
+        MissionId::Regift | MissionId::Journey5 | MissionId::NewConnection => 2,
+        MissionId::Journey10 => 3,
+        // 행사마다 NearEvent.tickets를 쓴다. grant_mission 경로로 지급하지 않는다.
+        MissionId::NearEvent => 0,
     }
 }

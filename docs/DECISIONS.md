@@ -13,3 +13,4 @@
 | 7 | 2026-11-10 | `MINT_DEPOSIT` = 2 NEAR | vault.wasm 109KB → 스토리지 약 1.1 NEAR + 계정·NFT 저장 여유분 | 팀 |
 | 8 | 2026-11-10 | 프런트 `near-api-js` 6.x 고정, 트랜잭션 생성은 `@near-js/transactions` | Meteor SDK가 near-api-js ^6을 peer로 요구. 7.x에서 빌드 실패 | 팀 |
 | 9 | 2026-11-10 | `vault.wasm`은 `contracts/res/`에 커밋, envelope `build.rs`가 포함 | 모든 팀원이 vault 빌드 없이 `cargo check` 가능 | 팀 |
+| 10 | 2026-11-13 | 미션 보상은 강화 티켓만, 희귀도는 레벨로만 결정. 여정(소유자 3/5/10명)·신규 유입(`NewConnection`)·니어 행사 코드(`NearEvent`) 미션 추가. 보상은 자동 지급(claim 없음) | 별도 스탬프·배지 축 없이 기존 레벨 체계로 "많은 손을 거친 봉투가 강해진다"를 표현. 행사 코드는 해시만 저장해 백엔드 없이 온체인 검증 | 팀 |
