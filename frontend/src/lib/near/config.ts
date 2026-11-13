@@ -19,6 +19,7 @@ export const GAS_TGAS = {
   sendEnvelope: 50,
   enhance: 30,
   checkIn: 30,
+  redeemNearEvent: 30,
 } as const;
 
 export const ONE_YOCTO = "1";

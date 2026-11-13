@@ -4,13 +4,41 @@
 
 import { NFT_CONTRACT_ID } from "./config";
 import { isValidAccountId, nearToYocto } from "./format";
-import type { EnvelopeApi, EnvelopeView, MissionId, Rarity, VaultBalances } from "./types";
+import type { EnvelopeApi, EnvelopeView, MissionId, NearEventView, Rarity, VaultBalances } from "./types";
 
 /** 지갑이 연결되면 setMockAccount로 실제 계정으로 바뀐다. 시드 봉투도 그 계정 소유가 된다. */
 let currentAccount = "you.testnet";
 
 const ENHANCE_TABLE = [10000, 9000, 8000, 7000, 6000, 5000, 4000, 3000, 2000, 1000];
-const REWARD: Record<MissionId, number> = { Welcome: 1, FirstFill: 1, FirstGift: 1, Regift: 2 };
+const REWARD: Record<MissionId, number> = {
+  Welcome: 1,
+  FirstFill: 1,
+  FirstGift: 1,
+  Regift: 2,
+  Journey3: 1,
+  Journey5: 2,
+  Journey10: 3,
+  NewConnection: 2,
+  NearEvent: 0, // 행사별 tickets
+};
+const JOURNEY: [number, MissionId][] = [
+  [3, "Journey3"],
+  [5, "Journey5"],
+  [10, "Journey10"],
+];
+
+/** 목업 행사. 실제 컨트랙트는 sha256 해시를 저장하지만 목업은 원문을 비교한다 */
+const nearEvents: (NearEventView & { code: string })[] = [
+  {
+    event_id: "near-hackathon-demo",
+    name: "NEAR Hackathon Demo Day",
+    tickets: 2,
+    ends_at_ms: Date.now() + 7 * 86_400_000,
+    code: "ENVELOPE",
+  },
+];
+/** `${event_id}:${account_id}` */
+const redeemed = new Set<string>();
 
 const rarityOf = (level: number): Rarity =>
   level <= 3 ? "Basic" : level <= 6 ? "Rare" : level <= 9 ? "Epic" : "Legendary";
@@ -102,12 +130,21 @@ function addBalance(vaultId: string, key: keyof VaultBalances, delta: bigint) {
   balances.set(vaultId, { ...b, [key]: next.toString() });
 }
 
+/** 봉투를 민트했거나 받은 적 있는 계정 (컨트랙트 known_accounts) */
+function isKnown(accountId: string) {
+  return [...envelopes.values()].some((e) => e.creator_id === accountId || e.history.some((r) => r.to === accountId));
+}
+
 function transfer(e: EnvelopeView, to: string, message: string | null) {
   const regift = e.history.length > 0;
+  const newcomer = to !== e.owner_id && !isKnown(to);
   e.history.push({ from: e.owner_id, to, at_ms: Date.now(), message });
   e.owner_id = to;
   grant(e, "FirstGift");
   if (regift) grant(e, "Regift");
+  if (newcomer) grant(e, "NewConnection");
+  const owners = new Set([e.creator_id, ...e.history.map((r) => r.to)]).size;
+  for (const [n, mission] of JOURNEY) if (owners >= n) grant(e, mission);
 }
 
 export const mockApi: EnvelopeApi = {
@@ -124,6 +161,9 @@ export const mockApi: EnvelopeApi = {
     message_max_len: 280,
     check_in_cooldown_ms: 600_000,
   }),
+  nearEvents: async () =>
+    nearEvents.map(({ event_id, name, tickets, ends_at_ms }) => ({ event_id, name, tickets, ends_at_ms })),
+  nearEventRedeemed: async (eventId, accountId) => redeemed.has(`${eventId}:${accountId}`),
   vaultBalances: async (vaultId) => (await delay(), balances.get(vaultId) ?? { near: "0", usdc: "0" }),
   walletBalances: async () => (await delay(), { ...walletBalance }),
   accountExists: async (accountId) => (await delay(), isValidAccountId(accountId)),
@@ -182,6 +222,18 @@ export const mockApi: EnvelopeApi = {
     if (Date.now() - e.last_check_in_ms < 600_000) throw new Error("ERR_CHECK_IN_COOLDOWN");
     e.last_check_in_ms = Date.now();
     e.enhance_tickets += 1;
+  },
+  redeemNearEvent: async (tokenId, eventId, code) => {
+    await delay();
+    const e = owned(tokenId);
+    const event = nearEvents.find((x) => x.event_id === eventId);
+    if (!event) throw new Error("ERR_EVENT_NOT_FOUND");
+    if (Date.now() >= event.ends_at_ms) throw new Error("ERR_EVENT_ENDED");
+    const key = `${eventId}:${currentAccount}`;
+    if (redeemed.has(key)) throw new Error("ERR_ALREADY_REDEEMED");
+    if (code.trim() !== event.code) throw new Error("ERR_INVALID_CODE");
+    redeemed.add(key);
+    e.enhance_tickets += event.tickets;
   },
   sealAndSend: async ({ tokenId, vaultId, near, usdc, receiverId, message }) => {
     await delay();

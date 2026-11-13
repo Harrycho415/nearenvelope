@@ -2,7 +2,17 @@
 // 변경 절차: 루트 CLAUDE.md §5
 
 export type Rarity = "Basic" | "Rare" | "Epic" | "Legendary";
-export type MissionId = "Welcome" | "FirstFill" | "FirstGift" | "Regift";
+export type MissionId =
+  | "Welcome"
+  | "FirstFill"
+  | "FirstGift"
+  | "Regift"
+  | "Journey3"
+  | "Journey5"
+  | "Journey10"
+  | "NewConnection"
+  /** 반복 보상. missions_done에는 들어가지 않는다 */
+  | "NearEvent";
 
 export interface TransferRecord {
   from: string;
@@ -42,6 +52,13 @@ export interface ContractConfig {
   check_in_cooldown_ms: number;
 }
 
+export interface NearEventView {
+  event_id: string;
+  name: string;
+  tickets: number;
+  ends_at_ms: number;
+}
+
 /** 프런트 전용: Vault 잔액 (최소 단위 문자열) */
 export interface VaultBalances {
   /** Vault `withdrawable` (스토리지 예약분 제외) */
@@ -70,6 +87,8 @@ export interface EnvelopeApi {
   envelopesForOwner(accountId: string): Promise<EnvelopeView[]>;
   enhanceTable(): Promise<number[]>;
   config(): Promise<ContractConfig>;
+  nearEvents(): Promise<NearEventView[]>;
+  nearEventRedeemed(eventId: string, accountId: string): Promise<boolean>;
   vaultBalances(vaultId: string): Promise<VaultBalances>;
   /** 프런트 전용: 지갑 계정의 사용 가능 잔액. NEAR는 스토리지·가스 예약분을 뺀 값 */
   walletBalances(accountId: string): Promise<VaultBalances>;
@@ -86,6 +105,8 @@ export interface EnvelopeApi {
   sendEnvelope(tokenId: string, receiverId: string, message?: string): Promise<void>;
   enhance(tokenId: string): Promise<EnhanceResult | null>;
   checkIn(tokenId: string): Promise<void>;
+  /** 행사 코드 입력. 보상은 tokenId 봉투에 쌓인다 */
+  redeemNearEvent(tokenId: string, eventId: string, code: string): Promise<void>;
   /** fill / register_ft / ft_transfer_call / send_envelope를 지갑 승인 한 번으로 보낸다. send 트랜잭션 해시 (모르면 null) */
   sealAndSend(params: SealAndSendParams): Promise<string | null>;
 }

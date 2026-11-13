@@ -41,6 +41,13 @@ pub enum MissionId {
     FirstFill,
     FirstGift,
     Regift,
+    // v0.2 — borsh 호환을 위해 항상 뒤에 추가한다
+    Journey3,
+    Journey5,
+    Journey10,
+    NewConnection,
+    /// 반복 보상. missions_done에는 넣지 않고 mission_complete 이벤트로만 남긴다.
+    NearEvent,
 }
 
 #[near(serializers = [borsh, json])]
@@ -118,4 +125,24 @@ pub struct ContractConfig {
     pub max_level: u8,
     pub message_max_len: u32,
     pub check_in_cooldown_ms: u64,
+}
+
+/// 온체인 저장용 니어 행사. 코드 원문은 저장하지 않는다.
+#[near(serializers = [borsh])]
+#[derive(Clone, Debug)]
+pub struct NearEvent {
+    pub name: String,
+    /// sha256(code)의 소문자 hex
+    pub code_hash: String,
+    pub tickets: u32,
+    pub ends_at_ms: u64,
+}
+
+#[near(serializers = [json])]
+#[derive(Clone, Debug)]
+pub struct NearEventView {
+    pub event_id: String,
+    pub name: String,
+    pub tickets: u32,
+    pub ends_at_ms: u64,
 }
