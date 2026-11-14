@@ -1,10 +1,9 @@
 "use client";
 
-// 보내기 1단계: 내 봉투 선택 → /send/[tokenId], 새 봉투는 /send/new
+// 보내기 1단계: 봉투 카드의 Send → /send/[tokenId], 새 봉투는 /send/new
 // 소유자: C
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ChooseEnvelopeCard } from "@/components/envelope/ChooseEnvelopeCard";
@@ -12,10 +11,8 @@ import { SendSteps } from "@/components/ui/SendSteps";
 import { useNear, type EnvelopeView } from "@/lib/near";
 
 export default function ChooseEnvelopePage() {
-  const router = useRouter();
   const { accountId, api, signIn, ready } = useNear();
   const [envelopes, setEnvelopes] = useState<EnvelopeView[] | null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
 
   useEffect(() => {
     if (!accountId) return;
@@ -56,12 +53,7 @@ export default function ChooseEnvelopePage() {
           <Notice>You don&apos;t have any envelopes yet. Create one below to get started.</Notice>
         ) : (
           envelopes.map((envelope) => (
-            <ChooseEnvelopeCard
-              key={envelope.token_id}
-              envelope={envelope}
-              selected={selected === envelope.token_id}
-              onSelect={() => setSelected(envelope.token_id)}
-            />
+            <ChooseEnvelopeCard key={envelope.token_id} envelope={envelope} />
           ))
         )}
       </div>
@@ -75,13 +67,6 @@ export default function ChooseEnvelopePage() {
         >
           Back Home
         </Link>
-        <button
-          onClick={() => selected && router.push(`/send/${selected}`)}
-          disabled={!selected}
-          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
-        >
-          Continue
-        </button>
       </div>
     </div>
   );
