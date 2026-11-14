@@ -42,7 +42,7 @@ NEAR: `@near-wallet-selector/core` + `meteor-wallet` 10.x (**Meteor 지갑만 �
 ## 개발
 
 ```bash
-cp .env.example .env.local   # 기본값 NEXT_PUBLIC_USE_MOCK=true → 컨트랙트 없이 목업으로 동작
+cp .env.example .env.local   # 기본값 NEXT_PUBLIC_USE_MOCK=false → 테스트넷 컨트랙트 사용 (true면 목업)
 pnpm dev
 pnpm lint && pnpm build      # PR 전 필수
 ```
