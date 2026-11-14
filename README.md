@@ -71,7 +71,7 @@ Requirements: Node 22, pnpm 10. For contracts: Rust (pinned in `contracts/rust-t
 # Frontend against the deployed testnet contracts
 cd frontend
 cp .env.example .env.local
-# in .env.local set NEXT_PUBLIC_USE_MOCK=false to use the testnet contracts (true = in-memory mock data)
+# uses the testnet contracts by default (set NEXT_PUBLIC_USE_MOCK=true in .env.local for in-memory mock data)
 pnpm install
 pnpm dev            # http://localhost:3000
 ```
