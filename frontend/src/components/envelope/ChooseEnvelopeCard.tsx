@@ -22,11 +22,11 @@ export function ChooseEnvelopeCard({
 
   return (
     <div
-      className={`rounded-2xl border bg-surface p-6 transition ${
+      className={`rounded-3xl border bg-surface p-6 transition ${
         selected ? "border-2 border-brand" : "border-line hover:border-sketch"
       }`}
     >
-      <EnvelopeIllustration className="w-full" />
+      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
       <h3 className="mt-7 text-2xl font-semibold">
         {designName(envelope.design)} Envelope +{envelope.level}
       </h3>
@@ -44,7 +44,7 @@ export function ChooseEnvelopeCard({
         aria-pressed={selected}
         className={`mt-4 rounded-lg px-6 py-3 font-semibold transition ${
           selected
-            ? "bg-brand text-white hover:bg-brand-hover"
+            ? "bg-brand text-on-brand hover:bg-brand-hover"
             : "border border-line bg-surface text-ink hover:border-sketch"
         }`}
       >

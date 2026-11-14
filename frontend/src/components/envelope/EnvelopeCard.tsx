@@ -12,7 +12,7 @@ const RARITY_STYLE: Record<Rarity, string> = {
 
 export function EnvelopeCard({ envelope }: { envelope: EnvelopeView }) {
   return (
-    <div className={`rounded-2xl border-2 p-5 ${RARITY_STYLE[envelope.rarity]}`}>
+    <div className={`rounded-3xl border-2 p-5 ${RARITY_STYLE[envelope.rarity]}`}>
       <div className="text-xs uppercase tracking-wide opacity-60">#{envelope.token_id}</div>
       <div className="mt-2 text-lg font-semibold">
         {envelope.rarity} Envelope +{envelope.level}

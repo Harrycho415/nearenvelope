@@ -29,7 +29,7 @@ export function OverviewTab({
 
   return (
     <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1fr_424px]">
-      <section className="rounded-2xl border border-line bg-surface p-6 sm:p-7">
+      <section className="rounded-3xl border border-line bg-surface p-6 sm:p-7">
         <h2 className="text-2xl font-semibold">A gift that grows in meaning.</h2>
         <p className="mt-4 text-[17px] leading-relaxed text-ink-muted">
           A keepsake passed between friends. Each gift and every enhancement adds another chapter, without changing
@@ -47,7 +47,7 @@ export function OverviewTab({
           ))}
         </dl>
 
-        <div className="mt-6 rounded-2xl border border-line bg-seal/40 p-5">
+        <div className="mt-6 rounded-3xl border border-line bg-seal/40 p-5">
           <div className="text-sm text-ink-muted">Envelope Account</div>
           <a
             href={`${EXPLORER_URL}/address/${envelope.vault_id}`}
@@ -63,7 +63,7 @@ export function OverviewTab({
         </div>
       </section>
 
-      <aside className="rounded-2xl border border-line bg-paper p-6 sm:p-7">
+      <aside className="rounded-3xl border border-line bg-paper p-6 sm:p-7">
         <h2 className="text-2xl font-semibold">Keep the story going</h2>
         <p className="mt-4 text-[17px] leading-relaxed text-ink-muted">
           Enhance its meaning or pass it on when you are ready.

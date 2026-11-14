@@ -106,7 +106,7 @@ export function WithdrawForm({
   }
 
   return (
-    <section className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
+    <section className="rounded-3xl border border-line bg-surface p-6 sm:p-8">
       <label className="block text-[15px] font-medium">
         Asset
         <div className="relative">
@@ -159,7 +159,7 @@ export function WithdrawForm({
         >
           Use maximum
         </button>
-        {amountError && <span className="basis-full text-red-600">{amountError}</span>}
+        {amountError && <span className="basis-full text-red-400">{amountError}</span>}
       </div>
 
       <label className="mt-6 block text-[15px] font-medium">
@@ -167,14 +167,14 @@ export function WithdrawForm({
         <input readOnly value={accountId} title={accountId} className={`${FIELD} truncate`} />
       </label>
 
-      <div className="mt-4 rounded-2xl border border-line bg-seal/40 p-6">
+      <div className="mt-4 rounded-3xl border border-line bg-seal/40 p-6">
         <div className="text-2xl font-semibold">You receive: {receiveText}</div>
         <div className="mt-5 text-[17px]">Remaining inside: {assetsText(remaining) ?? "Nothing"}</div>
         <div className="mt-5 text-sm text-ink-muted">Estimated network fee: {FEE_TEXT}</div>
       </div>
 
       {error && (
-        <p role="alert" className="mt-4 text-[15px] text-red-600">
+        <p role="alert" className="mt-4 text-[15px] text-red-400">
           {error}
         </p>
       )}

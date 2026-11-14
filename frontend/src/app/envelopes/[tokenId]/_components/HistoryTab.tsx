@@ -36,7 +36,7 @@ export function HistoryTab({ envelope }: { envelope: EnvelopeView }) {
   ];
 
   return (
-    <section className="mt-8 rounded-2xl border border-line bg-surface p-6 sm:p-7">
+    <section className="mt-8 rounded-3xl border border-line bg-surface p-6 sm:p-7">
       <h2 className="text-2xl font-semibold">Every chapter stays with the envelope.</h2>
       <p className="mt-5 text-[15px] text-ink-muted">
         {plural(envelope.history.length, "gift")} · {plural(envelope.level, "successful enhancement")} · One

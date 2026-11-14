@@ -41,8 +41,8 @@ export function PreviewStep({
       <StepHeader step={4} title="Ready to send?" subtitle="A gift of value. A message that matters." />
 
       <div className="mt-9 grid items-start gap-10 lg:grid-cols-[570px_1fr]">
-        <div className="rounded-2xl border border-line bg-paper p-10 text-center">
-          <EnvelopeIllustration className="w-full" />
+        <div className="rounded-3xl border border-line bg-paper p-10 text-center">
+          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
           <h3 className="mt-8 text-3xl font-semibold">{envelopeTitle(envelope)}</h3>
           <div className="mt-5 text-sm font-semibold uppercase tracking-wide text-brand">
             {RARITY_LABEL[envelope.rarity]}
@@ -54,12 +54,12 @@ export function PreviewStep({
           </p>
         </div>
 
-        <div className="rounded-2xl border border-line bg-surface p-8">
+        <div className="rounded-3xl border border-line bg-surface p-8">
           <div className="text-2xl font-semibold">To: {receiverId}</div>
           <div className="mt-5 text-3xl font-semibold">Inside: {totalText ?? "Nothing"}</div>
 
           {message && (
-            <div className="mt-5 rounded-2xl border border-line bg-seal/40 p-6">
+            <div className="mt-5 rounded-3xl border border-line bg-seal/40 p-6">
               <div className="text-xs font-semibold uppercase tracking-wide text-brand">Your message</div>
               <p className="mt-4 whitespace-pre-wrap break-words text-xl">&ldquo;{message}&rdquo;</p>
             </div>
@@ -85,19 +85,19 @@ export function PreviewStep({
             <button
               onClick={onBack}
               disabled={sending}
-              className="rounded-lg border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch disabled:opacity-50"
+              className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch disabled:opacity-50"
             >
               Back
             </button>
             <button
               onClick={onSend}
               disabled={sending}
-              className="rounded-lg bg-brand px-6 py-3.5 font-semibold text-white transition hover:bg-brand-hover disabled:opacity-50"
+              className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
             >
               {sending ? "Sending…" : "Seal & Send"}
             </button>
           </div>
-          {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+          {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
         </div>
       </div>
     </>

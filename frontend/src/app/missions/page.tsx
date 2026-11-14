@@ -98,7 +98,7 @@ function Missions() {
 
       <div className="mt-10">
         {!ready || (accountId && loaded === null) ? (
-          <div className="h-[420px] animate-pulse rounded-2xl border border-line bg-surface" aria-label="Loading" />
+          <div className="h-[420px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
         ) : !accountId ? (
           <ConnectNotice message="Connect your wallet to see your Envelopes' missions." />
         ) : loaded === "error" || loaded === null ? (
@@ -131,7 +131,7 @@ function Missions() {
         )}
       </div>
 
-      <section className="mt-12 rounded-2xl border border-line bg-seal/40 p-6">
+      <section className="mt-12 rounded-3xl border border-line bg-seal/40 p-6">
         <h2 className="text-lg font-semibold sm:text-xl">
           Action → Envelope Experience → Enhancement Attempt → Stronger Envelope
         </h2>
@@ -176,11 +176,11 @@ function MissionBoard({
                 role="radio"
                 aria-checked={active}
                 onClick={() => onSelect(e.token_id)}
-                className={`flex items-center gap-4 rounded-2xl border bg-surface p-4 text-left transition ${
+                className={`flex items-center gap-4 rounded-3xl border bg-surface p-4 text-left transition ${
                   active ? "border-brand ring-1 ring-brand" : "border-line hover:border-sketch"
                 }`}
               >
-                <EnvelopeIllustration className="w-20 shrink-0" />
+                <EnvelopeIllustration design={e.design} rarity={e.rarity} className="w-20 shrink-0" />
                 <span className="min-w-0">
                   <span className="block truncate font-semibold">
                     {envelopeName(e)} +{e.level}
@@ -198,8 +198,8 @@ function MissionBoard({
         </div>
       </section>
 
-      <section className="mt-10 flex flex-col gap-5 rounded-2xl border border-line bg-surface p-6 sm:flex-row sm:items-center">
-        <EnvelopeIllustration className="w-28 shrink-0" />
+      <section className="mt-10 flex flex-col gap-5 rounded-3xl border border-line bg-surface p-6 sm:flex-row sm:items-center">
+        <EnvelopeIllustration design={selected.design} rarity={selected.rarity} className="w-28 shrink-0" />
         <div className="min-w-0 flex-1">
           <h2 className="text-2xl font-semibold">
             {label} +{selected.level}

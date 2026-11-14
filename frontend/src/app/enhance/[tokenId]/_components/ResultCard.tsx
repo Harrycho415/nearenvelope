@@ -31,16 +31,16 @@ export function ResultCard({
   const left = Math.max(outcome.attempts - 1, 0);
 
   return (
-    <section className="mx-auto max-w-[1020px] rounded-2xl border border-line bg-surface px-6 py-12 text-center sm:px-16 sm:py-14">
+    <section className="mx-auto max-w-[1020px] rounded-3xl border border-line bg-surface px-6 py-12 text-center sm:px-16 sm:py-14">
       {outcome.success ? (
-        <Success outcome={outcome} name={name} design={designName(envelope.design)} />
+        <Success outcome={outcome} name={name} design={envelope.design} />
       ) : (
-        <Failure outcome={outcome} name={name} />
+        <Failure outcome={outcome} name={name} design={envelope.design} />
       )}
 
       {outcome.success ? (
         <>
-          <div className="mx-auto mt-6 grid max-w-[760px] gap-4 rounded-2xl border border-line bg-seal/40 px-6 py-5 text-left text-[17px] sm:grid-cols-2 sm:gap-10">
+          <div className="mx-auto mt-6 grid max-w-[760px] gap-4 rounded-3xl border border-line bg-seal/40 px-6 py-5 text-left text-[17px] sm:grid-cols-2 sm:gap-10">
             <div>
               <div>Assets unchanged</div>
               <div className="mt-1">All assets remain inside.</div>
@@ -56,7 +56,7 @@ export function ResultCard({
         </>
       ) : (
         <>
-          <div className="mx-auto mt-5 max-w-[760px] rounded-2xl border border-line bg-seal/40 px-6 py-7">
+          <div className="mx-auto mt-5 max-w-[760px] rounded-3xl border border-line bg-seal/40 px-6 py-7">
             <div className="text-[22px] font-semibold">Your envelope and its assets are safe.</div>
             <p className="mt-4 text-[15px] text-ink-muted">
               All assets remain inside. Your envelope&apos;s history is preserved.
@@ -86,7 +86,7 @@ export function ResultCard({
       )}
 
       {error && (
-        <p role="alert" className="mt-4 text-sm text-red-600">
+        <p role="alert" className="mt-4 text-sm text-red-400">
           {error}
         </p>
       )}
@@ -94,7 +94,7 @@ export function ResultCard({
   );
 }
 
-function Success({ outcome, name, design }: { outcome: EnhanceOutcome; name: string; design: string }) {
+function Success({ outcome, name, design }: { outcome: EnhanceOutcome; name: string; design: number }) {
   const before = rarityOf(outcome.from);
   const after = rarityOf(outcome.to);
   const rarityUp = before !== after;
@@ -103,7 +103,7 @@ function Success({ outcome, name, design }: { outcome: EnhanceOutcome; name: str
     <>
       <div className="text-sm font-semibold uppercase tracking-wide text-brand">Enhancement successful</div>
       <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-[38px]">Your Envelope just got stronger.</h1>
-      <EnvelopeIllustration className="mx-auto mt-6 w-[260px] sm:w-[360px]" />
+      <EnvelopeIllustration design={design} rarity={after} className="mx-auto mt-6 w-[260px] sm:w-[360px]" />
       <div className="mt-6 text-5xl font-semibold sm:text-[56px]">
         +{outcome.from} → +{outcome.to}
       </div>
@@ -113,17 +113,17 @@ function Success({ outcome, name, design }: { outcome: EnhanceOutcome; name: str
           : `${RARITY_LABEL[after].toUpperCase()} · Level upgraded`}
       </div>
       <div className="mt-5 text-xl">{name}</div>
-      <p className="mt-5 text-[17px] text-ink-muted">One attempt used. A new chapter for your {design} Envelope.</p>
+      <p className="mt-5 text-[17px] text-ink-muted">One attempt used. A new chapter for your {designName(design)} Envelope.</p>
     </>
   );
 }
 
-function Failure({ outcome, name }: { outcome: EnhanceOutcome; name: string }) {
+function Failure({ outcome, name, design }: { outcome: EnhanceOutcome; name: string; design: number }) {
   return (
     <>
       <div className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Enhancement unsuccessful</div>
       <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-[42px]">Enhancement Failed</h1>
-      <EnvelopeIllustration className="mx-auto mt-6 w-[260px] sm:w-[340px]" />
+      <EnvelopeIllustration design={design} rarity={rarityOf(outcome.from)} className="mx-auto mt-6 w-[260px] sm:w-[340px]" />
       <div className="mt-6 text-2xl sm:text-[28px]">
         {name} remains at +{outcome.from}.
       </div>

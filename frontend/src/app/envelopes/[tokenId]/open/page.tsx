@@ -66,7 +66,7 @@ export default function OpenEnvelopePage() {
   }, [tokenId, accountId, api]);
 
   if (!ready || (accountId && data?.accountId !== accountId)) {
-    return <div className="mx-auto mt-14 h-[640px] max-w-[580px] animate-pulse rounded-2xl border border-line bg-surface" />;
+    return <div className="mx-auto mt-14 h-[640px] max-w-[580px] animate-pulse rounded-3xl border border-line bg-surface" />;
   }
 
   if (!accountId) {
@@ -116,8 +116,8 @@ export default function OpenEnvelopePage() {
         <h1 className="text-4xl font-semibold tracking-tight sm:text-[42px]">You received an Envelope.</h1>
         <p className="mt-6 text-xl text-ink-muted">From: {last.from}</p>
 
-        <div className="mx-auto mt-6 max-w-[580px] rounded-2xl border border-line bg-paper px-12 pb-12 pt-12">
-          <EnvelopeIllustration className="w-full" />
+        <div className="mx-auto mt-6 max-w-[580px] rounded-3xl border border-line bg-paper px-12 pb-12 pt-12">
+          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
           <h2 className="mt-6 text-3xl font-semibold">
             {envelopeName(envelope)} +{envelope.level}
           </h2>
@@ -154,7 +154,7 @@ export default function OpenEnvelopePage() {
 function Card({ children }: { children: React.ReactNode }) {
   return (
     <div className="pt-14">
-      <section className="mx-auto max-w-[1040px] rounded-2xl border border-line bg-surface px-6 py-14 text-center">
+      <section className="mx-auto max-w-[1040px] rounded-3xl border border-line bg-surface px-6 py-14 text-center">
         {children}
       </section>
     </div>
@@ -168,12 +168,12 @@ function Opening({ envelope, from }: { envelope: EnvelopeView; from: string }) {
       <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-[42px]">Opening your Envelope…</h1>
       <p className="mt-6 text-lg text-ink-muted">From {from}</p>
 
-      <div className="mx-auto mt-5 max-w-[360px] rounded-2xl border border-line bg-seal/40 px-6 py-7">
+      <div className="mx-auto mt-5 max-w-[360px] rounded-3xl border border-line bg-seal/40 px-6 py-7">
         <div className="text-[22px] font-medium">A note for you</div>
         <p className="mt-4 text-[15px] text-ink-muted">Your gift is about to be revealed.</p>
       </div>
 
-      <EnvelopeIllustration className="mx-auto mt-4 w-full max-w-[440px] animate-pulse" />
+      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-4 w-full max-w-[440px] animate-pulse" />
       <div className="mt-6 text-xl font-medium">
         {envelopeName(envelope)} +{envelope.level} · {RARITY_LABEL[envelope.rarity]}
       </div>
@@ -216,14 +216,14 @@ function Revealed({
 
         <div className="mx-auto mt-8 max-w-[760px] space-y-4">
           {message && (
-            <div className="rounded-2xl border border-line bg-paper px-6 py-9">
+            <div className="rounded-3xl border border-line bg-paper px-6 py-9">
               <p className="whitespace-pre-wrap break-words text-[28px]">&ldquo;{message}&rdquo;</p>
               <p className="mt-5 text-[17px] text-ink-muted">— {from}</p>
             </div>
           )}
 
-          <div className="flex items-center gap-7 rounded-2xl border border-line bg-seal/40 p-6 text-left">
-            <EnvelopeIllustration className="w-32 shrink-0 sm:w-44" />
+          <div className="flex items-center gap-7 rounded-3xl border border-line bg-seal/40 p-6 text-left">
+            <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-32 shrink-0 sm:w-44" />
             <div className="min-w-0">
               <div className="text-[15px] text-ink-muted">You now own</div>
               <div className="mt-4 text-2xl font-semibold sm:text-[28px]">

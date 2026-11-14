@@ -50,7 +50,7 @@ export default function ChooseEnvelopePage() {
           </Notice>
         ) : envelopes === null ? (
           Array.from({ length: 3 }, (_, i) => (
-            <div key={i} className="h-[488px] animate-pulse rounded-2xl border border-line bg-surface" />
+            <div key={i} className="h-[488px] animate-pulse rounded-3xl border border-line bg-surface" />
           ))
         ) : envelopes.length === 0 ? (
           <Notice>You don&apos;t have any envelopes yet. Create one below to get started.</Notice>
@@ -71,14 +71,14 @@ export default function ChooseEnvelopePage() {
       <div className="mt-8 flex gap-4">
         <Link
           href="/"
-          className="rounded-lg border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+          className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
         >
           Back Home
         </Link>
         <button
           onClick={() => selected && router.push(`/send/${selected}`)}
           disabled={!selected}
-          className="rounded-lg bg-brand px-6 py-3.5 font-semibold text-white transition hover:bg-brand-hover disabled:opacity-50"
+          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
         >
           Continue
         </button>
@@ -89,7 +89,7 @@ export default function ChooseEnvelopePage() {
 
 function Notice({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-dashed border-line bg-surface p-6 text-sm text-ink-muted md:col-span-2 lg:col-span-3">
+    <div className="rounded-3xl border border-dashed border-line bg-surface p-6 text-sm text-ink-muted md:col-span-2 lg:col-span-3">
       {children}
     </div>
   );
@@ -98,14 +98,14 @@ function Notice({ children }: { children: React.ReactNode }) {
 /** "A new story starts here" 박스 → /send/new */
 function CreateEnvelopeBox() {
   return (
-    <section className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-line bg-surface p-6">
+    <section className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-line bg-surface p-6">
       <div>
         <h2 className="text-xl font-semibold">A new story starts here</h2>
         <p className="mt-3 text-[15px] text-ink-muted">Create a fresh envelope with no gifting history.</p>
       </div>
       <Link
         href="/send/new"
-        className="rounded-lg border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch"
+        className="rounded-full border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch"
       >
         Create New Envelope
       </Link>

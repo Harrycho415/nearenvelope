@@ -33,7 +33,7 @@ export function AssetsTab({
 }) {
   return (
     <>
-      <section className="mt-8 rounded-2xl border border-line bg-surface p-6 sm:p-8">
+      <section className="mt-8 rounded-3xl border border-line bg-surface p-6 sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-[28px] font-semibold leading-tight">Inside this envelope</h2>
@@ -88,7 +88,7 @@ export function AssetsTab({
         </table>
       </section>
 
-      <section className="mt-8 rounded-2xl border border-line bg-seal/40 p-6">
+      <section className="mt-8 rounded-3xl border border-line bg-seal/40 p-6">
         <h2 className="text-[22px] font-semibold">The gift travels as one.</h2>
         <p className="mt-5 text-[17px] leading-relaxed text-ink-muted">
           Assets remain connected to this envelope until withdrawn. If the envelope is sent to another user, control

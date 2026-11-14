@@ -66,7 +66,7 @@ export function RecipientStep({
       <StepHeader step={3} title="Who is this for?" subtitle="A few thoughtful words make the gift yours." />
 
       <div className="mt-9 grid items-start gap-10 lg:grid-cols-[1fr_400px]">
-        <div className="rounded-2xl border border-line bg-surface p-8">
+        <div className="rounded-3xl border border-line bg-surface p-8">
           <label htmlFor="recipient" className="text-[15px] font-medium">
             Recipient NEAR account / wallet
           </label>
@@ -93,29 +93,29 @@ export function RecipientStep({
             placeholder="Thanks for everything this year."
             className="mt-4 w-full resize-none rounded-xl border border-line bg-surface px-5 py-4 text-lg outline-none focus:border-brand"
           />
-          <p className={`mt-4 text-sm ${messageLength > maxMessage ? "text-red-600" : "text-ink-muted"}`}>
+          <p className={`mt-4 text-sm ${messageLength > maxMessage ? "text-red-400" : "text-ink-muted"}`}>
             {messageLength} / {maxMessage} characters
           </p>
 
           <div className="mt-4 flex gap-4">
             <button
               onClick={onBack}
-              className="rounded-lg border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+              className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
             >
               Back
             </button>
             <button
               onClick={onContinue}
               disabled={!canContinue}
-              className="rounded-lg bg-brand px-6 py-3.5 font-semibold text-white transition hover:bg-brand-hover disabled:opacity-50"
+              className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
             >
               Preview Envelope
             </button>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-paper p-7">
-          <EnvelopeIllustration className="w-full" />
+        <div className="rounded-3xl border border-line bg-paper p-7">
+          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
           <h3 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h3>
           <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-brand">
             {RARITY_LABEL[envelope.rarity]}
@@ -137,9 +137,9 @@ function RecipientStatus({ status, id }: { status: Status; id: string }) {
     empty: [null, ""],
     checking: ["Checking account…", "text-ink-muted"],
     found: [`Account found · ${displayName(id)}`, "font-medium text-brand"],
-    missing: [`No account named ${id} on ${NETWORK}.`, "text-red-600"],
-    invalid: ["Enter a valid NEAR account, like alice.testnet.", "text-red-600"],
-    self: ["You already own this envelope. Choose someone else.", "text-red-600"],
+    missing: [`No account named ${id} on ${NETWORK}.`, "text-red-400"],
+    invalid: ["Enter a valid NEAR account, like alice.testnet.", "text-red-400"],
+    self: ["You already own this envelope. Choose someone else.", "text-red-400"],
   }[status];
 
   return <p className={`mt-4 min-h-5 text-sm ${tone}`}>{text}</p>;

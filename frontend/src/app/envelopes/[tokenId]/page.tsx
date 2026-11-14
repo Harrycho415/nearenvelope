@@ -77,8 +77,8 @@ export default function EnvelopeDetailPage() {
   if (!ready || (accountId && envelope === null)) {
     return (
       <Frame>
-        <div className="h-[236px] animate-pulse rounded-2xl border border-line bg-surface" aria-label="Loading" />
-        <div className="mt-8 h-[420px] animate-pulse rounded-2xl border border-line bg-surface" />
+        <div className="h-[236px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
+        <div className="mt-8 h-[420px] animate-pulse rounded-3xl border border-line bg-surface" />
       </Frame>
     );
   }
