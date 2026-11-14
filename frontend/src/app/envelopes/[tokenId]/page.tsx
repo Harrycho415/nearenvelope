@@ -2,7 +2,7 @@
 
 // 봉투 상세: 개요, 자산(Vault 잔액), 전달 기록 타임라인. 강화는 /enhance/[tokenId], 보내기는 /send/[tokenId],
 // 출금은 /envelopes/[tokenId]/withdraw. `?tab=assets|history`로 처음 열 탭을 고를 수 있다.
-// 채우기(fill)는 아직 연결하지 않았다.
+// 현재 소유자만 볼 수 있다 (보낸 뒤에는 이전 소유자에게 안내 문구만 보인다).
 // 소유자: C
 
 import Link from "next/link";
@@ -54,7 +54,8 @@ export default function EnvelopeDetailPage() {
       .then((result) => {
         if (cancelled) return;
         setEnvelopeResult({ key, value: result });
-        if (typeof result === "string") return;
+        // 소유자가 아니면 상세를 보여 주지 않으므로 잔액도 조회하지 않는다
+        if (typeof result === "string" || result.owner_id !== accountId) return;
 
         api
           .vaultBalances(result.vault_id)
@@ -114,7 +115,21 @@ export default function EnvelopeDetailPage() {
     );
   }
 
-  const isOwner = envelope.owner_id === accountId;
+  // 현재 소유자만 상세를 볼 수 있다. 보낸 사람이 전송 후 다시 들어와 자산을 넣는 일을 막는다.
+  if (envelope.owner_id !== accountId) {
+    return (
+      <Frame>
+        <Notice>
+          Only the current owner can view this envelope.{" "}
+          <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+            Back to My Envelopes
+          </Link>
+        </Notice>
+      </Frame>
+    );
+  }
+
+  const isOwner = true;
 
   return (
     <Frame title={`${envelopeName(envelope)} #${envelope.token_id}`}>

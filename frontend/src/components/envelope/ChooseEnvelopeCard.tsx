@@ -1,5 +1,7 @@
-// 보내기 1단계 "Choose an Envelope"의 선택 카드.
+// 보내기 1단계 "Choose an Envelope"의 봉투 카드. Send를 누르면 바로 다음 단계(/send/[tokenId])로 간다.
 // 소유자: D
+
+import Link from "next/link";
 
 import type { EnvelopeView } from "@/lib/near";
 
@@ -9,23 +11,11 @@ import { EnvelopeIllustration } from "./EnvelopeIllustration";
 const formatDate = (ms: number) =>
   new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-export function ChooseEnvelopeCard({
-  envelope,
-  selected,
-  onSelect,
-}: {
-  envelope: EnvelopeView;
-  selected: boolean;
-  onSelect: () => void;
-}) {
+export function ChooseEnvelopeCard({ envelope }: { envelope: EnvelopeView }) {
   const gifted = envelope.history.length;
 
   return (
-    <div
-      className={`rounded-3xl border bg-surface p-6 transition ${
-        selected ? "border-2 border-brand" : "border-line hover:border-sketch"
-      }`}
-    >
+    <div className="rounded-3xl border border-line bg-surface p-6 transition hover:border-sketch">
       <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
       <h3 className="mt-7 text-2xl font-semibold">
         {designName(envelope.design)} Envelope +{envelope.level}
@@ -39,17 +29,12 @@ export function ChooseEnvelopeCard({
           Gifted {gifted} {gifted === 1 ? "time" : "times"}
         </div>
       </div>
-      <button
-        onClick={onSelect}
-        aria-pressed={selected}
-        className={`mt-4 rounded-lg px-6 py-3 font-semibold transition ${
-          selected
-            ? "bg-brand text-on-brand hover:bg-brand-hover"
-            : "border border-line bg-surface text-ink hover:border-sketch"
-        }`}
+      <Link
+        href={`/send/${envelope.token_id}`}
+        className="mt-4 inline-block rounded-lg bg-brand px-6 py-3 font-semibold text-on-brand transition hover:bg-brand-hover"
       >
-        {selected ? "Selected" : "Choose Envelope"}
-      </button>
+        Send
+      </Link>
     </div>
   );
 }

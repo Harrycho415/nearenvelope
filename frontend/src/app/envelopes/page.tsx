@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { useNear, type EnvelopeView } from "@/lib/near";
+import { isOpened, isReceivedBy } from "@/lib/opened";
 
 import { EnvelopeListCard } from "./_components/EnvelopeListCard";
 import {
@@ -157,6 +158,7 @@ export default function MyEnvelopesPage() {
               key={envelope.token_id}
               envelope={envelope}
               balances={balances[envelope.vault_id] ?? null}
+              unopened={isReceivedBy(envelope, accountId) && !isOpened(envelope, accountId)}
             />
           ))
         )}
