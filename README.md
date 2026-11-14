@@ -6,8 +6,7 @@ Built at NEAR HACKATHON · Track: **NFTs That Do Something** (`nfts`)
 
 - Network: NEAR **testnet** · contracts deployed at [`nearenvelope.testnet`](#deployed-contracts-testnet)
 - Try it: [step by step on testnet](#try-it-testnet) or [run it locally](#run-locally)
-- Demo video: under 2 minutes, posted on X
-<!-- Add the X post link (demo video) and a hosted URL here once they exist. -->
+- Demo video (X): https://x.com/suhyuncho415/status/2121641810443555315
 
 ## Problem
 
