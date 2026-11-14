@@ -66,19 +66,19 @@ export function CreateEnvelope({ entry }: { entry: CreateEntry }) {
         <Created tokenId={created} design={design} entry={entry} />
       ) : (
         <>
-          <h1 className="mt-10 text-4xl font-bold tracking-tight sm:text-[42px]">Create Envelope</h1>
+          <h1 className="mt-10 text-4xl sm:text-[44px]">Create Envelope</h1>
           <p className="mt-6 text-lg text-ink-muted sm:mt-10">
             Start a personal keepsake. Keep it, fill it, or send it whenever you like.
           </p>
 
           <div className="mt-8 grid items-start gap-10 lg:grid-cols-[480px_1fr]">
-            <div className="rounded-3xl border border-line bg-paper p-8">
+            <div className="sheet bg-paper p-8">
               <EnvelopeIllustration design={design} className="w-full" />
               <div className="mt-5 truncate text-[26px] font-semibold">{DESIGN_NAMES[design]} Envelope +0</div>
-              <div className="mt-4 text-sm font-medium text-brand">COMMON · A new story</div>
+              <div className="label mt-4 text-common">COMMON · A new story</div>
             </div>
 
-            <div className="rounded-3xl border border-line bg-surface p-8">
+            <div className="sheet p-8">
               <div className="text-lg font-medium">Choose a cover</div>
               <div className="mt-4 grid grid-cols-3 gap-4">
                 {DESIGN_NAMES.map((cover, i) => (
@@ -87,8 +87,8 @@ export function CreateEnvelope({ entry }: { entry: CreateEntry }) {
                     onClick={() => setDesign(i)}
                     aria-pressed={design === i}
                     disabled={minting}
-                    className={`rounded-3xl border p-4 text-left transition ${
-                      design === i ? "border-sketch bg-seal/40" : "border-line bg-surface hover:border-sketch"
+                    className={`rounded-[3px] border p-4 text-left transition ${
+                      design === i ? "border-sketch bg-seal/55" : "border-line bg-surface hover:border-sketch"
                     }`}
                   >
                     <EnvelopeIllustration design={i} className="w-full" />
@@ -121,7 +121,7 @@ export function CreateEnvelope({ entry }: { entry: CreateEntry }) {
                 )}
               </div>
               {error && (
-                <p role="alert" className="mt-3 text-sm text-red-400">
+                <p role="alert" className="mt-3 text-sm text-danger">
                   {error}
                 </p>
               )}
@@ -137,8 +137,8 @@ export function CreateEnvelope({ entry }: { entry: CreateEntry }) {
 function Created({ tokenId, design, entry }: { tokenId: string; design: number; entry: CreateEntry }) {
   if (!tokenId) {
     return (
-      <section className="mx-auto mt-10 max-w-[760px] rounded-3xl border border-line bg-surface px-6 py-12 text-center">
-        <h1 className="text-3xl font-semibold">Your envelope is being created.</h1>
+      <section className="mx-auto mt-10 max-w-[760px] sheet px-6 py-12 text-center">
+        <h1 className="text-3xl">Your envelope is being created.</h1>
         <p className="mt-4 text-ink-muted">It will appear in My Envelopes once the transaction is confirmed.</p>
         <Link href="/envelopes" className={`${BUTTON_PRIMARY} mt-8 inline-block`}>
           Go to My Envelopes
@@ -152,17 +152,16 @@ function Created({ tokenId, design, entry }: { tokenId: string; design: number; 
   const [primary, secondary] = entry === "send" ? [send, view] : [view, send];
 
   return (
-    <section className="mx-auto mt-10 max-w-[1020px] rounded-3xl border border-line bg-surface px-6 py-12 text-center sm:px-16">
-      <div className="text-sm font-semibold uppercase tracking-wide text-brand">Envelope created</div>
-      <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-[38px]">A new story starts here.</h1>
+    <section className="mx-auto mt-10 max-w-[1020px] sheet px-6 py-12 text-center sm:px-16">
+      <h1 className="text-3xl tracking-tight sm:text-[38px]">A new story starts here.</h1>
       <EnvelopeIllustration design={design} className="mx-auto mt-6 w-[260px] sm:w-[340px]" />
       <div className="mt-6 text-2xl">
         {DESIGN_NAMES[design]} Envelope #{tokenId}
       </div>
       <p className="mt-3 text-lg text-ink-muted">+0 · Common · Saved in My Envelopes</p>
 
-      <div className="mx-auto mt-6 max-w-[760px] rounded-3xl border border-line bg-seal/40 px-6 py-5 text-[17px]">
-        Welcome mission complete: <span className="font-semibold text-brand">+1 Enhancement Attempt</span>
+      <div className="mx-auto mt-6 max-w-[760px] note px-6 py-5 text-[17px]">
+        Welcome mission complete: <span className="font-semibold text-ok">+1 Enhancement Attempt</span>
       </div>
 
       <div className="mt-6 flex flex-wrap justify-center gap-4">

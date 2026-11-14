@@ -53,18 +53,18 @@ export function CheckInCard({
   }
 
   return (
-    <article className="flex flex-col rounded-3xl border border-line bg-surface p-6">
+    <article className="flex flex-col sheet p-6">
       <h3 className="text-xl font-semibold">Check In</h3>
       <p className="mt-3 text-[15px] text-ink-muted">
         Visit this Envelope regularly. Every {Math.round(cooldownMs / 60_000)} minutes it can earn another attempt.
       </p>
-      <div className="mt-5 text-sm font-semibold text-brand">Reward: +{attemptsText(1)} · Repeatable</div>
+      <div className="label mt-5 text-ink">Reward: +{attemptsText(1)} · Repeatable</div>
       <div className="mt-auto pt-5">
         <button onClick={checkIn} disabled={busy || waiting} className={`${BUTTON_PRIMARY} disabled:opacity-50`}>
           {busy ? "Checking in…" : waiting ? `Next check-in in ${remainingText(readyAt - now)}` : "Check In"}
         </button>
         {error && (
-          <p role="alert" className="mt-3 text-sm text-red-400">
+          <p role="alert" className="mt-3 text-sm text-danger">
             {error}
           </p>
         )}

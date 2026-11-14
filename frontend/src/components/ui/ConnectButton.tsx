@@ -21,11 +21,11 @@ export function ConnectButton() {
             signIn().catch((e: Error) => setError(e.message || "연결에 실패했습니다"));
           }}
           disabled={!ready}
-          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] whitespace-nowrap px-4 py-2 text-sm font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
+          className="btn btn-primary"
         >
           Connect Wallet
         </button>
-        {error && <span className="mt-1 text-xs text-red-400">{error}</span>}
+        {error && <span className="mt-1 text-xs text-danger">{error}</span>}
       </div>
     );
   }
@@ -35,18 +35,20 @@ export function ConnectButton() {
       <button
         onClick={() => setMenuOpen((o) => !o)}
         title={accountId}
-        className="text-[15px] font-medium text-ink hover:text-brand"
+        aria-expanded={menuOpen}
+        className="flex min-h-11 items-center gap-2 font-mono text-xs tracking-[0.06em] text-ink transition-colors duration-200 hover:text-brand"
       >
+        <span aria-hidden className="size-2 rounded-full bg-ok" />
         {shortAccount(accountId)}
       </button>
       {menuOpen && (
-        <div className="absolute right-0 mt-2 w-44 rounded-xl border border-line bg-surface p-1 shadow-sm">
+        <div className="sheet rise absolute right-0 mt-1 w-44 p-1 shadow-lift">
           <button
             onClick={() => {
               setMenuOpen(false);
               signOut();
             }}
-            className="w-full rounded-lg px-3 py-2 text-left text-sm hover:bg-canvas"
+            className="min-h-11 w-full rounded-xs px-3 text-left font-mono text-xs uppercase tracking-[0.1em] hover:bg-seal"
           >
             Disconnect
           </button>

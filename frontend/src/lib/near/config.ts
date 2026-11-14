@@ -4,6 +4,8 @@ export const FT_CONTRACT_ID = process.env.NEXT_PUBLIC_FT_CONTRACT_ID ?? "usdc.ne
 export const RPC_URL = process.env.NEXT_PUBLIC_RPC_URL ?? "https://test.rpc.fastnear.com";
 export const EXPLORER_URL = NETWORK === "mainnet" ? "https://nearblocks.io" : "https://testnet.nearblocks.io";
 export const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK === "true";
+/** 드라이런 계정. 목업 모드에서 이 값이 있으면 Meteor 없이 이 계정으로 바로 연결된다 (서명·잔액 불필요) */
+export const MOCK_ACCOUNT = (USE_MOCK && process.env.NEXT_PUBLIC_MOCK_ACCOUNT) || null;
 
 export const FT_DECIMALS = 6;
 export const NEAR_DECIMALS = 24;

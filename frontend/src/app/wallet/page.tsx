@@ -81,18 +81,18 @@ export default function WalletPage() {
 
   return (
     <div className="pt-10 sm:pt-14">
-      <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">Wallet</h1>
+      <h1 className="text-4xl sm:text-[44px]">Wallet</h1>
       <p className="mt-5 text-lg text-ink-muted">Your connected account and the test funds you need to try NEAR Envelope.</p>
 
       <div className="mt-9">
         {!ready || (accountId && balances === null) ? (
-          <div className="h-[420px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
+          <div className="h-[420px] animate-pulse sheet" aria-label="Loading" />
         ) : !accountId ? (
           <ConnectNotice message="Connect your wallet to see your balances and get test funds." />
         ) : (
           <div className="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
-            <section className="rounded-3xl border border-line bg-surface p-6 sm:p-7">
-              <h2 className="text-2xl font-semibold">Wallet</h2>
+            <section className="sheet p-6 sm:p-7">
+              <h2 className="text-2xl">Wallet</h2>
               <div className="mt-5 text-[17px]">
                 Connected as{" "}
                 <a
@@ -114,7 +114,7 @@ export default function WalletPage() {
                   </Notice>
                 </div>
               ) : (
-                <div className="mt-3 grid grid-cols-2 gap-4 rounded-3xl border border-line bg-seal/40 px-6 py-5">
+                <div className="mt-3 grid grid-cols-2 gap-4 note px-6 py-5">
                   <div>
                     <div className="text-sm text-ink-muted">USDC</div>
                     <div className="mt-3 text-3xl font-semibold">{unitsToUsdc(balances.usdc)}</div>
@@ -142,14 +142,14 @@ export default function WalletPage() {
 
             <div className="flex flex-col gap-6">
               {NETWORK === "testnet" && (
-                <section className="rounded-3xl border border-line bg-surface p-6 sm:p-7">
-                  <h2 className="text-2xl font-semibold">Test funds</h2>
+                <section className="sheet p-6 sm:p-7">
+                  <h2 className="text-2xl">Test funds</h2>
                   <p className="mt-3 text-[15px] text-ink-muted">
                     NEAR Envelope runs on testnet. These funds have no real value and are only for trying the app.
                   </p>
 
-                  <div className="mt-5 flex flex-col gap-4">
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line p-4">
+                  <div className="ledger mt-5">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <div className="font-semibold">Test USDC</div>
                         <div className="text-sm text-ink-muted">Up to {FAUCET_MAX_USDC} USDC each time</div>
@@ -162,7 +162,7 @@ export default function WalletPage() {
                         {claiming ? "Getting USDC…" : "Get test USDC"}
                       </button>
                     </div>
-                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-line p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <div className="font-semibold">Test NEAR</div>
                         <div className="text-sm text-ink-muted">Pays network fees and fills envelopes</div>
@@ -173,15 +173,15 @@ export default function WalletPage() {
                     </div>
                   </div>
                   {notice && (
-                    <p role="status" className={`mt-4 text-sm ${notice.ok ? "text-brand" : "text-red-400"}`}>
+                    <p role="status" className={`mt-4 text-sm ${notice.ok ? "text-ok" : "text-danger"}`}>
                       {notice.text}
                     </p>
                   )}
                 </section>
               )}
 
-              <section className="rounded-3xl border border-line bg-paper p-6 sm:p-7">
-                <h2 className="text-[22px] font-semibold">New to NEAR?</h2>
+              <section className="sheet bg-paper p-6 sm:p-7">
+                <h2 className="text-[22px]">New to NEAR?</h2>
                 <p className="mt-4 text-[15px] leading-relaxed text-ink-muted">
                   Your wallet approves every action and keeps you in control. A small NEAR balance pays network fees,
                   and your wallet shows them before you confirm.
@@ -190,7 +190,7 @@ export default function WalletPage() {
                   href="https://docs.near.org/"
                   target="_blank"
                   rel="noreferrer"
-                  className="mt-4 inline-block text-[15px] font-medium text-brand hover:underline"
+                  className="link mt-4 inline-block text-[15px]"
                 >
                   Learn about NEAR ↗
                 </a>

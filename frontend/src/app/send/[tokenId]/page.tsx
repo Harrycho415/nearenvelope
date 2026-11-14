@@ -79,11 +79,11 @@ export default function SendFlowPage() {
     return (
       <div className="pt-14">
         <SendSteps current={2} />
-        <div className="mt-10 rounded-3xl border border-dashed border-line bg-surface p-6 text-sm text-ink-muted">
+        <div className="mt-10 note p-6 text-sm text-ink-muted">
           {!accountId ? (
             <>
               Connect your wallet to continue.{" "}
-              <button onClick={() => signIn()} disabled={!ready} className="font-semibold text-brand hover:underline">
+              <button onClick={() => signIn()} disabled={!ready} className="link">
                 Connect Wallet
               </button>
             </>

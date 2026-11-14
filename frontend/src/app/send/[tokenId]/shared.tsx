@@ -65,11 +65,10 @@ export function errorText(e: unknown) {
   return code ? ERROR_TEXT[code] : message || "Something went wrong. Please try again.";
 }
 
-export function StepHeader({ step, title, subtitle }: { step: number; title: string; subtitle: string }) {
+export function StepHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <>
-      <p className="mt-10 text-[13px] font-semibold uppercase tracking-wide text-brand">Step {step} of 4</p>
-      <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-[42px]">{title}</h1>
+      <h1 className="mt-10 text-4xl sm:text-[44px]">{title}</h1>
       <p className="mt-3 text-lg text-ink-muted">{subtitle}</p>
     </>
   );

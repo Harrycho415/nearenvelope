@@ -92,10 +92,10 @@ export default function MyEnvelopesPage() {
     <div className="pt-10 sm:pt-14">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">My Envelopes</h1>
+          <h1 className="text-4xl sm:text-[44px]">My Envelopes</h1>
           <p className="mt-5 text-lg text-ink-muted">Gifts you own. Stories you are part of.</p>
         </div>
-        <div className="flex flex-wrap gap-3 self-start sm:mr-16 sm:mt-4">
+        <div className="flex flex-wrap gap-3 self-start sm:mt-2">
           <Link href="/envelopes/new" className={BUTTON_SECONDARY}>
             Create Envelope
           </Link>
@@ -108,7 +108,7 @@ export default function MyEnvelopesPage() {
       <div
         role="tablist"
         aria-label="Filter envelopes"
-        className="mt-9 flex gap-6 overflow-x-auto rounded-3xl border border-line bg-surface px-5 py-5 sm:gap-10"
+        className="mt-9 flex gap-1.5 overflow-x-auto border-b border-line px-2 pt-1"
       >
         {FILTERS.map(({ id, label, match }) => (
           <button
@@ -116,20 +116,18 @@ export default function MyEnvelopesPage() {
             role="tab"
             aria-selected={filter === id}
             onClick={() => setFilter(id)}
-            className={`shrink-0 whitespace-nowrap text-[17px] transition ${
-              filter === id ? "font-semibold text-brand" : "text-ink-muted hover:text-ink"
-            }`}
+            className="tab shrink-0"
           >
             {label}
-            <span className="ml-2">{envelopes === null || envelopes === "error" ? "–" : loaded.filter(match).length}</span>
+            <span className="tabular-nums text-ink-faint">{envelopes === null || envelopes === "error" ? "–" : loaded.filter(match).length}</span>
           </button>
         ))}
       </div>
 
-      <div role="tabpanel" className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div role="tabpanel" className="pull stagger mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {!ready || (accountId && envelopes === null) ? (
           Array.from({ length: 3 }, (_, i) => (
-            <div key={i} className="h-[496px] animate-pulse rounded-3xl border border-line bg-surface" />
+            <div key={i} className="h-[496px] animate-pulse sheet" />
           ))
         ) : !accountId ? (
           <Wide>
@@ -146,7 +144,7 @@ export default function MyEnvelopesPage() {
             <Notice>
               {EMPTY_TEXT[filter]}{" "}
               {filter !== "received" && (
-                <Link href="/envelopes/new" className="font-semibold text-brand hover:underline">
+                <Link href="/envelopes/new" className="link">
                   Create an envelope
                 </Link>
               )}
@@ -164,8 +162,8 @@ export default function MyEnvelopesPage() {
         )}
       </div>
 
-      <section className="mt-8 rounded-3xl border border-line bg-seal/40 p-6">
-        <h2 className="text-[22px] font-semibold">Every envelope is yours to keep or pass on.</h2>
+      <section className="mt-8 note p-6">
+        <h2 className="text-[22px]">Every envelope is yours to keep or pass on.</h2>
         <p className="mt-5 text-[15px] leading-relaxed text-ink-muted">
           Sending an envelope transfers ownership and control of the assets still inside. Received and Created show
           how each envelope you own came to you.

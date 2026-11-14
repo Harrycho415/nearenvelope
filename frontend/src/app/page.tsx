@@ -1,14 +1,15 @@
 "use client";
 
-// Home: 새 선물 배너, 히어로(희귀도별 봉투), 최근 받은 봉투, 4단계 안내, 기능 소개.
+// Home: 새 선물 배너, 히어로(편지글 + 우표 판), 최근 받은 봉투, 4단계 안내, 기능 소개.
 // 소유자: C
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 
-import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
 import { ReceivedEnvelopeCard } from "@/components/envelope/ReceivedEnvelopeCard";
+import { StampBoard } from "@/components/envelope/StampBoard";
 import { GiftBanner } from "@/components/ui/GiftBanner";
+import { InkTitle } from "@/components/ui/InkTitle";
 import { useNear, type EnvelopeView } from "@/lib/near";
 import { isOpened, isReceivedBy } from "@/lib/opened";
 
@@ -32,9 +33,9 @@ export default function Home() {
   const unopened = received?.items.filter((i) => !i.opened) ?? [];
 
   return (
-    <div className="pt-14">
+    <div className="pt-8 sm:pt-10">
       {unopened.length > 0 && (
-        <div className="mb-10">
+        <div className="mb-8">
           <GiftBanner
             envelope={unopened[0].envelope}
             now={received!.loadedAt}
@@ -81,61 +82,52 @@ function useReceived() {
   return received && received.accountId === accountId ? received : null;
 }
 
-/** 작은 라벨: "• Built on NEAR" */
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-seal px-3.5 py-1.5 text-sm text-brand">
-      <span className="size-1.5 rounded-full bg-brand" aria-hidden />
-      {children}
-    </span>
-  );
-}
-
-/** 희귀도별 봉투 부채꼴: 왼쪽 Rare, 가운데 Legendary, 오른쪽 Epic */
-const FAN: { design: number; rarity: "Rare" | "Epic" | "Legendary"; className: string }[] = [
-  { design: 2, rarity: "Rare", className: "-rotate-12 translate-y-6 sm:translate-x-10" },
-  { design: 1, rarity: "Legendary", className: "z-10 scale-110" },
-  { design: 0, rarity: "Epic", className: "rotate-12 translate-y-6 sm:-translate-x-10" },
+/** 히어로 왼쪽 아래의 사실 표. 값은 타자기처럼 찍힌다 */
+const FACTS = [
+  ["Standard", "NEP-171 NFT"],
+  ["Vault", "One sub-account per envelope"],
+  ["Access keys", "None"],
+  ["Holds", "NEAR and USDC"],
 ];
 
 function Hero() {
   return (
-    <section className="relative overflow-x-clip pt-8 text-center sm:pt-14">
-      <div
-        className="pointer-events-none absolute left-1/2 top-[420px] -z-10 h-[360px] w-[720px] max-w-full -translate-x-1/2 rounded-full bg-brand/15 blur-3xl"
-        aria-hidden
-      />
-      <Eyebrow>NFTs that hold money · Built on NEAR</Eyebrow>
-      <h1 className="mx-auto mt-7 max-w-[880px] text-5xl font-semibold leading-[1.05] sm:text-[72px]">
-        Send more than money — send the envelope.
-      </h1>
-      <p className="mx-auto mt-7 max-w-[620px] text-lg leading-relaxed text-ink-muted sm:text-xl">
-        Every envelope is an NFT with its own NEAR account inside. Whoever holds the envelope controls what&apos;s in
-        it — pass it on, and the money goes with it.
-      </p>
-      <div className="mt-9 flex flex-wrap justify-center gap-3">
-        <Link
-          href="/send"
-          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover"
-        >
-          Send an Envelope ↗
-        </Link>
-        <Link
-          href="/envelopes"
-          className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
-        >
-          View My Envelopes
-        </Link>
+    <section className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-0">
+      <div className="lg:border-r lg:border-line lg:py-6 lg:pr-14">
+        <InkTitle
+          text="Send more than money — send the envelope."
+          className="text-[2.75rem] sm:text-6xl lg:text-[4.25rem]"
+        />
+        <div className="stagger mt-8 max-w-[34rem]">
+          <p className="text-lg text-ink-muted sm:text-xl">
+            Every envelope is an NFT with its own NEAR account inside. Whoever holds the envelope controls
+            what&apos;s in it — pass it on, and the money goes with it.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link href="/send" className="btn btn-primary">
+              Send an Envelope ↗
+            </Link>
+            <Link href="/envelopes" className="btn btn-secondary">
+              View My Envelopes
+            </Link>
+          </div>
+          <dl className="ledger mt-12">
+            {FACTS.map(([term, value], i) => (
+              <div key={term} className="flex items-baseline justify-between gap-6">
+                <dt className="label">{term}</dt>
+                <dd className="typed text-right" style={{ "--n": value.length, "--i": i + 4 } as CSSProperties}>
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="mt-8 italic text-ink-muted">The money stays the same. The meaning travels with it.</p>
+        </div>
       </div>
 
-      <div className="mx-auto mt-14 flex max-w-[960px] items-center justify-center gap-2 sm:mt-16 sm:gap-0">
-        {FAN.map(({ design, rarity, className }) => (
-          <div key={rarity} className={`w-1/3 max-w-[320px] transition ${className}`}>
-            <EnvelopeIllustration design={design} rarity={rarity} className="w-full" />
-          </div>
-        ))}
+      <div className="lg:py-6 lg:pl-14">
+        <StampBoard />
       </div>
-      <p className="mt-10 text-[15px] text-ink-muted">The money stays the same. The meaning travels with it.</p>
     </section>
   );
 }
@@ -144,20 +136,20 @@ function RecentlyReceived({ items }: { items: ReceivedItem[] | null }) {
   const { accountId } = useNear();
 
   return (
-    <section className="mt-20">
-      <div className="flex items-baseline gap-4">
-        <h2 className="text-2xl font-semibold">Recently received envelopes</h2>
-        <Link href="/envelopes" className="text-[15px] font-medium text-brand hover:underline">
+    <section className="mt-24 border-t border-line pt-10">
+      <div className="flex flex-wrap items-baseline justify-between gap-4">
+        <h2 className="text-3xl sm:text-4xl">Recently received envelopes</h2>
+        <Link href="/envelopes" className="link text-[15px]">
           View all →
         </Link>
       </div>
 
-      <div className="mt-5 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <div className="pull mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {!accountId ? (
           <EmptyCard>Connect your wallet to see envelopes sent to you.</EmptyCard>
         ) : items === null ? (
           Array.from({ length: RECENT_LIMIT }, (_, i) => (
-            <div key={i} className="h-[138px] animate-pulse rounded-3xl border border-line bg-surface" />
+            <div key={i} className="h-[138px] animate-pulse rounded-[3px] bg-seal" />
           ))
         ) : items.length === 0 ? (
           <EmptyCard>No envelopes yet. When someone sends you one, it will show up here.</EmptyCard>
@@ -171,12 +163,8 @@ function RecentlyReceived({ items }: { items: ReceivedItem[] | null }) {
   );
 }
 
-function EmptyCard({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-3xl border border-dashed border-line bg-surface p-6 text-sm text-ink-muted md:col-span-2 lg:col-span-3">
-      {children}
-    </div>
-  );
+function EmptyCard({ children }: { children: ReactNode }) {
+  return <div className="note p-6 text-[15px] text-ink-muted md:col-span-2 lg:col-span-3">{children}</div>;
 }
 
 const STEP_TEXT: Record<(typeof STEPS)[number], string> = {
@@ -188,18 +176,18 @@ const STEP_TEXT: Record<(typeof STEPS)[number], string> = {
 
 function Steps() {
   return (
-    <section className="mt-24 text-center">
-      <Eyebrow>How it works</Eyebrow>
-      <h2 className="mt-6 text-4xl font-semibold sm:text-5xl">A thoughtful gift in four steps</h2>
-      <ol className="mt-10 grid gap-5 text-left sm:grid-cols-2 lg:grid-cols-4">
+    <section className="mt-28 grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-0">
+      <div className="lg:pr-14">
+        <h2 className="text-4xl sm:text-5xl">A thoughtful gift in four steps</h2>
+      </div>
+      <ol className="ledger lg:pl-14">
         {STEPS.map((step, i) => (
-          <li key={step} className="rounded-3xl border border-line bg-surface p-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand/30 bg-seal px-3 py-1 text-sm text-brand">
-              <span className="size-1.5 rounded-full bg-brand" aria-hidden />
-              Step {i + 1}
-            </span>
-            <div className="mt-6 text-xl font-semibold">{step}</div>
-            <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">{STEP_TEXT[step]}</p>
+          <li key={step} className="grid grid-cols-[3rem_minmax(0,1fr)] gap-x-4 py-6!">
+            <span className="pt-1.5 font-mono text-xs tracking-[0.1em] text-brand">{String(i + 1).padStart(2, "0")}</span>
+            <div>
+              <h3 className="text-2xl">{step}</h3>
+              <p className="mt-2 max-w-[32rem] text-ink-muted">{STEP_TEXT[step]}</p>
+            </div>
           </li>
         ))}
       </ol>
@@ -211,54 +199,47 @@ const FEATURES = [
   {
     title: "An account inside every NFT",
     text: "Each envelope gets its own NEAR sub-account with no access keys. Only the envelope contract can move its funds, and only for the current owner.",
-    wide: true,
+    tab: "",
   },
   {
     title: "Grows as it travels",
     text: "Missions reward the envelope itself — new owners, first-time NEAR users, NEAR events.",
-    wide: false,
+    tab: "tab-rare",
   },
   {
     title: "Enhance to +10",
     text: "Spend attempts to level up. Rarity rises from Common to Legendary, and the art changes with it.",
-    wide: false,
+    tab: "tab-epic",
   },
   {
     title: "A history that stays",
     text: "Every hand-off and message is recorded on-chain, so the envelope carries its whole story to the next owner.",
-    wide: true,
+    tab: "tab-legendary",
   },
 ];
 
 function Features() {
   return (
-    <section className="mt-24 text-center">
-      <Eyebrow>Why NEAR Envelope</Eyebrow>
-      <h2 className="mx-auto mt-6 max-w-[760px] text-4xl font-semibold sm:text-5xl">
-        Ownership with behavior, not just a picture
-      </h2>
-      <div className="mt-10 grid gap-5 text-left md:grid-cols-3">
-        {FEATURES.map((f) => (
-          <div
-            key={f.title}
-            className={`rounded-3xl border border-line bg-surface p-7 ${f.wide ? "md:col-span-2" : ""}`}
-          >
-            <div className="text-2xl font-semibold">{f.title}</div>
-            <p className="mt-3 max-w-[560px] text-[15px] leading-relaxed text-ink-muted">{f.text}</p>
-          </div>
+    <section className="mt-28">
+      <h2 className="max-w-[20ch] text-4xl sm:text-5xl">Ownership with behavior, not just a picture</h2>
+
+      <div className="mt-12 grid gap-x-14 gap-y-10 border-t border-line pt-10 md:grid-cols-2">
+        {FEATURES.map((f, i) => (
+          <article key={f.title} className={i % 2 ? "md:mt-16" : ""}>
+            <span className={`tab pointer-events-none rounded-[3px] border-b ${f.tab}`}>
+              No. {String(i + 1).padStart(2, "0")}
+            </span>
+            <h3 className="mt-5 text-[28px]">{f.title}</h3>
+            <p className="mt-3 max-w-[30rem] text-ink-muted">{f.text}</p>
+          </article>
         ))}
       </div>
-      <div className="mt-12 flex flex-wrap justify-center gap-3">
-        <Link
-          href="/envelopes/new"
-          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover"
-        >
+
+      <div className="mt-16 flex flex-wrap gap-3 border-t border-dashed border-sketch pt-8">
+        <Link href="/envelopes/new" className="btn btn-primary">
           Create an Envelope ↗
         </Link>
-        <Link
-          href="/missions"
-          className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
-        >
+        <Link href="/missions" className="btn btn-secondary">
           See Missions
         </Link>
       </div>

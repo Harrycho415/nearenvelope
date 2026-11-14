@@ -7,6 +7,7 @@ import type { EnvelopeView } from "@/lib/near";
 
 import { designName, RARITY_LABEL, RARITY_TEXT } from "./designs";
 import { EnvelopeIllustration } from "./EnvelopeIllustration";
+import { Tilt, sheenForLevel } from "./Tilt";
 
 const formatDate = (ms: number) =>
   new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
@@ -15,12 +16,14 @@ export function ChooseEnvelopeCard({ envelope }: { envelope: EnvelopeView }) {
   const gifted = envelope.history.length;
 
   return (
-    <div className="rounded-3xl border border-line bg-surface p-6 transition hover:border-sketch">
-      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
-      <h3 className="mt-7 text-2xl font-semibold">
+    <div className="sheet p-6 transition hover:border-sketch">
+      <Tilt sheen={sheenForLevel(envelope.level)} >
+        <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
+      </Tilt>
+      <h2 className="mt-7 text-2xl font-semibold">
         {designName(envelope.design)} Envelope +{envelope.level}
-      </h3>
-      <div className={`mt-4 text-xs font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
+      </h2>
+      <div className={`mt-4 label ${RARITY_TEXT[envelope.rarity]}`}>
         {RARITY_LABEL[envelope.rarity]}
       </div>
       <div className="mt-4 space-y-0.5 text-[15px] text-ink-muted">
@@ -31,7 +34,7 @@ export function ChooseEnvelopeCard({ envelope }: { envelope: EnvelopeView }) {
       </div>
       <Link
         href={`/send/${envelope.token_id}`}
-        className="mt-4 inline-block rounded-lg bg-brand px-6 py-3 font-semibold text-on-brand transition hover:bg-brand-hover"
+        className="mt-4 btn btn-primary"
       >
         Send
       </Link>

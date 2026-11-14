@@ -14,14 +14,14 @@ export function ReceivedEnvelopeCard({ envelope, opened }: { envelope: EnvelopeV
   return (
     <Link
       href={`/envelopes/${envelope.token_id}${opened ? "" : "/open"}`}
-      className="flex items-center gap-4 rounded-3xl border border-line bg-surface p-5 transition hover:border-sketch"
+      className="flex items-center gap-4 sheet p-5 transition-shadow duration-200 hover:shadow-lift"
     >
       <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-28 shrink-0" />
       <div className="min-w-0">
         <div className="truncate text-[17px] font-semibold">
           {designName(envelope.design)} Envelope +{envelope.level}
         </div>
-        <div className={`mt-2 text-[13px] font-medium ${RARITY_TEXT[envelope.rarity]}`}>{RARITY_LABEL[envelope.rarity]}</div>
+        <div className={`label mt-2 ${RARITY_TEXT[envelope.rarity]}`}>{RARITY_LABEL[envelope.rarity]}</div>
         <div className="mt-2 truncate text-sm text-ink-muted">
           {from ? `From ${displayName(from)}` : "Minted by you"} · {opened ? "Opened" : "Unopened"}
         </div>

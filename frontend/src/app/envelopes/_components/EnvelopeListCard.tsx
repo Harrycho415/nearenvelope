@@ -25,12 +25,12 @@ export function EnvelopeListCard({
     balances === null ? "…" : balances === "error" ? "Unavailable" : (assetsText(balances) ?? "No assets inside");
 
   return (
-    <article className="flex flex-col rounded-3xl border border-line bg-surface p-6">
+    <article className="lift flex flex-col sheet p-6">
       <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
-      <h3 className="mt-7 text-2xl font-semibold">
+      <h2 className="mt-7 text-2xl font-semibold">
         {envelopeName(envelope)} +{envelope.level}
-      </h3>
-      <div className={`mt-4 text-xs font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
+      </h2>
+      <div className={`mt-4 label ${RARITY_TEXT[envelope.rarity]}`}>
         {RARITY_LABEL[envelope.rarity]}
       </div>
       <div className="mt-4 truncate text-[15px] text-ink-muted" title={from}>

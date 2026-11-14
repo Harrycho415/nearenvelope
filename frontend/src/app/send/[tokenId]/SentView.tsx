@@ -4,6 +4,7 @@
 import Link from "next/link";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
+import { Tilt, sheenForLevel } from "@/components/envelope/Tilt";
 import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { displayName, EXPLORER_URL, type EnvelopeView } from "@/lib/near";
 
@@ -23,14 +24,16 @@ export function SentView({
   txHash: string | null;
 }) {
   return (
-    <section className="mx-auto max-w-[1000px] rounded-3xl border border-line bg-surface px-6 py-14 text-center">
-      <p className="text-sm font-semibold uppercase tracking-wide text-brand">Sent ✓</p>
-      <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-[42px]">Your Envelope is on its way.</h1>
+    <section className="mx-auto max-w-[1000px] sheet px-6 py-14 text-center">
+      <p className="postmark thunk">Sent</p>
+      <h1 className="mt-6 text-4xl sm:text-[44px]">Your Envelope is on its way.</h1>
       <p className="mt-6 text-lg text-ink-muted">A new chapter starts with {displayName(to)}.</p>
 
-      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-2 w-full max-w-[360px]" />
-      <h2 className="mt-6 text-3xl font-semibold">{envelopeTitle(envelope)}</h2>
-      <div className={`mt-5 text-sm font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
+      <Tilt sheen={sheenForLevel(envelope.level)} className="settle mx-auto mt-2 w-full max-w-[360px]">
+        <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
+      </Tilt>
+      <h2 className="mt-6 text-3xl">{envelopeTitle(envelope)}</h2>
+      <div className={`mt-5 label ${RARITY_TEXT[envelope.rarity]}`}>
         {RARITY_LABEL[envelope.rarity]}
       </div>
       <p className="mt-5 text-2xl">
@@ -44,13 +47,13 @@ export function SentView({
       <div className="mt-6 flex flex-wrap justify-center gap-4">
         <Link
           href="/send"
-          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover"
+          className="btn btn-primary"
         >
           Send Another Envelope
         </Link>
         <Link
           href="/"
-          className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+          className="btn btn-secondary"
         >
           Back Home
         </Link>

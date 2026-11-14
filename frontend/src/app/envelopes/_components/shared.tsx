@@ -14,10 +14,8 @@ export interface Keyed<T> {
 
 export type BalancesResult = VaultBalances | "error";
 
-export const BUTTON_PRIMARY =
-  "rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 text-center font-semibold text-on-brand transition hover:bg-brand-hover";
-export const BUTTON_SECONDARY =
-  "rounded-full border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-line";
+export const BUTTON_PRIMARY = "btn btn-primary";
+export const BUTTON_SECONDARY = "btn btn-secondary";
 
 /** "Golden Envelope" */
 export const envelopeName = (e: EnvelopeView) => `${designName(e.design)} Envelope`;
@@ -42,7 +40,7 @@ export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" :
 
 export function Notice({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-3xl border border-dashed border-line bg-surface p-6 text-sm text-ink-muted">
+    <div className="note p-6 text-[15px] text-ink-muted">
       {children}
     </div>
   );
@@ -53,7 +51,7 @@ export function ConnectNotice({ message }: { message: string }) {
   return (
     <Notice>
       {message}{" "}
-      <button onClick={() => signIn()} disabled={!ready} className="font-semibold text-brand hover:underline">
+      <button onClick={() => signIn()} disabled={!ready} className="link">
         Connect Wallet
       </button>
     </Notice>
@@ -62,7 +60,7 @@ export function ConnectNotice({ message }: { message: string }) {
 
 export function RetryButton({ onClick }: { onClick: () => void }) {
   return (
-    <button onClick={onClick} className="font-semibold text-brand hover:underline">
+    <button onClick={onClick} className="link">
       Try again
     </button>
   );

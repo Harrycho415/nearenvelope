@@ -4,16 +4,16 @@
 import type { EnvelopeView, Rarity } from "@/lib/near";
 
 const RARITY_STYLE: Record<Rarity, string> = {
-  Basic: "border-zinc-300 bg-zinc-50",
-  Rare: "border-sky-400 bg-sky-50",
-  Epic: "border-violet-500 bg-violet-50",
-  Legendary: "border-amber-500 bg-amber-50",
+  Basic: "border-common bg-common-tint",
+  Rare: "border-rare bg-rare-tint",
+  Epic: "border-epic bg-epic-tint",
+  Legendary: "border-legendary bg-legendary-tint",
 };
 
 export function EnvelopeCard({ envelope }: { envelope: EnvelopeView }) {
   return (
-    <div className={`rounded-3xl border-2 p-5 ${RARITY_STYLE[envelope.rarity]}`}>
-      <div className="text-xs uppercase tracking-wide opacity-60">#{envelope.token_id}</div>
+    <div className={`rounded-[3px] border p-5 ${RARITY_STYLE[envelope.rarity]}`}>
+      <div className="label">#{envelope.token_id}</div>
       <div className="mt-2 text-lg font-semibold">
         {envelope.rarity} Envelope +{envelope.level}
       </div>

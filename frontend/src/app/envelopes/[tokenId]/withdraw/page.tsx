@@ -52,7 +52,7 @@ export default function WithdrawPage() {
   if (!ready || (accountId && loaded === null)) {
     return (
       <Frame tokenId={tokenId}>
-        <div className="h-[520px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
+        <div className="h-[520px] animate-pulse sheet" aria-label="Loading" />
       </Frame>
     );
   }
@@ -80,7 +80,7 @@ export default function WithdrawPage() {
       <Frame tokenId={tokenId}>
         <Notice>
           Envelope #{tokenId} doesn&apos;t exist.{" "}
-          <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+          <Link href="/envelopes" className="link">
             Back to My Envelopes
           </Link>
         </Notice>
@@ -96,7 +96,7 @@ export default function WithdrawPage() {
       <Frame tokenId={tokenId} title={title}>
         <Notice>
           Only the current owner can withdraw from this envelope.{" "}
-          <Link href={assetsHref} className="font-semibold text-brand hover:underline">
+          <Link href={assetsHref} className="link">
             Back to envelope
           </Link>
         </Notice>
@@ -113,7 +113,7 @@ export default function WithdrawPage() {
 
   return (
     <Frame tokenId={tokenId} title={title}>
-      <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">Withdraw assets</h1>
+      <h1 className="text-4xl sm:text-[44px]">Withdraw assets</h1>
       <p className="mt-5 text-lg text-ink-muted sm:mt-9">Move assets to your wallet. Keep the envelope and its history.</p>
 
       <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1fr_440px] lg:gap-10">

@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
+import { Tilt, sheenForLevel } from "@/components/envelope/Tilt";
 import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { displayName, isValidAccountId, NETWORK, useNear, type EnvelopeView } from "@/lib/near";
 
@@ -63,10 +64,10 @@ export function RecipientStep({
 
   return (
     <>
-      <StepHeader step={3} title="Who is this for?" subtitle="A few thoughtful words make the gift yours." />
+      <StepHeader title="Who is this for?" subtitle="A few thoughtful words make the gift yours." />
 
       <div className="mt-9 grid items-start gap-10 lg:grid-cols-[1fr_400px]">
-        <div className="rounded-3xl border border-line bg-surface p-8">
+        <div className="sheet p-8">
           <label htmlFor="recipient" className="text-[15px] font-medium">
             Recipient NEAR account / wallet
           </label>
@@ -77,7 +78,7 @@ export function RecipientStep({
             placeholder={NETWORK === "mainnet" ? "alice.near" : "alice.testnet"}
             autoComplete="off"
             spellCheck={false}
-            className="mt-4 w-full rounded-xl border border-line bg-surface px-5 py-4 text-lg outline-none focus:border-brand"
+            className="mt-4 w-full field px-5 py-4 text-lg"
           />
           <RecipientStatus status={status} id={id} />
           <p className="mt-4 text-sm text-ink-muted">Check the recipient carefully. Sent envelopes cannot be recalled.</p>
@@ -91,33 +92,35 @@ export function RecipientStep({
             onChange={(e) => setMessage(e.target.value)}
             rows={5}
             placeholder="Thanks for everything this year."
-            className="mt-4 w-full resize-none rounded-xl border border-line bg-surface px-5 py-4 text-lg outline-none focus:border-brand"
+            className="mt-4 w-full resize-none field px-5 py-4 text-lg"
           />
-          <p className={`mt-4 text-sm ${messageLength > maxMessage ? "text-red-400" : "text-ink-muted"}`}>
+          <p className={`mt-4 text-sm ${messageLength > maxMessage ? "text-danger" : "text-ink-muted"}`}>
             {messageLength} / {maxMessage} characters
           </p>
 
           <div className="mt-4 flex gap-4">
             <button
               onClick={onBack}
-              className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+              className="btn btn-secondary"
             >
               Back
             </button>
             <button
               onClick={onContinue}
               disabled={!canContinue}
-              className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
+              className="btn btn-primary"
             >
               Preview Envelope
             </button>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-line bg-paper p-7">
-          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
-          <h3 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h3>
-          <div className={`mt-4 text-xs font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
+        <div className="sheet bg-paper p-7">
+          <Tilt sheen={sheenForLevel(envelope.level)} className="rise">
+            <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
+          </Tilt>
+          <h2 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h2>
+          <div className={`mt-4 label ${RARITY_TEXT[envelope.rarity]}`}>
             {RARITY_LABEL[envelope.rarity]}
           </div>
           <div className="mt-6 text-xl">Inside: {totalText ?? "Nothing"}</div>
@@ -136,10 +139,10 @@ function RecipientStatus({ status, id }: { status: Status; id: string }) {
   const [text, tone] = {
     empty: [null, ""],
     checking: ["Checking account…", "text-ink-muted"],
-    found: [`Account found · ${displayName(id)}`, "font-medium text-brand"],
-    missing: [`No account named ${id} on ${NETWORK}.`, "text-red-400"],
-    invalid: ["Enter a valid NEAR account, like alice.testnet.", "text-red-400"],
-    self: ["You already own this envelope. Choose someone else.", "text-red-400"],
+    found: [`Account found · ${displayName(id)}`, "text-ok"],
+    missing: [`No account named ${id} on ${NETWORK}.`, "text-danger"],
+    invalid: ["Enter a valid NEAR account, like alice.testnet.", "text-danger"],
+    self: ["You already own this envelope. Choose someone else.", "text-danger"],
   }[status];
 
   return <p className={`mt-4 min-h-5 text-sm ${tone}`}>{text}</p>;

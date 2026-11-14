@@ -53,7 +53,7 @@ export default function AddAssetsPage() {
   if (!ready || (accountId && loaded === null)) {
     return (
       <Frame tokenId={tokenId}>
-        <div className="h-[520px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
+        <div className="h-[520px] animate-pulse sheet" aria-label="Loading" />
       </Frame>
     );
   }
@@ -81,7 +81,7 @@ export default function AddAssetsPage() {
       <Frame tokenId={tokenId}>
         <Notice>
           Envelope #{tokenId} doesn&apos;t exist.{" "}
-          <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+          <Link href="/envelopes" className="link">
             Back to My Envelopes
           </Link>
         </Notice>
@@ -97,7 +97,7 @@ export default function AddAssetsPage() {
       <Frame tokenId={tokenId}>
         <Notice>
           Only the current owner can add assets to this envelope.{" "}
-          <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+          <Link href="/envelopes" className="link">
             Back to My Envelopes
           </Link>
         </Notice>
@@ -119,7 +119,7 @@ export default function AddAssetsPage() {
 
   return (
     <Frame tokenId={tokenId} title={title}>
-      <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">Add assets</h1>
+      <h1 className="text-4xl sm:text-[44px]">Add assets</h1>
       <p className="mt-5 text-lg text-ink-muted sm:mt-9">
         Put NEAR or USDC inside. It stays with the envelope until its owner withdraws it.
       </p>

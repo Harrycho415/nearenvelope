@@ -4,6 +4,7 @@
 import Link from "next/link";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
+import { Tilt, sheenForLevel } from "@/components/envelope/Tilt";
 import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { shortAccount, type EnvelopeView } from "@/lib/near";
 
@@ -11,14 +12,16 @@ import { BUTTON_PRIMARY, envelopeName } from "../../_components/shared";
 
 export function EnvelopeHero({ envelope, isOwner }: { envelope: EnvelopeView; isOwner: boolean }) {
   return (
-    <section className="flex flex-col gap-6 rounded-3xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:gap-9 sm:p-7">
-      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full max-w-[250px] shrink-0" />
+    <section className="rise flex flex-col gap-6 sheet p-6 sm:flex-row sm:items-center sm:gap-9 sm:p-7">
+      <Tilt sheen={sheenForLevel(envelope.level)} className="w-full max-w-[250px] shrink-0">
+        <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
+      </Tilt>
 
       <div className="min-w-0 flex-1">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="text-3xl tracking-tight sm:text-4xl">
           {envelopeName(envelope)} #{envelope.token_id}
         </h1>
-        <div className="mt-4 text-lg font-medium sm:mt-5">
+        <div className="mt-4 font-mono text-sm tracking-[0.1em] sm:mt-5">
           +{envelope.level}
           <span className="mx-3 text-ink-muted">/</span>
           <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity].toUpperCase()}</span>
@@ -32,7 +35,7 @@ export function EnvelopeHero({ envelope, isOwner }: { envelope: EnvelopeView; is
       </div>
 
       {isOwner && (
-        <Link href={`/send/${envelope.token_id}`} className={`${BUTTON_PRIMARY} shrink-0 sm:mr-12 lg:mr-20`}>
+        <Link href={`/send/${envelope.token_id}`} className={`${BUTTON_PRIMARY} shrink-0 self-start sm:self-center`}>
           Send an Envelope
         </Link>
       )}

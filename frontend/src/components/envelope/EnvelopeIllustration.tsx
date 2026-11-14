@@ -1,5 +1,5 @@
 // 봉투 그림: public/designs/{design}/{rarity}.svg (NFT 메타데이터 media와 같은 파일, scripts/generate-envelope-art.mjs로 생성)
-// 크기는 부모 너비를 따른다 (비율 34:23, 희귀도 빛 번짐 여백 포함).
+// 크기는 부모 너비를 따른다 (비율 34:23, 그림자 여백 포함). 톱니 모양을 따라 그림자가 지도록 .stamp(drop-shadow)를 쓴다.
 // 소유자: D
 
 import Image from "next/image";
@@ -25,7 +25,7 @@ export function EnvelopeIllustration({
       height={230}
       unoptimized
       draggable={false}
-      className={`h-auto select-none ${className}`}
+      className={`stamp h-auto select-none ${className}`}
     />
   );
 }

@@ -1,47 +1,617 @@
 @import "tailwindcss";
 
 /* 디자인 토큰. 색은 여기서만 정의하고 컴포넌트는 bg-canvas, text-ink 같은 유틸리티로 쓴다.
-   테마: 어두운 배경 + 라임 강조 (Clario 템플릿 참고, DECISIONS #11) */
+   테마: 종이와 우표 "Paper & Post" (design-system/near-envelope/MASTER.md) */
 @theme inline {
-  --color-canvas: #050505;
-  --color-surface: #0f0f0f;
-  --color-paper: #161616;
-  --color-line: #242424;
-  --color-sketch: #3d3d3d;
-  --color-seal: #1a2a0c;
-  --color-ink: #f5f5f4;
-  --color-ink-muted: #9a9a96;
-  --color-brand: #a3ff47;
-  --color-brand-hover: #bcff7a;
-  /* 라임(bg-brand) 위 글자 */
-  --color-on-brand: #0a0a0a;
+  --font-serif: var(--font-libertinus), "Iowan Old Style", "Apple SD Gothic Neo", Georgia, serif;
+  --font-sans: var(--font-libertinus), "Iowan Old Style", "Apple SD Gothic Neo", Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
+}
 
-  /* 희귀도 강조색 (봉투 그림 public/designs/와 같은 값) */
-  --color-common: #cfcfca;
-  --color-rare: #4da3ff;
-  --color-epic: #b57bff;
-  --color-legendary: #ffc83d;
+@theme {
+  --color-canvas: #f5f5f4;
+  --color-surface: #fafaf9;
+  --color-paper: #fdfcfa;
+  --color-line: #d6d3d1;
+  --color-sketch: #a8a29e;
+  --color-seal: #e7e5e4;
+  --color-ink: #292524;
+  --color-ink-muted: #57534e;
+  --color-ink-faint: #635d58;
+  /* 주홍 잉크: 화면마다 한 곳(주 버튼·링크·활성 표시)에만 쓴다 */
+  --color-brand: #b02d12;
+  --color-brand-hover: #8f240e;
+  --color-on-brand: #fffaf5;
+  /* 장식 전용 (봉랍·소인). 글자색으로 쓰지 않는다 */
+  --color-stamp: #f44e22;
+  --color-ok: #3f6b2c;
+  --color-danger: #b3261e;
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* 희귀도 = 색인 탭 색 (봉투 그림 public/designs/와 같은 값). 글자색 / 바탕색 */
+  --color-common: #57534e;
+  --color-common-tint: #e7e5e4;
+  --color-rare: #2b5878;
+  --color-rare-tint: #c3deee;
+  --color-epic: #7f3b63;
+  --color-epic-tint: #e5d2dd;
+  --color-legendary: #7a4e06;
+  --color-legendary-tint: #f6deb6;
+
+  --shadow-sheet: 0 1px 1px rgb(41 37 36 / 0.04), 0 2px 4px rgb(41 37 36 / 0.05);
+  --shadow-lift: 0 2px 2px rgb(41 37 36 / 0.05), 0 10px 24px -6px rgb(41 37 36 / 0.18);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.22, 1.35, 0.36, 1);
+  --ease-spring: linear(0, 0.32 8%, 0.78 18%, 1.06 30%, 1.1 38%, 1.02 52%, 0.99 66%, 1);
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  --dur-exit: 160ms;
+  --dur-fast: 200ms;
+  --dur-slide: 450ms;
+  --dur-place: 900ms;
 }
 
-body {
-  background: var(--color-canvas);
-  color: var(--color-ink);
+@layer base {
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  /* 종이 결: 화면 전체에 고정된 노이즈 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.22;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .15 0 0 0 0 .14 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  h1,
+  h2 {
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  p,
+  li,
+  dd {
+    text-wrap: pretty;
+  }
+
+  h3 {
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  ::selection {
+    background: var(--color-seal);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 1px dashed var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  button:not(:disabled),
+  [role="tab"],
+  [role="radio"],
+  select {
+    cursor: pointer;
+  }
+
+  ::placeholder {
+    color: var(--color-ink-faint);
+  }
 }
 
-/* 큰 제목은 자간을 좁힌다 */
-h1,
-h2 {
-  letter-spacing: -0.025em;
+@layer components {
+  /* ── 종이 ─────────────────────────────────────────── */
+  .sheet {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 3px;
+    box-shadow: var(--shadow-sheet);
+  }
+
+  .note {
+    background: color-mix(in srgb, var(--color-seal) 55%, transparent);
+    border: 1px dashed var(--color-sketch);
+    border-radius: 3px;
+  }
+
+  /* 모눈종이 */
+  .sheet-grid {
+    background-color: var(--color-surface);
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--color-line) 45%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--color-line) 45%, transparent) 1px, transparent 1px);
+    background-size: 16px 16px;
+    background-position: -1px -1px;
+  }
+
+  /* 왼쪽 가장자리 바인더 구멍 */
+  .punched {
+    position: relative;
+  }
+  .punched::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 28px;
+    bottom: 28px;
+    width: 20px;
+    pointer-events: none;
+    background-image: radial-gradient(ellipse 10px 6px at 10px 6px, var(--color-seal) 96%, transparent 100%);
+    background-size: 20px 44px;
+    background-repeat: repeat-y;
+    filter: drop-shadow(0 1px 0 rgb(41 37 36 / 0.18));
+  }
+
+  /* ── 글자 ─────────────────────────────────────────── */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-faint);
+  }
+
+  .link {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      text-decoration-thickness var(--dur-fast) var(--ease-out);
+  }
+  .link:hover {
+    color: var(--color-brand-hover);
+    text-decoration-thickness: 2px;
+  }
+
+  /* ── 버튼 ─────────────────────────────────────────── */
+  .btn {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: 2px;
+    border: 1px solid var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      transform var(--dur-exit) var(--ease-out),
+      box-shadow var(--dur-exit) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out);
+  }
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .btn-primary {
+    border-color: var(--color-brand-hover);
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    box-shadow: 2px 2px 0 var(--color-brand-hover);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--color-brand-hover);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 var(--color-brand-hover);
+  }
+
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-ink);
+    box-shadow: 2px 2px 0 var(--color-line);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--color-seal);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--color-line);
+  }
+  .btn-secondary:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 var(--color-line);
+  }
+
+  /* ── 입력 ─────────────────────────────────────────── */
+  .field {
+    display: block;
+    width: 100%;
+    background: var(--color-paper);
+    border: 1px solid var(--color-line);
+    border-radius: 2px;
+    outline: none;
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  .field:hover {
+    border-color: var(--color-sketch);
+  }
+  .field:focus {
+    border-color: var(--color-ink);
+    outline: 1px dashed var(--color-ink);
+    outline-offset: 3px;
+  }
+
+  /* ── 색인 탭 ──────────────────────────────────────── */
+  .tab {
+    position: relative;
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px dashed var(--color-sketch);
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+    background: var(--color-seal);
+    color: var(--color-ink-muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition:
+      transform var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+  .tab:hover {
+    color: var(--color-ink);
+    transform: translateY(-2px);
+  }
+  .tab[aria-selected="true"],
+  .tab[aria-current] {
+    z-index: 1;
+    border-style: solid;
+    border-color: var(--color-line);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    transform: translateY(1px);
+    box-shadow: 2px 0 5px 0 rgb(41 37 36 / 0.08);
+  }
+  .tab-rare {
+    background: var(--color-rare-tint);
+    color: var(--color-rare);
+  }
+  .tab-epic {
+    background: var(--color-epic-tint);
+    color: var(--color-epic);
+  }
+  .tab-legendary {
+    background: var(--color-legendary-tint);
+    color: var(--color-legendary);
+  }
+
+  /* ── 장부 행: 점선으로 나눈 라벨 / 값 ─────────────── */
+  .ledger > * {
+    border-top: 1px dashed var(--color-sketch);
+    padding-block: 0.875rem;
+  }
+  .ledger > *:last-child {
+    border-bottom: 1px dashed var(--color-sketch);
+  }
+
+  /* ── 우표 (봉투 그림) ─────────────────────────────── */
+  .stamp {
+    rotate: var(--r, 0deg);
+    filter: drop-shadow(0 1px 2px rgb(41 37 36 / 0.14)) drop-shadow(0 1px 1px rgb(41 37 36 / 0.08));
+    transition:
+      rotate var(--dur-fast) var(--ease-out),
+      translate var(--dur-fast) var(--ease-out),
+      filter var(--dur-fast) var(--ease-out);
+  }
+  a:hover > .stamp,
+  a:focus-visible > .stamp,
+  .lift:hover .stamp,
+  .lift:focus-within .stamp {
+    rotate: 0deg;
+    translate: 0 -4px;
+    filter: drop-shadow(0 2px 2px rgb(41 37 36 / 0.1)) drop-shadow(0 12px 14px rgb(41 37 36 / 0.16));
+  }
+
+  /* 하나를 가리키면 나머지가 물러난다 */
+  .pull > * {
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+  @media (hover: hover) {
+    .pull:has(> :hover) > :not(:hover) {
+      opacity: 0.55;
+    }
+  }
+
+  /* 소인 */
+  .postmark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1.125rem;
+    border: 2px solid var(--color-brand);
+    border-radius: 999px;
+    outline: 1px dashed var(--color-brand);
+    outline-offset: 3px;
+    color: var(--color-brand);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    rotate: -6deg;
+  }
+
+  /* 얇은 진행 자 */
+  .rule-progress {
+    height: 3px;
+    background: var(--color-line);
+  }
+  .rule-progress > * {
+    height: 100%;
+    background: var(--color-ink);
+    transform-origin: left;
+    animation: grow var(--dur-place) var(--ease-out) both;
+  }
+
+  /* ── 움직임 ───────────────────────────────────────── */
+  .rise,
+  .page-enter > * > *,
+  .stagger > * {
+    animation: rise var(--dur-slide) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 40ms);
+  }
+  .page-enter > * > :nth-child(2),
+  .stagger > :nth-child(2) {
+    --i: 1;
+  }
+  .page-enter > * > :nth-child(3),
+  .stagger > :nth-child(3) {
+    --i: 2;
+  }
+  .page-enter > * > :nth-child(4),
+  .stagger > :nth-child(4) {
+    --i: 3;
+  }
+  .page-enter > * > :nth-child(5),
+  .stagger > :nth-child(5) {
+    --i: 4;
+  }
+  .page-enter > * > :nth-child(n + 6),
+  .stagger > :nth-child(n + 6) {
+    --i: 5;
+  }
+
+  .ink-letter {
+    display: inline-block;
+    white-space: pre;
+    animation: ink var(--dur-slide) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 28ms);
+  }
+
+  .thunk {
+    animation: thunk var(--dur-place) var(--ease-spring) both;
+    animation-delay: var(--delay, 0ms);
+  }
+
+  .settle {
+    animation: settle var(--dur-place) var(--ease-spring) both;
+  }
+
+  .shake {
+    animation: shake 420ms var(--ease-out) both;
+  }
+
+  .typed {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+    max-width: 100%;
+    animation: typed calc(var(--n, 12) * 25ms) steps(var(--n, 12)) both;
+    animation-delay: calc(var(--i, 0) * 120ms + 200ms);
+  }
+
+  /* 기울기 + 광택 (Tilt.tsx가 --rx --ry --mx --my를 넣는다) */
+  .tilt {
+    perspective: 1200px;
+  }
+  .tilt-body {
+    position: relative;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform var(--dur-slide) var(--ease-out);
+    will-change: transform;
+  }
+  .tilt[data-active] .tilt-body {
+    transition-duration: 80ms;
+  }
+  .tilt-sheen {
+    position: absolute;
+    inset: 6%;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: soft-light;
+    background: radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgb(255 255 255 / 0.95),
+      rgb(255 255 255 / 0) 55%
+    );
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+  .tilt[data-active] .tilt-sheen {
+    opacity: var(--sheen, 0.5);
+  }
+
+  /* 봉투 열기 (OpeningEnvelope.tsx) */
+  .env {
+    position: relative;
+    width: min(100%, 320px);
+    aspect-ratio: 3 / 2;
+    perspective: 900px;
+  }
+  .env-back,
+  .env-front {
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--color-sketch);
+    border-radius: 3px;
+    background: var(--color-paper);
+  }
+  .env-front {
+    z-index: 3;
+    clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%);
+    background: linear-gradient(var(--color-surface), var(--color-surface));
+    box-shadow: inset 0 0 0 1px var(--color-line);
+  }
+  .env-letter {
+    position: absolute;
+    z-index: 2;
+    inset: 8% 9% 10%;
+    border: 1px solid var(--color-line);
+    border-radius: 2px;
+    background: var(--color-paper);
+    box-shadow: var(--shadow-sheet);
+    animation: letter 1100ms var(--ease-out) 900ms both;
+  }
+  .env-letter::before {
+    content: "";
+    position: absolute;
+    inset: 18% 14% auto;
+    height: 46%;
+    background: repeating-linear-gradient(var(--color-line) 0 1px, transparent 1px 12px);
+  }
+  .env-flap {
+    position: absolute;
+    z-index: 4;
+    inset: 0 0 auto;
+    height: 56%;
+    transform-origin: top;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background: var(--color-seal);
+    animation: flap 800ms var(--ease-out) 300ms both;
+  }
+  .env-wax {
+    position: absolute;
+    z-index: 5;
+    left: 50%;
+    top: 50%;
+    width: 13%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    border-radius: 999px;
+    background: var(--color-stamp);
+    box-shadow: inset 0 -2px 0 rgb(0 0 0 / 0.18);
+    animation: wax 300ms var(--ease-out) 150ms both;
+  }
 }
 
-::selection {
-  background: var(--color-brand);
-  color: var(--color-on-brand);
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+}
+@keyframes ink {
+  from {
+    opacity: 0;
+    transform: translateY(0.18em);
+    filter: blur(3px);
+  }
+}
+@keyframes thunk {
+  from {
+    opacity: 0;
+    scale: 2.2;
+  }
+  18% {
+    opacity: 1;
+  }
+}
+@keyframes settle {
+  from {
+    opacity: 0;
+    scale: 0.86;
+    translate: 0 -18px;
+  }
+}
+@keyframes shake {
+  20% {
+    translate: -6px 0;
+  }
+  45% {
+    translate: 5px 0;
+  }
+  70% {
+    translate: -3px 0;
+  }
+}
+@keyframes typed {
+  from {
+    max-width: 0;
+  }
+}
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes flap {
+  to {
+    transform: rotateX(180deg);
+    z-index: 1;
+  }
+}
+@keyframes letter {
+  to {
+    translate: 0 -58%;
+  }
+}
+@keyframes wax {
+  to {
+    opacity: 0;
+    scale: 1.6;
+  }
+}
+
+/* 움직임 줄이기: 모든 연출을 즉시 상태 전환으로 바꾼다 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* 시트 안의 메모는 상자를 겹치지 않고 위 점선으로만 나눈다. 유틸리티 여백보다 우선하도록 레이어 밖에 둔다 */
+.sheet .note {
+  background: none;
+  border-width: 1px 0 0;
+  border-radius: 0;
+  padding-inline: 0;
+  padding-bottom: 0;
 }

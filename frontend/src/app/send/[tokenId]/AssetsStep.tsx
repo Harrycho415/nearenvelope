@@ -4,6 +4,7 @@
 // 소유자: C
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
+import { Tilt, sheenForLevel } from "@/components/envelope/Tilt";
 import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import type { EnvelopeView, VaultBalances } from "@/lib/near";
 
@@ -56,15 +57,16 @@ export function AssetsStep({
   return (
     <>
       <StepHeader
-        step={2}
         title="Put something inside"
         subtitle="Choose what to give. The assets will belong to whoever owns this envelope."
       />
 
       <div className="mt-9 grid items-start gap-10 lg:grid-cols-[360px_1fr]">
-        <div className="rounded-3xl border border-line bg-surface p-6">
-          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
-          <h3 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h3>
+        <div className="sheet p-6">
+          <Tilt sheen={sheenForLevel(envelope.level)} className="rise">
+            <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
+          </Tilt>
+          <h2 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h2>
           <div className="mt-4 text-[13px] font-medium text-ink-muted">
             <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity].toUpperCase()}</span> · Gifted{" "}
             {gifted} {gifted === 1 ? "time" : "times"}
@@ -72,8 +74,8 @@ export function AssetsStep({
           <div className="mt-4 text-[15px] text-ink-muted">Assets inside now: {formatAssets(inside) ?? "None"}</div>
         </div>
 
-        <div className="rounded-3xl border border-line bg-surface p-8">
-          <h2 className="text-2xl font-semibold">Add an asset</h2>
+        <div className="sheet p-8">
+          <h2 className="text-2xl">Add an asset</h2>
 
           {rows.map((row, i) => (
             <div key={row.key} className="mt-5">
@@ -85,7 +87,7 @@ export function AssetsStep({
                     placeholder="0"
                     value={row.amount}
                     onChange={(e) => update(row.key, { amount: e.target.value.replace(/[^\d.]/g, "") })}
-                    className="mt-4 block w-full rounded-xl border border-line bg-surface px-5 py-4 text-2xl font-normal outline-none focus:border-brand"
+                    className="mt-4 block w-full field px-5 py-4 text-2xl font-normal"
                   />
                 </label>
                 <label className="text-[15px] font-medium">
@@ -94,7 +96,7 @@ export function AssetsStep({
                     <select
                       value={row.token}
                       onChange={(e) => update(row.key, { token: e.target.value as Token, amount: "" })}
-                      className="block w-full appearance-none rounded-xl border border-line bg-surface px-5 py-4 text-xl font-normal outline-none focus:border-brand"
+                      className="block w-full appearance-none field px-5 py-4 text-xl font-normal"
                     >
                       {TOKENS.filter((t) => t === row.token || !rows.some((r) => r.token === t)).map((t) => (
                         <option key={t}>{t}</option>
@@ -108,7 +110,7 @@ export function AssetsStep({
                 <span className="text-ink-muted">
                   Available: {formatToken(balanceOf(wallet, row.token), row.token)} {row.token}
                 </span>
-                {errors[i] && <span className="text-red-400">{errors[i]}</span>}
+                {errors[i] && <span className="text-danger">{errors[i]}</span>}
                 {rows.length > 1 && (
                   <button
                     onClick={() => setRows(rows.filter((r) => r.key !== row.key))}
@@ -124,13 +126,13 @@ export function AssetsStep({
           {unusedToken && (
             <button
               onClick={() => setRows([...rows, { key: Date.now(), token: unusedToken, amount: "" }])}
-              className="mt-5 rounded-full border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch"
+              className="mt-5 btn btn-secondary"
             >
               + Add another asset
             </button>
           )}
 
-          <div className="mt-4 rounded-3xl border border-line bg-seal/40 p-6">
+          <div className="mt-4 note p-6">
             <div className="text-[15px] text-ink-muted">Inside this envelope</div>
             <div className="mt-5 text-3xl font-semibold">{totalText ?? "Nothing yet"}</div>
             <div className="mt-5 text-sm text-ink-muted">Network fee is shown before you send.</div>
@@ -139,14 +141,14 @@ export function AssetsStep({
           <div className="mt-4 flex gap-4">
             <button
               onClick={onBack}
-              className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+              className="btn btn-secondary"
             >
               Back
             </button>
             <button
               onClick={onContinue}
               disabled={!canContinue}
-              className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
+              className="btn btn-primary"
             >
               Continue
             </button>
@@ -154,7 +156,7 @@ export function AssetsStep({
         </div>
       </div>
 
-      <div className="mt-8 rounded-3xl border border-line bg-seal/40 px-6 py-6 text-[15px]">
+      <div className="mt-8 note px-6 py-6 text-[15px]">
         The envelope holds the assets. Sending the envelope also transfers control of everything still inside.
       </div>
     </>

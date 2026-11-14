@@ -78,8 +78,8 @@ export default function EnvelopeDetailPage() {
   if (!ready || (accountId && envelope === null)) {
     return (
       <Frame>
-        <div className="h-[236px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
-        <div className="mt-8 h-[420px] animate-pulse rounded-3xl border border-line bg-surface" />
+        <div className="h-[236px] animate-pulse sheet" aria-label="Loading" />
+        <div className="mt-8 h-[420px] animate-pulse sheet" />
       </Frame>
     );
   }
@@ -107,7 +107,7 @@ export default function EnvelopeDetailPage() {
       <Frame>
         <Notice>
           Envelope #{tokenId} doesn&apos;t exist.{" "}
-          <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+          <Link href="/envelopes" className="link">
             Back to My Envelopes
           </Link>
         </Notice>
@@ -121,7 +121,7 @@ export default function EnvelopeDetailPage() {
       <Frame>
         <Notice>
           Only the current owner can view this envelope.{" "}
-          <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+          <Link href="/envelopes" className="link">
             Back to My Envelopes
           </Link>
         </Notice>

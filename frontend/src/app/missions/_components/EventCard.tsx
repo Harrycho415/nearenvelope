@@ -11,7 +11,7 @@ import { BUTTON_PRIMARY, formatDate } from "../../envelopes/_components/shared";
 import { attemptsText, errorText } from "./missions";
 
 const FIELD =
-  "block w-full rounded-xl border border-line bg-surface px-4 py-3 text-base outline-none focus:border-brand disabled:opacity-60";
+  "block w-full field px-4 py-3 text-base disabled:opacity-60";
 
 export function EventCard({
   event,
@@ -46,17 +46,17 @@ export function EventCard({
   }
 
   return (
-    <article className="flex flex-col rounded-3xl border border-line bg-surface p-6">
+    <article className="flex flex-col sheet p-6">
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-xl font-semibold">{event.name}</h3>
         {redeemed && (
-          <span className="shrink-0 rounded-full bg-seal px-3 py-1 text-xs font-semibold text-brand">Completed</span>
+          <span className="shrink-0 label text-ok">Completed</span>
         )}
       </div>
       <p className="mt-3 text-[15px] text-ink-muted">
         Attending? Enter the code shown at the event. {ended ? "Ended" : "Open until"} {formatDate(event.ends_at_ms)}.
       </p>
-      <div className="mt-5 text-sm font-semibold text-brand">Reward: +{attemptsText(event.tickets)}</div>
+      <div className="label mt-5 text-ink">Reward: +{attemptsText(event.tickets)}</div>
       <p className="mt-2 text-xs text-ink-muted">
         {redeemed
           ? "You've used this event's code. Each account can use it once."
@@ -89,7 +89,7 @@ export function EventCard({
         </form>
       )}
       {error && (
-        <p role="alert" className="mt-3 text-sm text-red-400">
+        <p role="alert" className="mt-3 text-sm text-danger">
           {error}
         </p>
       )}

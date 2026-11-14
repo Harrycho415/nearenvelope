@@ -1,17 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 230" role="img" aria-label="Envelope">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 230" role="img" aria-label="MIDNIGHT envelope, LEGENDARY">
 <defs>
-<linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#18224d"/><stop offset="1" stop-color="#0a0f26"/></linearGradient>
-<radialGradient id="seal" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="0.45" stop-color="#ffc83d"/><stop offset="1" stop-color="#ffc83d" stop-opacity="0.75"/></radialGradient>
-<filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+<mask id="perf"><rect width="340" height="230" fill="#fff"/><g fill="#000"><circle cx="12.0" cy="12.0" r="4.6"/><circle cx="27.8" cy="12.0" r="4.6"/><circle cx="43.6" cy="12.0" r="4.6"/><circle cx="59.4" cy="12.0" r="4.6"/><circle cx="75.2" cy="12.0" r="4.6"/><circle cx="91.0" cy="12.0" r="4.6"/><circle cx="106.8" cy="12.0" r="4.6"/><circle cx="122.6" cy="12.0" r="4.6"/><circle cx="138.4" cy="12.0" r="4.6"/><circle cx="154.2" cy="12.0" r="4.6"/><circle cx="170.0" cy="12.0" r="4.6"/><circle cx="185.8" cy="12.0" r="4.6"/><circle cx="201.6" cy="12.0" r="4.6"/><circle cx="217.4" cy="12.0" r="4.6"/><circle cx="233.2" cy="12.0" r="4.6"/><circle cx="249.0" cy="12.0" r="4.6"/><circle cx="264.8" cy="12.0" r="4.6"/><circle cx="280.6" cy="12.0" r="4.6"/><circle cx="296.4" cy="12.0" r="4.6"/><circle cx="312.2" cy="12.0" r="4.6"/><circle cx="328.0" cy="12.0" r="4.6"/><circle cx="12.0" cy="218.0" r="4.6"/><circle cx="27.8" cy="218.0" r="4.6"/><circle cx="43.6" cy="218.0" r="4.6"/><circle cx="59.4" cy="218.0" r="4.6"/><circle cx="75.2" cy="218.0" r="4.6"/><circle cx="91.0" cy="218.0" r="4.6"/><circle cx="106.8" cy="218.0" r="4.6"/><circle cx="122.6" cy="218.0" r="4.6"/><circle cx="138.4" cy="218.0" r="4.6"/><circle cx="154.2" cy="218.0" r="4.6"/><circle cx="170.0" cy="218.0" r="4.6"/><circle cx="185.8" cy="218.0" r="4.6"/><circle cx="201.6" cy="218.0" r="4.6"/><circle cx="217.4" cy="218.0" r="4.6"/><circle cx="233.2" cy="218.0" r="4.6"/><circle cx="249.0" cy="218.0" r="4.6"/><circle cx="264.8" cy="218.0" r="4.6"/><circle cx="280.6" cy="218.0" r="4.6"/><circle cx="296.4" cy="218.0" r="4.6"/><circle cx="312.2" cy="218.0" r="4.6"/><circle cx="328.0" cy="218.0" r="4.6"/><circle cx="12.0" cy="12.0" r="4.6"/><circle cx="12.0" cy="27.8" r="4.6"/><circle cx="12.0" cy="43.7" r="4.6"/><circle cx="12.0" cy="59.5" r="4.6"/><circle cx="12.0" cy="75.4" r="4.6"/><circle cx="12.0" cy="91.2" r="4.6"/><circle cx="12.0" cy="107.1" r="4.6"/><circle cx="12.0" cy="122.9" r="4.6"/><circle cx="12.0" cy="138.8" r="4.6"/><circle cx="12.0" cy="154.6" r="4.6"/><circle cx="12.0" cy="170.5" r="4.6"/><circle cx="12.0" cy="186.3" r="4.6"/><circle cx="12.0" cy="202.2" r="4.6"/><circle cx="12.0" cy="218.0" r="4.6"/><circle cx="328.0" cy="12.0" r="4.6"/><circle cx="328.0" cy="27.8" r="4.6"/><circle cx="328.0" cy="43.7" r="4.6"/><circle cx="328.0" cy="59.5" r="4.6"/><circle cx="328.0" cy="75.4" r="4.6"/><circle cx="328.0" cy="91.2" r="4.6"/><circle cx="328.0" cy="107.1" r="4.6"/><circle cx="328.0" cy="122.9" r="4.6"/><circle cx="328.0" cy="138.8" r="4.6"/><circle cx="328.0" cy="154.6" r="4.6"/><circle cx="328.0" cy="170.5" r="4.6"/><circle cx="328.0" cy="186.3" r="4.6"/><circle cx="328.0" cy="202.2" r="4.6"/><circle cx="328.0" cy="218.0" r="4.6"/></g></mask>
 </defs>
-<rect x="25" y="25" width="290" height="180" rx="16" fill="none" stroke="#ffc83d" stroke-width="6" opacity="0.85" filter="url(#glow)"/>
-<rect x="25" y="25" width="290" height="180" rx="16" fill="url(#body)" stroke="#3f52a3" stroke-width="2"/>
-<g fill="none" stroke="#6276d1" stroke-width="2.2" stroke-linecap="round">
-<path d="M29 33 L152 120 M311 33 L188 120"/>
-<path d="M29 199 L125 117 M311 199 L215 117"/>
+<rect x="12" y="12" width="316" height="206" fill="#292524" mask="url(#perf)"/>
+<rect x="28" y="28" width="284" height="174" fill="#1c1917"/>
+<rect x="28" y="28" width="284" height="30" fill="#f6deb6"/>
+<rect x="28.5" y="28.5" width="283" height="173" fill="none" stroke="#e7e5e4" stroke-opacity="0.55"/>
+<path d="M28 58.5 H312" stroke="#e7e5e4" stroke-opacity="0.55"/>
+<text x="40" y="47" font-family="ui-monospace, 'IBM Plex Mono', Menlo, Consolas, monospace" font-size="10.5" font-weight="600" letter-spacing="2" fill="#7a4e06">LEGENDARY</text>
+<circle cx="298" cy="43" r="3.2" fill="#7a4e06"/><circle cx="287" cy="43" r="3.2" fill="#7a4e06"/><circle cx="276" cy="43" r="3.2" fill="#7a4e06"/><circle cx="265" cy="43" r="3.2" fill="#7a4e06"/>
+<g stroke="#e7e5e4" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+<rect x="95" y="71" width="150" height="96" rx="2" fill="#3a3532"/>
+<path d="M95 167 L151 117 M245 167 L189 117" fill="none" stroke-opacity="0.6"/>
+<path d="M95 71 L170 127 L245 71" fill="#3a3532"/>
 </g>
-<rect x="26" y="26" width="288" height="178" rx="15" fill="none" stroke="#ffc83d" stroke-opacity="0.85" stroke-width="1.5"/>
-<circle cx="170" cy="124" r="19" fill="url(#seal)" stroke="#0a0f26" stroke-width="2"/>
-<circle cx="170" cy="124" r="11" fill="none" stroke="#000" stroke-opacity="0.25" stroke-width="1.5"/>
-<path d="M55 48 L56.96 53.04 L62 55 L56.96 56.96 L55 62 L53.04 56.96 L48 55 L53.04 53.04 Z" fill="#ffc83d"/><path d="M287 64 L288.4 67.6 L292 69 L288.4 70.4 L287 74 L285.6 70.4 L282 69 L285.6 67.6 Z" fill="#ffc83d"/><path d="M275 169 L276.68 173.32 L281 175 L276.68 176.68 L275 181 L273.32 176.68 L269 175 L273.32 173.32 Z" fill="#ffc83d"/>
+<circle cx="170" cy="125" r="11" fill="#f44e22"/>
+<circle cx="170" cy="125" r="6" fill="none" stroke="#000" stroke-opacity="0.22" stroke-width="1.2"/>
+<g fill="none" stroke="#78716c" stroke-width="1.1" stroke-opacity="0.8">
+<path d="M42 93 q7 -6 14 0 t14 0 M42 105 q7 -6 14 0 t14 0 M42 117 q7 -6 14 0 t14 0"/>
+<circle cx="278" cy="105" r="19" stroke-dasharray="3 3"/>
+<circle cx="278" cy="105" r="13"/>
+</g>
+<text x="40" y="192" font-family="ui-monospace, 'IBM Plex Mono', Menlo, Consolas, monospace" font-size="9.5" letter-spacing="2.2" fill="#e7e5e4">NEAR ENVELOPE</text>
+<text x="300" y="192" text-anchor="end" font-family="ui-monospace, 'IBM Plex Mono', Menlo, Consolas, monospace" font-size="9.5" letter-spacing="2.2" fill="#e7e5e4" fill-opacity="0.7">MIDNIGHT</text>
 </svg>

@@ -47,7 +47,7 @@ function errorText(e: unknown) {
 }
 
 const FIELD =
-  "mt-4 block w-full rounded-xl border border-line bg-surface px-5 py-4 text-xl font-normal outline-none focus:border-brand";
+  "mt-4 block w-full field px-5 py-4 text-xl font-normal";
 
 export function AddForm({
   inside,
@@ -107,7 +107,7 @@ export function AddForm({
   }
 
   return (
-    <section className="rounded-3xl border border-line bg-surface p-6 sm:p-8">
+    <section className="sheet p-6 sm:p-8">
       <label className="block text-[15px] font-medium">
         Asset
         <div className="relative">
@@ -161,11 +161,11 @@ export function AddForm({
           Use maximum
         </button>
         {available === zero && (
-          <Link href="/wallet" className="basis-full font-semibold text-brand hover:underline">
+          <Link href="/wallet" className="basis-full link">
             Get test {token} in Wallet
           </Link>
         )}
-        {amountError && <span className="basis-full text-red-400">{amountError}</span>}
+        {amountError && <span className="basis-full text-danger">{amountError}</span>}
       </div>
 
       <label className="mt-6 block text-[15px] font-medium">
@@ -173,7 +173,7 @@ export function AddForm({
         <input readOnly value={accountId} title={accountId} className={`${FIELD} truncate`} />
       </label>
 
-      <div className="mt-4 rounded-3xl border border-line bg-seal/40 p-6">
+      <div className="mt-4 note p-6">
         <div className="text-2xl font-semibold">You add: {addText}</div>
         <div className="mt-5 text-[17px]">Inside after: {assetsText(after) ?? "Nothing"}</div>
         <div className="mt-5 text-sm text-ink-muted">
@@ -184,7 +184,7 @@ export function AddForm({
       </div>
 
       {error && (
-        <p role="alert" className="mt-4 text-[15px] text-red-400">
+        <p role="alert" className="mt-4 text-[15px] text-danger">
           {error}
         </p>
       )}

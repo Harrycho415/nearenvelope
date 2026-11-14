@@ -5,18 +5,19 @@ export const SEND_STEPS = ["Choose Envelope", "Add Assets", "Recipient & Message
 
 export function SendSteps({ current }: { current: number }) {
   return (
-    <ol className="flex flex-wrap items-center gap-x-8 gap-y-2 text-[15px]">
+    <ol className="flex flex-wrap gap-x-8 gap-y-1 border-b border-dashed border-sketch">
       {SEND_STEPS.map((label, i) => {
         const active = i + 1 === current;
         return (
           <li
             key={label}
             aria-current={active ? "step" : undefined}
-            className={`flex items-center gap-2 ${active ? "font-semibold text-brand" : "text-ink-muted"}`}
+            className={`-mb-px flex min-h-11 items-center gap-2 border-b-2 font-mono text-xs uppercase tracking-[0.1em] ${
+              active ? "border-brand text-ink" : "border-transparent text-ink-faint"
+            }`}
           >
-            <span>{i + 1}</span>
+            <span className={active ? "text-brand" : undefined}>{String(i + 1).padStart(2, "0")}</span>
             <span>{label}</span>
-            {i < SEND_STEPS.length - 1 && <span className="ml-2">→</span>}
           </li>
         );
       })}

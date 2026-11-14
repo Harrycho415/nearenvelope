@@ -11,9 +11,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "history", label: "History" },
 ];
 
-const BASE = "shrink-0 whitespace-nowrap rounded-xl border px-3 py-2.5 text-lg transition sm:px-3.5";
-const ACTIVE = "border-line bg-seal/40 font-semibold text-brand";
-const INACTIVE = "border-transparent text-ink-muted hover:text-ink";
+const BASE = "tab shrink-0";
 
 export const tabPanelId = (tab: Tab) => `envelope-panel-${tab}`;
 
@@ -31,8 +29,8 @@ export function DetailTabs({
   onChange: (tab: Tab) => void;
 }) {
   return (
-    <div className="mt-8 flex gap-2 overflow-x-auto sm:gap-10">
-      <div role="tablist" aria-label="Envelope sections" className="flex gap-2 sm:gap-10">
+    <div className="mt-8 flex gap-1.5 overflow-x-auto border-b border-line px-2 pt-1">
+      <div role="tablist" aria-label="Envelope sections" className="flex gap-1.5">
         {TABS.map(({ id, label }) => (
           <button
             key={id}
@@ -40,14 +38,14 @@ export function DetailTabs({
             aria-selected={current === id}
             aria-controls={tabPanelId(id)}
             onClick={() => onChange(id)}
-            className={`${BASE} ${current === id ? ACTIVE : INACTIVE}`}
+            className={BASE}
           >
             {label}
           </button>
         ))}
       </div>
-      <Link href={`/enhance/${tokenId}`} className={`${BASE} ${INACTIVE}`}>
-        Enhance
+      <Link href={`/enhance/${tokenId}`} className={`${BASE} tab-legendary ml-auto`}>
+        Enhance →
       </Link>
     </div>
   );

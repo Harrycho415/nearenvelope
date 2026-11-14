@@ -88,7 +88,7 @@ function Missions() {
     <div className="pt-10 sm:pt-14">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">Missions</h1>
+          <h1 className="text-4xl sm:text-[44px]">Missions</h1>
           <p className="mt-5 text-lg text-ink-muted">Complete missions to help your Envelopes grow.</p>
         </div>
         <Link href="/send" className={`${BUTTON_PRIMARY} self-start sm:mt-4`}>
@@ -98,7 +98,7 @@ function Missions() {
 
       <div className="mt-10">
         {!ready || (accountId && loaded === null) ? (
-          <div className="h-[420px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
+          <div className="h-[420px] animate-pulse sheet" aria-label="Loading" />
         ) : !accountId ? (
           <ConnectNotice message="Connect your wallet to see your Envelopes' missions." />
         ) : loaded === "error" || loaded === null ? (
@@ -108,7 +108,7 @@ function Missions() {
         ) : loaded.envelopes.length === 0 ? (
           <Notice>
             You don&apos;t have any Envelopes yet. Missions start the moment you create one.{" "}
-            <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+            <Link href="/envelopes" className="link">
               Go to My Envelopes
             </Link>
           </Notice>
@@ -131,8 +131,8 @@ function Missions() {
         )}
       </div>
 
-      <section className="mt-12 rounded-3xl border border-line bg-seal/40 p-6">
-        <h2 className="text-lg font-semibold sm:text-xl">
+      <section className="mt-12 note p-6">
+        <h2 className="text-lg sm:text-xl">
           Action → Envelope Experience → Enhancement Attempt → Stronger Envelope
         </h2>
         <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">
@@ -163,7 +163,7 @@ function MissionBoard({
   return (
     <>
       <section>
-        <h2 className="text-[22px] font-semibold">Your Envelopes</h2>
+        <h2 className="text-[22px]">Your Envelopes</h2>
         <p className="mt-2 text-[15px] text-ink-muted">
           Each Envelope earns its own Enhancement Attempts. Pick one to see its missions.
         </p>
@@ -176,8 +176,8 @@ function MissionBoard({
                 role="radio"
                 aria-checked={active}
                 onClick={() => onSelect(e.token_id)}
-                className={`flex items-center gap-4 rounded-3xl border bg-surface p-4 text-left transition ${
-                  active ? "border-brand ring-1 ring-brand" : "border-line hover:border-sketch"
+                className={`flex items-center gap-4 rounded-[3px] border bg-surface p-4 text-left transition ${
+                  active ? "border-ink shadow-lift" : "border-line hover:border-sketch"
                 }`}
               >
                 <EnvelopeIllustration design={e.design} rarity={e.rarity} className="w-20 shrink-0" />
@@ -188,7 +188,7 @@ function MissionBoard({
                   <span className="mt-1 block text-sm text-ink-muted">
                     <span className={RARITY_TEXT[e.rarity]}>{RARITY_LABEL[e.rarity]}</span> · #{e.token_id}
                   </span>
-                  <span className="mt-1 block text-sm font-medium text-brand">
+                  <span className="label mt-1 block">
                     {attemptsText(e.enhance_tickets)}
                   </span>
                 </span>
@@ -198,14 +198,14 @@ function MissionBoard({
         </div>
       </section>
 
-      <section className="mt-10 flex flex-col gap-5 rounded-3xl border border-line bg-surface p-6 sm:flex-row sm:items-center">
+      <section className="mt-10 flex flex-col gap-5 sheet p-6 sm:flex-row sm:items-center">
         <EnvelopeIllustration design={selected.design} rarity={selected.rarity} className="w-28 shrink-0" />
         <div className="min-w-0 flex-1">
-          <h2 className="text-2xl font-semibold">
+          <h2 className="text-2xl">
             {label} +{selected.level}
           </h2>
           <div className={`mt-1 ${RARITY_TEXT[selected.rarity]}`}>{RARITY_LABEL[selected.rarity]}</div>
-          <div className="mt-2 font-semibold text-brand">{attemptsText(selected.enhance_tickets)} ready</div>
+          <div className="mt-2 font-semibold">{attemptsText(selected.enhance_tickets)} ready</div>
         </div>
         {selected.enhance_tickets > 0 && selected.level < 10 ? (
           // 강화 화면(확률·남은 기회 확인 후 실행)으로 이동
@@ -275,7 +275,7 @@ function MissionSection({
 }) {
   return (
     <section className="mt-10">
-      <h2 className="text-[22px] font-semibold">{title}</h2>
+      <h2 className="text-[22px]">{title}</h2>
       <p className="mt-2 text-[15px] text-ink-muted">{description}</p>
       <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{children}</div>
     </section>

@@ -15,12 +15,12 @@ export function EnvelopeSideCard({
   note?: string;
 }) {
   return (
-    <aside className="rounded-3xl border border-line bg-paper p-6 sm:p-7">
+    <aside className="sheet bg-paper p-6 sm:p-7">
       <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
-      <h2 className="mt-6 text-2xl font-semibold">
+      <h2 className="mt-6 text-2xl">
         {envelopeName(envelope)} #{envelope.token_id}
       </h2>
-      <div className="mt-4 text-[17px] text-brand">
+      <div className="mt-4 text-[17px] text-ink">
         +{envelope.level} · <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity]}</span>
       </div>
       <p className="mt-4 text-[15px] leading-relaxed text-ink-muted">{note}</p>

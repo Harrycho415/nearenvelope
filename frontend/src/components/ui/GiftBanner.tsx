@@ -22,16 +22,16 @@ export function GiftBanner({
   if (!last) return null;
 
   return (
-    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 rounded-3xl border border-line bg-seal/40 px-5 py-5">
-      <span className="text-xs font-semibold uppercase tracking-wide text-brand">New gift</span>
-      <span className="text-[17px] font-medium">{displayName(last.from)} sent you an Envelope.</span>
-      <span className="text-sm text-ink-muted">
+    <div className="note rise flex flex-wrap items-baseline gap-x-4 gap-y-1 px-5 py-4">
+      <span className="label text-brand">New gift</span>
+      <span className="text-lg">{displayName(last.from)} sent you an Envelope.</span>
+      <span className="text-[15px] text-ink-muted">
         {timeAgo(last.at_ms, now)}
         {more > 0 && ` · +${more} more`}
         {viewHref && (
           <>
             {" · "}
-            <Link href={viewHref} className="hover:text-ink hover:underline">
+            <Link href={viewHref} className="link">
               View gift →
             </Link>
           </>

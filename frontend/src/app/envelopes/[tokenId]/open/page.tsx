@@ -66,7 +66,7 @@ export default function OpenEnvelopePage() {
   }, [tokenId, accountId, api]);
 
   if (!ready || (accountId && data?.accountId !== accountId)) {
-    return <div className="mx-auto mt-14 h-[640px] max-w-[580px] animate-pulse rounded-3xl border border-line bg-surface" />;
+    return <div className="mx-auto mt-14 h-[640px] max-w-[580px] animate-pulse sheet" />;
   }
 
   if (!accountId) {
@@ -84,7 +84,7 @@ export default function OpenEnvelopePage() {
       <div className="pt-14">
         <Notice>
           This envelope isn&apos;t waiting for you.{" "}
-          <Link href={envelope ? `/envelopes/${tokenId}` : "/envelopes"} className="font-semibold text-brand hover:underline">
+          <Link href={envelope ? `/envelopes/${tokenId}` : "/envelopes"} className="link">
             {envelope ? "View envelope" : "Back to My Envelopes"}
           </Link>
         </Notice>
@@ -113,15 +113,15 @@ export default function OpenEnvelopePage() {
       <GiftBanner envelope={envelope} now={loadedAt} />
 
       <section className="mt-10 text-center">
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-[42px]">You received an Envelope.</h1>
+        <h1 className="text-4xl sm:text-[44px]">You received an Envelope.</h1>
         <p className="mt-6 text-xl text-ink-muted">From: {last.from}</p>
 
-        <div className="mx-auto mt-6 max-w-[580px] rounded-3xl border border-line bg-paper px-12 pb-12 pt-12">
-          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
-          <h2 className="mt-6 text-3xl font-semibold">
+        <div className="sheet sheet-grid mx-auto mt-6 max-w-[580px] px-8 pb-10 pt-10 sm:px-12">
+          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="settle w-full" />
+          <h2 className="mt-6 text-3xl">
             {envelopeName(envelope)} +{envelope.level}
           </h2>
-          <div className={`mt-5 text-sm font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
+          <div className={`mt-5 label ${RARITY_TEXT[envelope.rarity]}`}>
             {RARITY_LABEL[envelope.rarity]}
           </div>
         </div>
@@ -154,7 +154,7 @@ export default function OpenEnvelopePage() {
 function Card({ children }: { children: React.ReactNode }) {
   return (
     <div className="pt-14">
-      <section className="mx-auto max-w-[1040px] rounded-3xl border border-line bg-surface px-6 py-14 text-center">
+      <section className="sheet sheet-grid mx-auto max-w-[1040px] px-6 py-14 text-center">
         {children}
       </section>
     </div>
@@ -164,31 +164,25 @@ function Card({ children }: { children: React.ReactNode }) {
 function Opening({ envelope, from }: { envelope: EnvelopeView; from: string }) {
   return (
     <Card>
-      <p className="text-[13px] font-semibold uppercase tracking-wide text-brand">A moment just for you</p>
-      <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-[42px]">Opening your Envelope…</h1>
+      <h1 className="text-4xl sm:text-[44px]">Opening your Envelope…</h1>
       <p className="mt-6 text-lg text-ink-muted">From {from}</p>
 
-      <div className="mx-auto mt-5 max-w-[360px] rounded-3xl border border-line bg-seal/40 px-6 py-7">
-        <div className="text-[22px] font-medium">A note for you</div>
-        <p className="mt-4 text-[15px] text-ink-muted">Your gift is about to be revealed.</p>
+      {/* 봉랍이 떨어지고 → 덮개가 열리고 → 편지가 올라온다 (globals.css .env-*) */}
+      <div className="mx-auto mt-24 flex justify-center" aria-hidden>
+        <div className="env">
+          <div className="env-back" />
+          <div className="env-letter" />
+          <div className="env-front" />
+          <div className="env-flap" />
+          <div className="env-wax" />
+        </div>
       </div>
-
-      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-4 w-full max-w-[440px] animate-pulse" />
-      <div className="mt-6 text-xl font-medium">
+      <div className="mt-8 text-xl">
         {envelopeName(envelope)} +{envelope.level} ·{" "}
         <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity]}</span>
       </div>
-      <div className="mt-5 flex items-center justify-center gap-3 text-[17px] text-ink-muted" role="status">
+      <div className="label mt-4" role="status">
         Opening
-        <span className="flex gap-1.5" aria-hidden>
-          {[0, 150, 300].map((delay) => (
-            <span
-              key={delay}
-              className="size-1.5 animate-bounce rounded-full bg-ink-muted"
-              style={{ animationDelay: `${delay}ms` }}
-            />
-          ))}
-        </span>
       </div>
       <p className="mt-6 text-sm text-ink-muted">The amount and message stay hidden until the reveal.</p>
     </Card>
@@ -208,22 +202,22 @@ function Revealed({
 }) {
   return (
     <Card>
-      <div className="transition duration-700 starting:translate-y-3 starting:opacity-0">
-        <p className="text-[13px] font-semibold uppercase tracking-wide text-brand">
+      <div className="stagger">
+        <p className="label text-brand">
           From {displayName(from)}, with thanks
         </p>
-        <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-[40px]">A little something for you.</h1>
-        {contents && <div className="mt-8 text-5xl font-bold tracking-tight sm:text-[64px]">{contents}</div>}
+        <h1 className="mt-6 text-3xl italic text-ink-muted sm:text-[34px]">A little something for you.</h1>
+        {contents && <div className="mt-8 text-5xl tracking-tight sm:text-[72px]">{contents}</div>}
 
         <div className="mx-auto mt-8 max-w-[760px] space-y-4">
           {message && (
-            <div className="rounded-3xl border border-line bg-paper px-6 py-9">
+            <div className="sheet bg-paper px-6 py-9">
               <p className="whitespace-pre-wrap break-words text-[28px]">&ldquo;{message}&rdquo;</p>
               <p className="mt-5 text-[17px] text-ink-muted">— {from}</p>
             </div>
           )}
 
-          <div className="flex items-center gap-7 rounded-3xl border border-line bg-seal/40 p-6 text-left">
+          <div className="flex items-center gap-7 note p-6 text-left">
             <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-32 shrink-0 sm:w-44" />
             <div className="min-w-0">
               <div className="text-[15px] text-ink-muted">You now own</div>

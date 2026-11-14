@@ -36,8 +36,8 @@ export function HistoryTab({ envelope }: { envelope: EnvelopeView }) {
   ];
 
   return (
-    <section className="mt-8 rounded-3xl border border-line bg-surface p-6 sm:p-7">
-      <h2 className="text-2xl font-semibold">Every chapter stays with the envelope.</h2>
+    <section className="mt-8 sheet p-6 sm:p-7">
+      <h2 className="text-2xl">Every chapter stays with the envelope.</h2>
       <p className="mt-5 text-[15px] text-ink-muted">
         {plural(envelope.history.length, "gift")} · {plural(envelope.level, "successful enhancement")} · One
         continuing story
@@ -46,7 +46,7 @@ export function HistoryTab({ envelope }: { envelope: EnvelopeView }) {
       <ol className="mt-6 space-y-6">
         {entries.map((entry) => (
           <li key={entry.key} className="grid grid-cols-[24px_1fr] gap-x-4 sm:grid-cols-[24px_160px_1fr] sm:gap-x-6">
-            <span aria-hidden className="mt-1.5 size-3 rounded-full bg-brand" />
+            <span aria-hidden className="mt-1.5 size-3 rounded-full bg-stamp" />
             <time dateTime={new Date(entry.at_ms).toISOString()} className="text-[15px] text-ink-muted">
               {formatDate(entry.at_ms)}
             </time>

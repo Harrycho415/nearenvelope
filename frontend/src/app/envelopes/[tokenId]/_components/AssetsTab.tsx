@@ -33,10 +33,10 @@ export function AssetsTab({
 }) {
   return (
     <>
-      <section className="mt-8 rounded-3xl border border-line bg-surface p-6 sm:p-8">
+      <section className="mt-8 sheet p-6 sm:p-8">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h2 className="text-[28px] font-semibold leading-tight">Inside this envelope</h2>
+            <h2 className="text-[28px] leading-tight">Inside this envelope</h2>
             <p className="mt-3 text-[15px] text-ink-muted">These assets belong to the current envelope owner.</p>
           </div>
           <div className="flex gap-4">
@@ -54,8 +54,8 @@ export function AssetsTab({
         <table className="mt-6 w-full border-separate border-spacing-0 text-left">
           <thead>
             <tr className="text-[17px] text-ink-muted">
-              <th className="rounded-l-xl border-y border-l border-line bg-seal/40 px-4 py-4 font-normal">Asset</th>
-              <th className="w-[35%] rounded-r-xl border-y border-r border-line bg-seal/40 px-4 py-4 font-normal">
+              <th className="rounded-l-xl border-y border-l border-line bg-seal/55 px-4 py-4 font-normal">Asset</th>
+              <th className="w-[35%] rounded-r-xl border-y border-r border-line bg-seal/55 px-4 py-4 font-normal">
                 Amount
               </th>
             </tr>
@@ -76,7 +76,7 @@ export function AssetsTab({
                   </td>
                   <td className="px-4 pt-5 align-middle">
                     {balances === null ? (
-                      <span className="block h-7 w-28 animate-pulse rounded-md bg-line" aria-label="Loading" />
+                      <span className="block h-7 w-28 animate-pulse rounded-xs bg-line" aria-label="Loading" />
                     ) : (
                       <span className="text-2xl font-semibold sm:text-[26px]">{format(balances)}</span>
                     )}
@@ -88,8 +88,8 @@ export function AssetsTab({
         </table>
       </section>
 
-      <section className="mt-8 rounded-3xl border border-line bg-seal/40 p-6">
-        <h2 className="text-[22px] font-semibold">The gift travels as one.</h2>
+      <section className="mt-8 note p-6">
+        <h2 className="text-[22px]">The gift travels as one.</h2>
         <p className="mt-5 text-[17px] leading-relaxed text-ink-muted">
           Assets remain connected to this envelope until withdrawn. If the envelope is sent to another user, control
           of the remaining assets moves with the envelope.
