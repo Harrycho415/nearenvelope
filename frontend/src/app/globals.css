@@ -67,9 +67,9 @@ h2 {
 }
 
 .env-open-back {
-  border-radius: 6%/9.6%;
+  border-radius: 4.6%/7.4%;
   background: linear-gradient(var(--top), var(--bottom));
-  border: 2px solid var(--stroke);
+  border: 1.5px solid var(--stroke);
   box-shadow: 0 0 0 0 var(--glow);
   animation: env-open-glow 2.6s ease-out both;
 }
@@ -108,17 +108,15 @@ h2 {
   animation: env-open-open 2.6s cubic-bezier(0.55, 0, 0.3, 1) both;
 }
 
+/* 봉인 = 봉투 그림과 같은 NEAR 단추 (EnvelopeOpening이 SVG로 채움). 크기·위치는 봉투 그림 비율 */
 .env-open-seal {
   position: absolute;
   z-index: 4;
   left: 50%;
-  top: 55%;
-  width: 13%;
+  top: var(--seal-top, 55%);
+  width: var(--seal-w, 21%);
   aspect-ratio: 1;
   translate: -50% -50%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.6), var(--seal) 45%, var(--seal) 100%);
-  border: 2px solid var(--bottom);
   animation: env-open-unseal 2.6s ease-in both;
 }
 
@@ -164,5 +162,38 @@ h2 {
   .env-open-flap,
   .env-open-seal {
     animation-duration: 1ms;
+  }
+}
+
+/* 봉투 그림(EnvelopeIllustration): 빛이 8초 주기로 숨 쉬고, 4단계 별이 반짝인다 */
+@keyframes env-breathe {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.env-breathe {
+  animation: env-breathe 8s ease-in-out infinite;
+}
+@keyframes env-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+.env-star {
+  animation: env-twinkle var(--d, 6s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+@media (prefers-reduced-motion: reduce) {
+  .env-breathe,
+  .env-star {
+    animation: none;
   }
 }
