@@ -13,7 +13,7 @@ const NAV = [
   { href: "/send", label: "Send" },
   { href: "/envelopes", label: "My Envelopes" },
   { href: "/missions", label: "Missions" },
-  { href: "/wallet", label: "Wallet / Profile" },
+  { href: "/wallet", label: "Wallet" },
 ];
 
 export function SiteHeader() {

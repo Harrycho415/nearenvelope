@@ -2,8 +2,8 @@
 // NEXT_PUBLIC_USE_MOCK=true일 때 사용. 상태는 메모리에만 있고 새로고침하면 초기화된다.
 // 소유자: C (인터페이스 변경 시 types.ts와 함께 갱신)
 
-import { NFT_CONTRACT_ID } from "./config";
-import { isValidAccountId, nearToYocto } from "./format";
+import { FAUCET_MAX_USDC, NFT_CONTRACT_ID } from "./config";
+import { isValidAccountId, nearToYocto, usdcToUnits } from "./format";
 import type { EnvelopeApi, EnvelopeView, MissionId, NearEventView, Rarity, VaultBalances } from "./types";
 
 /** 지갑이 연결되면 setMockAccount로 실제 계정으로 바뀐다. 시드 봉투도 그 계정 소유가 된다. */
@@ -167,6 +167,11 @@ export const mockApi: EnvelopeApi = {
   vaultBalances: async (vaultId) => (await delay(), balances.get(vaultId) ?? { near: "0", usdc: "0" }),
   walletBalances: async () => (await delay(), { ...walletBalance }),
   accountExists: async (accountId) => (await delay(), isValidAccountId(accountId)),
+  faucet: async (amount) => {
+    await delay();
+    if (BigInt(amount) > BigInt(usdcToUnits(FAUCET_MAX_USDC))) throw new Error("ERR_FAUCET_LIMIT");
+    walletBalance.usdc = (BigInt(walletBalance.usdc) + BigInt(amount)).toString();
+  },
 
   mint: async (design) => {
     await delay();

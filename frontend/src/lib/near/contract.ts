@@ -95,6 +95,9 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
       const free = BigInt(account.amount) - BigInt(account.storage_usage) * STORAGE_PRICE_PER_BYTE - GAS_RESERVE;
       return { near: (free > BigInt(0) ? free : BigInt(0)).toString(), usdc };
     },
+    faucet: async (amount) => {
+      await call(FT_CONTRACT_ID, "faucet", { amount }, GAS_TGAS.faucet);
+    },
     accountExists: (accountId) =>
       viewAccount(accountId).then(
         () => true,

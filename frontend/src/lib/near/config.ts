@@ -19,7 +19,13 @@ export const GAS_TGAS = {
   sendEnvelope: 50,
   enhance: 30,
   checkIn: 30,
+  faucet: 30,
   redeemNearEvent: 30,
 } as const;
 
 export const ONE_YOCTO = "1";
+
+/** Mock USDC faucet 1회 최대 (mock-ft FAUCET_MAX = 1,000 USDC) */
+export const FAUCET_MAX_USDC = "1000";
+/** 테스트넷 NEAR faucet (외부) */
+export const NEAR_FAUCET_URL = "https://near-faucet.io";
