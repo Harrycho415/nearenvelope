@@ -21,7 +21,6 @@ import {
   Notice,
   RetryButton,
 } from "../envelopes/_components/shared";
-import { useEnhance } from "../enhance/[tokenId]/_components/enhance";
 import { CheckInCard } from "./_components/CheckInCard";
 import { EventCard } from "./_components/EventCard";
 import { MissionCard } from "./_components/MissionCard";
@@ -160,8 +159,6 @@ function MissionBoard({
 }) {
   const selected = data.envelopes.find((e) => e.token_id === selectedId)!;
   const label = `${envelopeName(selected)} #${selected.token_id}`;
-  // 강화를 실행하고 결과 화면(/enhance/[tokenId]?result=…)으로 이동
-  const { enhance, busy, error } = useEnhance();
 
   return (
     <>
@@ -211,20 +208,10 @@ function MissionBoard({
           <div className="mt-2 font-semibold text-brand">{attemptsText(selected.enhance_tickets)} ready</div>
         </div>
         {selected.enhance_tickets > 0 && selected.level < 10 ? (
-          <div className="flex flex-col items-start gap-2 sm:items-end">
-            <button
-              onClick={() => enhance(selected)}
-              disabled={busy}
-              className={`${BUTTON_PRIMARY} disabled:opacity-60`}
-            >
-              {busy ? "Opening the seal…" : "Enhance Envelope"}
-            </button>
-            {error && (
-              <p role="alert" className="max-w-xs text-sm text-red-600 sm:text-right">
-                {error}
-              </p>
-            )}
-          </div>
+          // 강화 화면(확률·남은 기회 확인 후 실행)으로 이동
+          <Link href={`/enhance/${selected.token_id}`} className={`${BUTTON_PRIMARY} self-start sm:self-center`}>
+            Enhance Envelope
+          </Link>
         ) : (
           <Link href={`/envelopes/${selected.token_id}`} className={`${BUTTON_SECONDARY} self-start sm:self-center`}>
             View Envelope
