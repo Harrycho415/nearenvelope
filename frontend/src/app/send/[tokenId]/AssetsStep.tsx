@@ -4,7 +4,7 @@
 // 소유자: C
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import type { EnvelopeView, VaultBalances } from "@/lib/near";
 
 import {
@@ -65,8 +65,9 @@ export function AssetsStep({
         <div className="rounded-3xl border border-line bg-surface p-6">
           <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
           <h3 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h3>
-          <div className="mt-4 text-[13px] font-medium text-brand">
-            {RARITY_LABEL[envelope.rarity].toUpperCase()} · Gifted {gifted} {gifted === 1 ? "time" : "times"}
+          <div className="mt-4 text-[13px] font-medium text-ink-muted">
+            <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity].toUpperCase()}</span> · Gifted{" "}
+            {gifted} {gifted === 1 ? "time" : "times"}
           </div>
           <div className="mt-4 text-[15px] text-ink-muted">Assets inside now: {formatAssets(inside) ?? "None"}</div>
         </div>

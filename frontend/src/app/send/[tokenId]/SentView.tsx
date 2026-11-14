@@ -4,7 +4,7 @@
 import Link from "next/link";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { displayName, EXPLORER_URL, type EnvelopeView } from "@/lib/near";
 
 import { envelopeTitle } from "./shared";
@@ -30,7 +30,7 @@ export function SentView({
 
       <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-2 w-full max-w-[360px]" />
       <h2 className="mt-6 text-3xl font-semibold">{envelopeTitle(envelope)}</h2>
-      <div className="mt-5 text-sm font-semibold uppercase tracking-wide text-brand">
+      <div className={`mt-5 text-sm font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
         {RARITY_LABEL[envelope.rarity]}
       </div>
       <p className="mt-5 text-2xl">

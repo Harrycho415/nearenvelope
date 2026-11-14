@@ -6,7 +6,7 @@
 import Link from "next/link";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { designName, RARITY_LABEL } from "@/components/envelope/designs";
+import { designName, RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import type { EnvelopeView } from "@/lib/near";
 
 import { BUTTON_PRIMARY, BUTTON_SECONDARY, envelopeName } from "../../../envelopes/_components/shared";
@@ -108,9 +108,14 @@ function Success({ outcome, name, design }: { outcome: EnhanceOutcome; name: str
         +{outcome.from} → +{outcome.to}
       </div>
       <div className="mt-6 text-2xl font-semibold text-brand">
-        {rarityUp
-          ? `${RARITY_LABEL[before].toUpperCase()} → ${RARITY_LABEL[after].toUpperCase()} · Rarity upgraded`
-          : `${RARITY_LABEL[after].toUpperCase()} · Level upgraded`}
+        {rarityUp && (
+          <>
+            <span className={RARITY_TEXT[before]}>{RARITY_LABEL[before].toUpperCase()}</span>
+            <span className="text-ink-muted"> → </span>
+          </>
+        )}
+        <span className={RARITY_TEXT[after]}>{RARITY_LABEL[after].toUpperCase()}</span>
+        {rarityUp ? " · Rarity upgraded" : " · Level upgraded"}
       </div>
       <div className="mt-5 text-xl">{name}</div>
       <p className="mt-5 text-[17px] text-ink-muted">One attempt used. A new chapter for your {designName(design)} Envelope.</p>
@@ -128,7 +133,8 @@ function Failure({ outcome, name, design }: { outcome: EnhanceOutcome; name: str
         {name} remains at +{outcome.from}.
       </div>
       <p className="mt-4 text-lg text-ink-muted">
-        {RARITY_LABEL[rarityOf(outcome.from)].toUpperCase()} · Your level and rarity are unchanged.
+        <span className={RARITY_TEXT[rarityOf(outcome.from)]}>{RARITY_LABEL[rarityOf(outcome.from)].toUpperCase()}</span> ·
+        Your level and rarity are unchanged.
       </p>
     </>
   );

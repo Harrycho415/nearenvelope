@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { GiftBanner } from "@/components/ui/GiftBanner";
 import { displayName, useNear, type EnvelopeView, type VaultBalances } from "@/lib/near";
 import { isOpened, isReceivedBy, markOpened } from "@/lib/opened";
@@ -121,7 +121,7 @@ export default function OpenEnvelopePage() {
           <h2 className="mt-6 text-3xl font-semibold">
             {envelopeName(envelope)} +{envelope.level}
           </h2>
-          <div className="mt-5 text-sm font-semibold uppercase tracking-wide text-brand">
+          <div className={`mt-5 text-sm font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
             {RARITY_LABEL[envelope.rarity]}
           </div>
         </div>
@@ -175,7 +175,8 @@ function Opening({ envelope, from }: { envelope: EnvelopeView; from: string }) {
 
       <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-4 w-full max-w-[440px] animate-pulse" />
       <div className="mt-6 text-xl font-medium">
-        {envelopeName(envelope)} +{envelope.level} · {RARITY_LABEL[envelope.rarity]}
+        {envelopeName(envelope)} +{envelope.level} ·{" "}
+        <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity]}</span>
       </div>
       <div className="mt-5 flex items-center justify-center gap-3 text-[17px] text-ink-muted" role="status">
         Opening
@@ -230,7 +231,7 @@ function Revealed({
                 {envelopeName(envelope)} +{envelope.level}
               </div>
               <div className="mt-4 text-[17px] text-ink-muted">
-                {RARITY_LABEL[envelope.rarity]} · Its story continues with you.
+                <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity]}</span> · Its story continues with you.
               </div>
             </div>
           </div>

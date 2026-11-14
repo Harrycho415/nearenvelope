@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { EXPLORER_URL, shortAccount, type EnvelopeView } from "@/lib/near";
 
 import { BUTTON_SECONDARY, formatDate } from "../../_components/shared";
@@ -20,7 +20,7 @@ export function OverviewTab({
   // MVP 강화는 실패해도 레벨이 내려가지 않으므로 성공 횟수 = 현재 레벨 (INTERFACE.md 강화)
   const stats = [
     { label: "Level", value: `+${envelope.level}` },
-    { label: "Rarity", value: RARITY_LABEL[envelope.rarity] },
+    { label: "Rarity", value: RARITY_LABEL[envelope.rarity], className: RARITY_TEXT[envelope.rarity] },
     { label: "Created", value: formatDate(envelope.created_at_ms) },
     { label: "Successful enhancements", value: String(envelope.level) },
     { label: "Times gifted", value: String(envelope.history.length) },
@@ -37,10 +37,10 @@ export function OverviewTab({
         </p>
 
         <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3">
-          {stats.map(({ label, value, title }) => (
+          {stats.map(({ label, value, title, className }) => (
             <div key={label} className="min-w-0">
               <dt className="text-sm text-ink-muted">{label}</dt>
-              <dd className="mt-3 truncate text-xl font-semibold" title={title}>
+              <dd className={`mt-3 truncate text-xl font-semibold ${className ?? ""}`} title={title}>
                 {value}
               </dd>
             </div>

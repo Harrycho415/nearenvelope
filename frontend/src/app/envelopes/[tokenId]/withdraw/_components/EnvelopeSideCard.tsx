@@ -2,7 +2,7 @@
 // 소유자: C
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import type { EnvelopeView } from "@/lib/near";
 
 import { envelopeName } from "../../../_components/shared";
@@ -21,7 +21,7 @@ export function EnvelopeSideCard({
         {envelopeName(envelope)} #{envelope.token_id}
       </h2>
       <div className="mt-4 text-[17px] text-brand">
-        +{envelope.level} · {RARITY_LABEL[envelope.rarity]}
+        +{envelope.level} · <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity]}</span>
       </div>
       <p className="mt-4 text-[15px] leading-relaxed text-ink-muted">{note}</p>
     </aside>

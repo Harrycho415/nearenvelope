@@ -17,6 +17,7 @@
   --color-on-brand: #0a0a0a;
 
   /* 희귀도 강조색 (봉투 그림 public/designs/와 같은 값) */
+  --color-common: #cfcfca;
   --color-rare: #4da3ff;
   --color-epic: #b57bff;
   --color-legendary: #ffc83d;

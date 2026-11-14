@@ -3,7 +3,7 @@
 
 import type { EnvelopeView } from "@/lib/near";
 
-import { designName, RARITY_LABEL } from "./designs";
+import { designName, RARITY_LABEL, RARITY_TEXT } from "./designs";
 import { EnvelopeIllustration } from "./EnvelopeIllustration";
 
 const formatDate = (ms: number) =>
@@ -30,7 +30,7 @@ export function ChooseEnvelopeCard({
       <h3 className="mt-7 text-2xl font-semibold">
         {designName(envelope.design)} Envelope +{envelope.level}
       </h3>
-      <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-brand">
+      <div className={`mt-4 text-xs font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
         {RARITY_LABEL[envelope.rarity]}
       </div>
       <div className="mt-4 space-y-0.5 text-[15px] text-ink-muted">

@@ -4,7 +4,7 @@
 import Link from "next/link";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { shortAccount, type EnvelopeView } from "@/lib/near";
 
 import { BUTTON_PRIMARY, envelopeName } from "../../_components/shared";
@@ -18,10 +18,10 @@ export function EnvelopeHero({ envelope, isOwner }: { envelope: EnvelopeView; is
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
           {envelopeName(envelope)} #{envelope.token_id}
         </h1>
-        <div className="mt-4 text-lg font-medium text-brand sm:mt-5">
+        <div className="mt-4 text-lg font-medium sm:mt-5">
           +{envelope.level}
-          <span className="mx-3">/</span>
-          {RARITY_LABEL[envelope.rarity].toUpperCase()}
+          <span className="mx-3 text-ink-muted">/</span>
+          <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity].toUpperCase()}</span>
         </div>
         <p className="mt-4 text-[17px]" title={envelope.owner_id}>
           Current Owner: {shortAccount(envelope.owner_id)}
