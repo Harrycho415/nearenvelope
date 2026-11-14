@@ -1,6 +1,6 @@
 "use client";
 
-// 받기 화면: 봉인된 봉투 → Open Envelope → 여는 중(잠깐) → 금액·메시지 공개.
+// 받기 화면: 봉인된 봉투 → Open Envelope → 개봉 애니메이션(EnvelopeOpening) → 금액·메시지 공개.
 // "열어 봄"은 이 브라우저에만 기록한다 (lib/opened.ts). 출금은 상세 화면에서 한다.
 // 소유자: C
 
@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
+import { EnvelopeOpening, OPEN_MS } from "@/components/envelope/EnvelopeOpening";
 import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { GiftBanner } from "@/components/ui/GiftBanner";
 import { displayName, useNear, type EnvelopeView, type VaultBalances } from "@/lib/near";
@@ -23,8 +24,8 @@ import {
   Notice,
 } from "../../_components/shared";
 
-/** 여는 중 연출 시간 */
-const OPENING_MS = 2200;
+/** 여는 중 연출 시간: 개봉 애니메이션 + 열린 모습을 잠깐 보여 줌 */
+const OPENING_MS = OPEN_MS + 500;
 
 type Phase = "sealed" | "opening" | "revealed";
 
@@ -168,12 +169,7 @@ function Opening({ envelope, from }: { envelope: EnvelopeView; from: string }) {
       <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-[42px]">Opening your Envelope…</h1>
       <p className="mt-6 text-lg text-ink-muted">From {from}</p>
 
-      <div className="mx-auto mt-5 max-w-[360px] rounded-3xl border border-line bg-seal/40 px-6 py-7">
-        <div className="text-[22px] font-medium">A note for you</div>
-        <p className="mt-4 text-[15px] text-ink-muted">Your gift is about to be revealed.</p>
-      </div>
-
-      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-4 w-full max-w-[440px] animate-pulse" />
+      <EnvelopeOpening design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-4 w-full max-w-[440px]" />
       <div className="mt-6 text-xl font-medium">
         {envelopeName(envelope)} +{envelope.level} ·{" "}
         <span className={RARITY_TEXT[envelope.rarity]}>{RARITY_LABEL[envelope.rarity]}</span>
