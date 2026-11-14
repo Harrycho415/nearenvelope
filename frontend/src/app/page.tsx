@@ -215,7 +215,7 @@ const FEATURES = [
   },
   {
     title: "Grows as it travels",
-    text: "Missions reward the envelope itself — new owners, first-time NEAR users, NEAR events.",
+    text: "Missions reward the envelope itself — new owners, first-time NEAR users.",
     wide: false,
   },
   {

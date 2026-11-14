@@ -11,7 +11,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
 import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
-import { useNear, type EnvelopeView, type NearEventView } from "@/lib/near";
+import { useNear, type EnvelopeView } from "@/lib/near";
 
 import {
   BUTTON_PRIMARY,
@@ -22,14 +22,12 @@ import {
   RetryButton,
 } from "../envelopes/_components/shared";
 import { CheckInCard } from "./_components/CheckInCard";
-import { EventCard } from "./_components/EventCard";
 import { MissionCard } from "./_components/MissionCard";
 import { attemptsText, MISSION_GROUPS } from "./_components/missions";
 
 interface Loaded {
   envelopes: EnvelopeView[];
   cooldownMs: number;
-  events: (NearEventView & { redeemed: boolean })[];
 }
 
 export default function MissionsPage() {
@@ -50,16 +48,10 @@ function Missions() {
   const load = useCallback(
     async (account: string) => {
       try {
-        const [envelopes, config, events] = await Promise.all([
-          api.envelopesForOwner(account),
-          api.config(),
-          api.nearEvents(),
-        ]);
-        const redeemed = await Promise.all(events.map((e) => api.nearEventRedeemed(e.event_id, account)));
+        const [envelopes, config] = await Promise.all([api.envelopesForOwner(account), api.config()]);
         return {
           envelopes: [...envelopes].sort((a, b) => Number(b.token_id) - Number(a.token_id)),
           cooldownMs: config.check_in_cooldown_ms,
-          events: events.map((e, i) => ({ ...e, redeemed: redeemed[i] })),
         };
       } catch {
         return "error" as const;
@@ -123,10 +115,6 @@ function Missions() {
               await api.checkIn(tokenId);
               refresh();
             }}
-            onRedeem={async (tokenId, eventId, code) => {
-              await api.redeemNearEvent(tokenId, eventId, code);
-              refresh();
-            }}
           />
         )}
       </div>
@@ -149,13 +137,11 @@ function MissionBoard({
   selectedId,
   onSelect,
   onCheckIn,
-  onRedeem,
 }: {
   data: Loaded;
   selectedId: string;
   onSelect: (tokenId: string) => void;
   onCheckIn: (tokenId: string) => Promise<void>;
-  onRedeem: (tokenId: string, eventId: string, code: string) => Promise<void>;
 }) {
   const selected = data.envelopes.find((e) => e.token_id === selectedId)!;
   const label = `${envelopeName(selected)} #${selected.token_id}`;
@@ -240,26 +226,6 @@ function MissionBoard({
         </MissionSection>
       ))}
 
-      <MissionSection
-        title="NEAR Events"
-        description="Join NEAR community events and bring your Envelope along."
-      >
-        {data.events.length === 0 ? (
-          <div className="sm:col-span-2 lg:col-span-3">
-            <Notice>No events are open right now. Check back when the next NEAR event starts.</Notice>
-          </div>
-        ) : (
-          data.events.map((event) => (
-            <EventCard
-              key={event.event_id}
-              event={event}
-              redeemed={event.redeemed}
-              envelopeLabel={label}
-              onRedeem={(code) => onRedeem(selected.token_id, event.event_id, code)}
-            />
-          ))
-        )}
-      </MissionSection>
     </>
   );
 }

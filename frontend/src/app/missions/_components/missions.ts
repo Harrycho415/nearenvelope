@@ -98,10 +98,6 @@ export const MISSION_GROUPS: { title: string; description: string; missions: Mis
 const ERROR_TEXT: Record<string, string> = {
   ERR_NOT_OWNER: "You no longer own this envelope.",
   ERR_CHECK_IN_COOLDOWN: "Check-in is cooling down. Try again a little later.",
-  ERR_EVENT_NOT_FOUND: "This event doesn't exist.",
-  ERR_EVENT_ENDED: "This event has ended.",
-  ERR_INVALID_CODE: "That code isn't right. Check it and try again.",
-  ERR_ALREADY_REDEEMED: "You've already used this event's code.",
 };
 
 export function errorText(e: unknown) {

@@ -44,7 +44,6 @@ You need a [Meteor wallet](https://wallet.meteorwallet.app) testnet account with
 6. **Old owner can't withdraw** — as A, call `claim_ft` on the envelope (e.g. with near-cli) → fails with `ERR_NOT_OWNER`. The app hides Withdraw for non-owners.
 7. **New owner can** — sign in as B → **Home** shows a "New gift" banner → open it to read the message → **Assets → Withdraw** 5 USDC → B's wallet receives 5 USDC; 5 USDC remains inside.
 8. **Missions and enhance** — **Missions**: the envelope shows First Fill, First Gift and New Connection (B had never held an envelope) as completed, with attempts added automatically → **Enhance Envelope** → success or failure screen; on success the level rises, and at +4/+7/+10 the rarity and artwork change.
-9. **NEAR event code** — on **Missions → NEAR Events**, enter `TODO` → "Completed" and +2 attempts (once per account).
 
 ## Deployed contracts (testnet)
 
@@ -116,7 +115,6 @@ Rewards are enhancement attempts, stored on the envelope and granted automatical
 | Pass It On (Regift) | A receiver sends it again | 2 |
 | Traveler / Wanderer / World Traveler | 3 / 5 / 10 different owners | 1 / 2 / 3 |
 | New Connection | Sent to an account that has never held an envelope | 2 |
-| NEAR Event | Enter an event code (once per account per event) | per event |
 | Check-in | Every 10 minutes (demo value) | 1 |
 
 ## Tests
@@ -127,7 +125,6 @@ Rewards are enhancement attempts, stored on the envelope and granted automatical
 
 - **Testnet only**; USDC is a mock token.
 - **Enhancement randomness** uses the block random seed mixed with the token ID and attempt count. It's fine for a demo but a validator could bias it; a VRF would be needed on mainnet.
-- **Event codes** are revealed on-chain once someone uses one; codes expire with the event (`ends_at_ms`) to limit this.
 - **Journey missions can be farmed** by passing an envelope between your own accounts. Each mission pays once per envelope.
 - **Locking assets while an envelope is listed for sale** (approval) is not implemented, so a seller could withdraw before a marketplace sale completes.
 - **NFT images in external wallets**: the contract's `base_uri` is not set yet, so the relative `media` path only resolves inside this app. TODO once the demo is hosted.
