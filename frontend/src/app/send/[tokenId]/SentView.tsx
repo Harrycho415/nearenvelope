@@ -43,14 +43,8 @@ export function SentView({
 
       <div className="mt-6 flex flex-wrap justify-center gap-4">
         <Link
-          href={`/envelopes/${envelope.token_id}`}
-          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover"
-        >
-          View Envelope
-        </Link>
-        <Link
           href="/send"
-          className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover"
         >
           Send Another Envelope
         </Link>

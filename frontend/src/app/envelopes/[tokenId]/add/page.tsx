@@ -1,14 +1,14 @@
 "use client";
 
 // 봉투 채우기: 자산(USDC / NEAR)과 금액을 골라 연결된 지갑에서 봉투(Vault)로 넣는다 (fill / ft_transfer_call).
-// 컨트랙트상 누구나 채울 수 있다. 넣은 자산은 봉투의 현재 소유자 것이 된다. 완료되면 Assets 탭으로 돌아간다.
+// 화면에서는 현재 소유자만 채울 수 있다 (컨트랙트상으로는 누구나 가능). 완료되면 Assets 탭으로 돌아간다.
 // 소유자: C
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { displayName, useNear, type EnvelopeView, type VaultBalances } from "@/lib/near";
+import { useNear, type EnvelopeView, type VaultBalances } from "@/lib/near";
 
 import { ConnectNotice, envelopeName, Notice, RetryButton, type Keyed } from "../../_components/shared";
 import { EnvelopeSideCard } from "../withdraw/_components/EnvelopeSideCard";
@@ -90,8 +90,22 @@ export default function AddAssetsPage() {
   }
 
   const { envelope, inside, wallet } = loaded;
+
+  // 현재 소유자만 채울 수 있다. 보낸 사람이 전송 후 다시 자산을 넣는 일을 막는다 (컨트랙트 fill은 여전히 누구나 가능).
+  if (envelope.owner_id !== accountId) {
+    return (
+      <Frame tokenId={tokenId}>
+        <Notice>
+          Only the current owner can add assets to this envelope.{" "}
+          <Link href="/envelopes" className="font-semibold text-brand hover:underline">
+            Back to My Envelopes
+          </Link>
+        </Notice>
+      </Frame>
+    );
+  }
+
   const title = `${envelopeName(envelope)} #${envelope.token_id}`;
-  const isOwner = envelope.owner_id === accountId;
 
   async function add(token: Token, units: string) {
     await api.addAssets({
@@ -107,9 +121,7 @@ export default function AddAssetsPage() {
     <Frame tokenId={tokenId} title={title}>
       <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">Add assets</h1>
       <p className="mt-5 text-lg text-ink-muted sm:mt-9">
-        {isOwner
-          ? "Put NEAR or USDC inside. It stays with the envelope until its owner withdraws it."
-          : `This envelope belongs to ${displayName(envelope.owner_id)}. Anything you add becomes theirs.`}
+        Put NEAR or USDC inside. It stays with the envelope until its owner withdraws it.
       </p>
 
       <div className="mt-8 grid items-start gap-8 lg:grid-cols-[1fr_440px] lg:gap-10">

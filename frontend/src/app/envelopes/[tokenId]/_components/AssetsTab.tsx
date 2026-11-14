@@ -1,5 +1,5 @@
 // Assets 탭: Vault 잔액 (api.vaultBalances).
-// Add Assets는 채우기 화면(/envelopes/[tokenId]/add, 누구나), Withdraw는 출금 화면(/envelopes/[tokenId]/withdraw, 소유자만)으로 이동.
+// Add Assets는 채우기 화면(/envelopes/[tokenId]/add), Withdraw는 출금 화면(/envelopes/[tokenId]/withdraw, 소유자만)으로 이동.
 // 소유자: C
 
 import Link from "next/link";
