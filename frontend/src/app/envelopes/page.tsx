@@ -1,6 +1,6 @@
 "use client";
 
-// My Envelopes: 내가 소유한 봉투 목록.
+// My Envelopes: 내가 소유한 봉투 목록. 새 봉투는 Create Envelope(/envelopes/new)에서 만들고 보내기는 나중에 해도 된다.
 // 보유 봉투(Owned)를 받은 것(Received: 전달 기록 있음)과 직접 만든 것(Created: 민트 후 전달된 적 없음)으로 나눈다.
 // 둘은 겹치지 않으므로 Owned = Received + Created. 보낸 봉투(Sent)는 조회 API가 없어 표시하지 않는다.
 // 소유자: C
@@ -13,6 +13,7 @@ import { useNear, type EnvelopeView } from "@/lib/near";
 import { EnvelopeListCard } from "./_components/EnvelopeListCard";
 import {
   BUTTON_PRIMARY,
+  BUTTON_SECONDARY,
   ConnectNotice,
   Notice,
   RetryButton,
@@ -93,9 +94,14 @@ export default function MyEnvelopesPage() {
           <h1 className="text-4xl font-bold tracking-tight sm:text-[42px]">My Envelopes</h1>
           <p className="mt-5 text-lg text-ink-muted">Gifts you own. Stories you are part of.</p>
         </div>
-        <Link href="/send" className={`${BUTTON_PRIMARY} self-start sm:mr-16 sm:mt-4`}>
-          Send an Envelope
-        </Link>
+        <div className="flex flex-wrap gap-3 self-start sm:mr-16 sm:mt-4">
+          <Link href="/envelopes/new" className={BUTTON_SECONDARY}>
+            Create Envelope
+          </Link>
+          <Link href="/send" className={BUTTON_PRIMARY}>
+            Send an Envelope
+          </Link>
+        </div>
       </div>
 
       <div
@@ -136,7 +142,14 @@ export default function MyEnvelopesPage() {
           </Wide>
         ) : visible.length === 0 ? (
           <Wide>
-            <Notice>{EMPTY_TEXT[filter]}</Notice>
+            <Notice>
+              {EMPTY_TEXT[filter]}{" "}
+              {filter !== "received" && (
+                <Link href="/envelopes/new" className="font-semibold text-brand hover:underline">
+                  Create an envelope
+                </Link>
+              )}
+            </Notice>
           </Wide>
         ) : (
           visible.map((envelope) => (
