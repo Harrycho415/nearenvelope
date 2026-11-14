@@ -4,9 +4,10 @@ Gift crypto inside an NFT that owns its own NEAR account. Whoever holds the enve
 
 Built at NEAR HACKATHON · Track: **NFTs That Do Something** (`nfts`)
 
-- Demo video: TODO (X post link)
-- Live demo: TODO (hosted URL) — or [run it locally](#run-locally)
-- Network: NEAR **testnet**
+- Network: NEAR **testnet** · contracts deployed at [`nearenvelope.testnet`](#deployed-contracts-testnet)
+- Try it: [step by step on testnet](#try-it-testnet) or [run it locally](#run-locally)
+- Demo video: under 2 minutes, posted on X
+<!-- Add the X post link (demo video) and a hosted URL here once they exist. -->
 
 ## Problem
 
@@ -17,7 +18,7 @@ Sending crypto as a gift today means pasting an address and pressing send. Nothi
 Each envelope is an NFT with its own NEAR account (a "vault") holding the gift:
 
 - **Fill it** with NEAR or USDC. The assets live in the envelope's vault, not in your wallet.
-- **Send it** with a message. Sending the NFT moves control of everything inside — the previous owner can no longer withdraw.
+- **Send it** with a message. Sending the NFT moves control of everything inside, and the previous owner can no longer withdraw.
 - **Withdraw** as the current owner, any time, any amount.
 - **It keeps a history.** Every hand-off and message is stored on-chain and travels with the envelope.
 - **It grows.** Missions give the envelope enhancement attempts; enhancing raises its level (+0 to +10) and rarity (Common → Rare → Epic → Legendary), and the NFT's metadata and artwork change with it.
@@ -36,14 +37,22 @@ Each envelope is an NFT with its own NEAR account (a "vault") holding the gift:
 
 You need a [Meteor wallet](https://wallet.meteorwallet.app) testnet account with ~5 NEAR (free from [near-faucet.io](https://near-faucet.io)). To see the ownership transfer, use **two** accounts (A and B).
 
-1. **Connect** — click **Connect Wallet** and sign in with account A → your account name appears in the header.
-2. **Get test USDC** — open **Wallet** → **Get test USDC** → your USDC balance goes up by 1,000.
-3. **Create an envelope** — **My Envelopes → Create Envelope**, pick a cover, confirm in the wallet (2 NEAR deposit) → a done screen shows the new envelope and "Welcome mission complete: +1 Enhancement Attempt". The envelope's vault account `<id>.nearenvelope.testnet` now exists on the explorer with **no access keys**.
-4. **Fill it** — open the envelope → **Assets → Add Assets**, add 10 USDC → the Assets tab shows 10 USDC inside.
-5. **Send it** — **Send**, choose the envelope, write a message, enter account B, confirm → the envelope leaves A's list.
-6. **Old owner can't withdraw** — as A, call `claim_ft` on the envelope (e.g. with near-cli) → fails with `ERR_NOT_OWNER`. The app hides Withdraw for non-owners.
-7. **New owner can** — sign in as B → **Home** shows a "New gift" banner → open it to read the message → **Assets → Withdraw** 5 USDC → B's wallet receives 5 USDC; 5 USDC remains inside.
-8. **Missions and enhance** — **Missions**: the envelope shows First Fill, First Gift and New Connection (B had never held an envelope) as completed, with attempts added automatically → **Enhance Envelope** → success or failure screen; on success the level rises, and at +4/+7/+10 the rarity and artwork change.
+Each step is "do X → see Y".
+
+1. **Connect.** Click **Connect Wallet** and sign in with account A → your account name appears in the header.
+2. **Get test USDC.** Open **Wallet → Get test USDC** → your USDC balance goes up by 1,000.
+3. **Create an envelope.** **My Envelopes → Create Envelope**, pick a cover, confirm in the wallet (2 NEAR deposit) → a done screen shows the new envelope and "Welcome mission complete: +1 Enhancement Attempt". Its vault account `<id>.nearenvelope.testnet` now exists on the [explorer](https://testnet.nearblocks.io) with **no access keys**.
+4. **Fill it.** Open the envelope → **Assets → Add Assets**, add 10 USDC → the Assets tab shows 10 USDC inside, and the explorer shows the USDC on the vault account.
+5. **Send it.** **Send**, choose the envelope, write a message, enter account B, confirm → the envelope leaves A's list.
+6. **Old owner can't withdraw.** The app hides Withdraw for non-owners, so try it from the CLI ([near-cli-rs](https://github.com/near/near-cli-rs)) as A → the call fails with `ERR_NOT_OWNER`:
+   ```bash
+   near contract call-function as-transaction nearenvelope.testnet claim_ft \
+     json-args '{"token_id":"<id>","ft_contract_id":"usdc.nearenvelope.testnet","amount":"1000000"}' \
+     prepaid-gas '100.0 Tgas' attached-deposit '1 yoctoNEAR' \
+     sign-as <account-A>.testnet network-config testnet sign-with-keychain send
+   ```
+7. **New owner can.** Sign in as B → **Home** shows a "New gift" banner → **View gift → Open Envelope** → the envelope opens (seal, flap, letter) and shows the amount and message → **View Envelope → Assets → Withdraw** 5 USDC → B's wallet gets 5 USDC and 5 USDC stays inside.
+8. **Missions and enhance.** **Missions** → First Fill, First Gift and New Connection (B had never held an envelope) are marked completed and their attempts were added on their own → **Enhance Envelope** shows the success chance and attempts left → **Enhance Envelope** → a success or failure screen. A failure keeps the level. At +4, +7 and +10 the rarity changes and so does the artwork.
 
 ## Deployed contracts (testnet)
 
@@ -63,7 +72,7 @@ Requirements: Node 22, pnpm 10. For contracts: Rust (pinned in `contracts/rust-t
 # Frontend against the deployed testnet contracts
 cd frontend
 cp .env.example .env.local
-# set NEXT_PUBLIC_USE_MOCK=false in .env.local to use testnet (true = in-memory mock data)
+# in .env.local set NEXT_PUBLIC_USE_MOCK=false to use the testnet contracts (true = in-memory mock data)
 pnpm install
 pnpm dev            # http://localhost:3000
 ```
@@ -119,7 +128,7 @@ Rewards are enhancement attempts, stored on the envelope and granted automatical
 
 ## Tests
 
-`contracts/integration-tests/tests/mvp_flow.rs` runs the full flow in a local sandbox: mint (vault created and funded) → fill NEAR and USDC → send with message (FirstGift, NewConnection) → previous owner `claim_near` fails with `ERR_NOT_OWNER` → new owner withdraws NEAR and USDC → regift (Regift, Journey3) → enhance and metadata update → check-in cooldown → event code (not admin / wrong code / success / already used) → standard `nft_transfer` keeps history. Mission rules also have unit tests in `contracts/envelope/src/mission.rs` (run in CI).
+`contracts/integration-tests/tests/mvp_flow.rs` runs the full flow in a local sandbox: mint (vault created and funded) → fill NEAR and USDC → send with message (FirstGift, NewConnection) → previous owner `claim_near` fails with `ERR_NOT_OWNER` → new owner withdraws NEAR and USDC → regift (Regift, Journey3) → enhance and metadata update → check-in cooldown → event-code rewards (a contract feature not shown in the app: not admin / wrong code / success / already used) → standard `nft_transfer` keeps history. Mission rules also have unit tests in `contracts/envelope/src/mission.rs` (run in CI).
 
 ## Limitations
 
@@ -127,7 +136,7 @@ Rewards are enhancement attempts, stored on the envelope and granted automatical
 - **Enhancement randomness** uses the block random seed mixed with the token ID and attempt count. It's fine for a demo but a validator could bias it; a VRF would be needed on mainnet.
 - **Journey missions can be farmed** by passing an envelope between your own accounts. Each mission pays once per envelope.
 - **Locking assets while an envelope is listed for sale** (approval) is not implemented, so a seller could withdraw before a marketplace sale completes.
-- **NFT images in external wallets**: the contract's `base_uri` is not set yet, so the relative `media` path only resolves inside this app. TODO once the demo is hosted.
+- **NFT images in external wallets**: the contract's `base_uri` is not set, so the relative `media` path (`designs/{design}/{rarity}.svg`) only resolves inside this app. Setting it needs a hosted frontend.
 
 ## Roadmap
 
@@ -138,13 +147,15 @@ Gift by link for receivers without a wallet · Global Contract for cheaper mints
 - Contracts: `near-sdk` 5.30, `near-contract-standards` 5.30, `near-workspaces` 0.24 (tests), `cargo-near`
 - Frontend: Next.js 16, React 19, Tailwind CSS 4, `@near-wallet-selector` 10 (Meteor wallet), `@near-js/transactions` 2, `near-api-js` 6
 - UI theme inspired by the [Clario](https://www.framer.com/marketplace/templates/clario/) Framer template (reimplemented, no template assets used)
+- Envelope artwork: 12 SVGs (3 designs × 4 rarities) generated by `scripts/generate-envelope-art.mjs`; the same files are the NFT metadata `media`
 - **AI assistance**: large parts of the contracts, frontend, tests and docs were written with Claude Code (commits are marked `Co-Authored-By: Claude`) and reviewed by the team.
 
 All code was written during the hackathon window (first commit 2026-11-10).
 
 ## Team
 
-**blockblock yonsei** — TODO: members and roles
+**blockblock yonsei**
+<!-- Add members and roles here. -->
 
 ## License
 
