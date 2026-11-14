@@ -240,6 +240,16 @@ export const mockApi: EnvelopeApi = {
     redeemed.add(key);
     e.enhance_tickets += event.tickets;
   },
+  addAssets: async ({ tokenId, vaultId, near, usdc }) => {
+    await delay();
+    const e = get(tokenId);
+    for (const [key, amount] of [["near", BigInt(near)], ["usdc", BigInt(usdc)]] as const) {
+      if (amount === BigInt(0)) continue;
+      spend(key, amount);
+      addBalance(vaultId, key, amount);
+      grant(e, "FirstFill");
+    }
+  },
   sealAndSend: async ({ tokenId, vaultId, near, usdc, receiverId, message }) => {
     await delay();
     const e = owned(tokenId);

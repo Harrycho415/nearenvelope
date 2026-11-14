@@ -78,6 +78,9 @@ export interface SealAndSendParams {
   message?: string;
 }
 
+/** 프런트 전용: 봉투에 NEAR / USDC를 지갑 승인 한 번으로 채운다 (누구나 가능) */
+export type AddAssetsParams = Omit<SealAndSendParams, "receiverId" | "message">;
+
 /**
  * 페이지·컴포넌트가 쓰는 유일한 체인 API. 실제 구현(contract.ts)과 목업(mock.ts)이 같은 모양을 가진다.
  * change 메서드가 `null`을 반환하면 리다이렉트형 지갑이라 결과를 즉시 알 수 없다는 뜻이다. 화면은 다시 조회한다.
@@ -109,6 +112,8 @@ export interface EnvelopeApi {
   checkIn(tokenId: string): Promise<void>;
   /** 행사 코드 입력. 보상은 tokenId 봉투에 쌓인다 */
   redeemNearEvent(tokenId: string, eventId: string, code: string): Promise<void>;
+  /** fill / (필요하면) register_ft / ft_transfer_call을 지갑 승인 한 번으로 보낸다 */
+  addAssets(params: AddAssetsParams): Promise<void>;
   /** fill / register_ft / ft_transfer_call / send_envelope를 지갑 승인 한 번으로 보낸다. send 트랜잭션 해시 (모르면 null) */
   sealAndSend(params: SealAndSendParams): Promise<string | null>;
 }

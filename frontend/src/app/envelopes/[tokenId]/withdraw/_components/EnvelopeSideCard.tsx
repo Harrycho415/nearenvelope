@@ -1,4 +1,4 @@
-// 출금 화면 오른쪽: 어떤 봉투에서 꺼내는지 보여 주는 카드
+// 출금·채우기 화면 오른쪽: 어떤 봉투인지 보여 주는 카드
 // 소유자: C
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
@@ -7,7 +7,13 @@ import type { EnvelopeView } from "@/lib/near";
 
 import { envelopeName } from "../../../_components/shared";
 
-export function EnvelopeSideCard({ envelope }: { envelope: EnvelopeView }) {
+export function EnvelopeSideCard({
+  envelope,
+  note = "Only the assets you select move out. Ownership, level, and history stay the same.",
+}: {
+  envelope: EnvelopeView;
+  note?: string;
+}) {
   return (
     <aside className="rounded-2xl border border-line bg-paper p-6 sm:p-7">
       <EnvelopeIllustration className="w-full" />
@@ -17,9 +23,7 @@ export function EnvelopeSideCard({ envelope }: { envelope: EnvelopeView }) {
       <div className="mt-4 text-[17px] text-brand">
         +{envelope.level} · {RARITY_LABEL[envelope.rarity]}
       </div>
-      <p className="mt-4 text-[15px] leading-relaxed text-ink-muted">
-        Only the assets you select move out. Ownership, level, and history stay the same.
-      </p>
+      <p className="mt-4 text-[15px] leading-relaxed text-ink-muted">{note}</p>
     </aside>
   );
 }
