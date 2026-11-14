@@ -15,9 +15,9 @@ export interface Keyed<T> {
 export type BalancesResult = VaultBalances | "error";
 
 export const BUTTON_PRIMARY =
-  "rounded-lg bg-brand px-6 py-3.5 text-center font-semibold text-white transition hover:bg-brand-hover";
+  "rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 text-center font-semibold text-on-brand transition hover:bg-brand-hover";
 export const BUTTON_SECONDARY =
-  "rounded-lg border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-line";
+  "rounded-full border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:border-line";
 
 /** "Golden Envelope" */
 export const envelopeName = (e: EnvelopeView) => `${designName(e.design)} Envelope`;
@@ -42,7 +42,7 @@ export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? "" :
 
 export function Notice({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-2xl border border-dashed border-line bg-surface p-6 text-sm text-ink-muted">
+    <div className="rounded-3xl border border-dashed border-line bg-surface p-6 text-sm text-ink-muted">
       {children}
     </div>
   );

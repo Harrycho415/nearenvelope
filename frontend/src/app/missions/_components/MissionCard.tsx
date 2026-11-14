@@ -15,7 +15,7 @@ export function MissionCard({ mission, envelope }: { mission: MissionDef; envelo
   const action = done ? undefined : mission.action?.(envelope);
 
   return (
-    <article className="flex flex-col rounded-2xl border border-line bg-surface p-6">
+    <article className="flex flex-col rounded-3xl border border-line bg-surface p-6">
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-xl font-semibold">{mission.title}</h3>
         {done && (

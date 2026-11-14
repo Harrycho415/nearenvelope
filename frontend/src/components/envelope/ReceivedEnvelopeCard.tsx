@@ -14,9 +14,9 @@ export function ReceivedEnvelopeCard({ envelope, opened }: { envelope: EnvelopeV
   return (
     <Link
       href={`/envelopes/${envelope.token_id}${opened ? "" : "/open"}`}
-      className="flex items-center gap-4 rounded-2xl border border-line bg-surface p-5 transition hover:border-sketch"
+      className="flex items-center gap-4 rounded-3xl border border-line bg-surface p-5 transition hover:border-sketch"
     >
-      <EnvelopeIllustration className="w-28 shrink-0" />
+      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-28 shrink-0" />
       <div className="min-w-0">
         <div className="truncate text-[17px] font-semibold">
           {designName(envelope.design)} Envelope +{envelope.level}

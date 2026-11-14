@@ -86,12 +86,12 @@ export default function WalletPage() {
 
       <div className="mt-9">
         {!ready || (accountId && balances === null) ? (
-          <div className="h-[420px] animate-pulse rounded-2xl border border-line bg-surface" aria-label="Loading" />
+          <div className="h-[420px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
         ) : !accountId ? (
           <ConnectNotice message="Connect your wallet to see your balances and get test funds." />
         ) : (
           <div className="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr]">
-            <section className="rounded-2xl border border-line bg-surface p-6 sm:p-7">
+            <section className="rounded-3xl border border-line bg-surface p-6 sm:p-7">
               <h2 className="text-2xl font-semibold">Wallet</h2>
               <div className="mt-5 text-[17px]">
                 Connected as{" "}
@@ -114,7 +114,7 @@ export default function WalletPage() {
                   </Notice>
                 </div>
               ) : (
-                <div className="mt-3 grid grid-cols-2 gap-4 rounded-2xl border border-line bg-seal/40 px-6 py-5">
+                <div className="mt-3 grid grid-cols-2 gap-4 rounded-3xl border border-line bg-seal/40 px-6 py-5">
                   <div>
                     <div className="text-sm text-ink-muted">USDC</div>
                     <div className="mt-3 text-3xl font-semibold">{unitsToUsdc(balances.usdc)}</div>
@@ -142,7 +142,7 @@ export default function WalletPage() {
 
             <div className="flex flex-col gap-6">
               {NETWORK === "testnet" && (
-                <section className="rounded-2xl border border-line bg-surface p-6 sm:p-7">
+                <section className="rounded-3xl border border-line bg-surface p-6 sm:p-7">
                   <h2 className="text-2xl font-semibold">Test funds</h2>
                   <p className="mt-3 text-[15px] text-ink-muted">
                     NEAR Envelope runs on testnet. These funds have no real value and are only for trying the app.
@@ -173,14 +173,14 @@ export default function WalletPage() {
                     </div>
                   </div>
                   {notice && (
-                    <p role="status" className={`mt-4 text-sm ${notice.ok ? "text-brand" : "text-red-600"}`}>
+                    <p role="status" className={`mt-4 text-sm ${notice.ok ? "text-brand" : "text-red-400"}`}>
                       {notice.text}
                     </p>
                   )}
                 </section>
               )}
 
-              <section className="rounded-2xl border border-line bg-paper p-6 sm:p-7">
+              <section className="rounded-3xl border border-line bg-paper p-6 sm:p-7">
                 <h2 className="text-[22px] font-semibold">New to NEAR?</h2>
                 <p className="mt-4 text-[15px] leading-relaxed text-ink-muted">
                   Your wallet approves every action and keeps you in control. A small NEAR balance pays network fees,

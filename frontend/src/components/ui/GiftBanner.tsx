@@ -22,7 +22,7 @@ export function GiftBanner({
   if (!last) return null;
 
   return (
-    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 rounded-2xl border border-line bg-seal/40 px-5 py-5">
+    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 rounded-3xl border border-line bg-seal/40 px-5 py-5">
       <span className="text-xs font-semibold uppercase tracking-wide text-brand">New gift</span>
       <span className="text-[17px] font-medium">{displayName(last.from)} sent you an Envelope.</span>
       <span className="text-sm text-ink-muted">

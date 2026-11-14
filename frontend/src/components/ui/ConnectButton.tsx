@@ -21,11 +21,11 @@ export function ConnectButton() {
             signIn().catch((e: Error) => setError(e.message || "연결에 실패했습니다"));
           }}
           disabled={!ready}
-          className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:opacity-50"
+          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] whitespace-nowrap px-4 py-2 text-sm font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
         >
           Connect Wallet
         </button>
-        {error && <span className="mt-1 text-xs text-red-600">{error}</span>}
+        {error && <span className="mt-1 text-xs text-red-400">{error}</span>}
       </div>
     );
   }

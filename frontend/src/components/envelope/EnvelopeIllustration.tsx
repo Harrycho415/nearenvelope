@@ -1,15 +1,31 @@
-// 선으로 그린 봉투. 크기는 부모 너비를 따른다 (비율 29:18).
+// 봉투 그림: public/designs/{design}/{rarity}.svg (NFT 메타데이터 media와 같은 파일, scripts/generate-envelope-art.mjs로 생성)
+// 크기는 부모 너비를 따른다 (비율 34:23, 희귀도 빛 번짐 여백 포함).
 // 소유자: D
 
-export function EnvelopeIllustration({ className = "" }: { className?: string }) {
+import Image from "next/image";
+
+import type { Rarity } from "@/lib/near";
+
+import { designName } from "./designs";
+
+export function EnvelopeIllustration({
+  design = 0,
+  rarity = "Basic",
+  className = "",
+}: {
+  design?: number;
+  rarity?: Rarity;
+  className?: string;
+}) {
   return (
-    <svg viewBox="0 0 290 180" className={className} role="img" aria-label="Envelope">
-      <g fill="none" stroke="var(--color-sketch)" strokeWidth="2.5" strokeLinecap="round">
-        <rect x="2" y="2" width="286" height="176" rx="14" className="fill-paper" />
-        <path d="M2 8 L127 98 M288 8 L163 98" />
-        <path d="M2 176 L100 92 M288 176 L190 92" />
-      </g>
-      <circle cx="145" cy="101" r="17" fill="var(--color-seal)" stroke="var(--color-sketch)" strokeWidth="1.5" />
-    </svg>
+    <Image
+      src={`/designs/${design}/${rarity.toLowerCase()}.svg`}
+      alt={`${designName(design)} envelope, ${rarity}`}
+      width={340}
+      height={230}
+      unoptimized
+      draggable={false}
+      className={`h-auto select-none ${className}`}
+    />
   );
 }

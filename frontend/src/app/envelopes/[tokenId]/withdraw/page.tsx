@@ -52,7 +52,7 @@ export default function WithdrawPage() {
   if (!ready || (accountId && loaded === null)) {
     return (
       <Frame tokenId={tokenId}>
-        <div className="h-[520px] animate-pulse rounded-2xl border border-line bg-surface" aria-label="Loading" />
+        <div className="h-[520px] animate-pulse rounded-3xl border border-line bg-surface" aria-label="Loading" />
       </Frame>
     );
   }

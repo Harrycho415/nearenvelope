@@ -62,8 +62,8 @@ export function AssetsStep({
       />
 
       <div className="mt-9 grid items-start gap-10 lg:grid-cols-[360px_1fr]">
-        <div className="rounded-2xl border border-line bg-surface p-6">
-          <EnvelopeIllustration className="w-full" />
+        <div className="rounded-3xl border border-line bg-surface p-6">
+          <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
           <h3 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h3>
           <div className="mt-4 text-[13px] font-medium text-brand">
             {RARITY_LABEL[envelope.rarity].toUpperCase()} · Gifted {gifted} {gifted === 1 ? "time" : "times"}
@@ -71,7 +71,7 @@ export function AssetsStep({
           <div className="mt-4 text-[15px] text-ink-muted">Assets inside now: {formatAssets(inside) ?? "None"}</div>
         </div>
 
-        <div className="rounded-2xl border border-line bg-surface p-8">
+        <div className="rounded-3xl border border-line bg-surface p-8">
           <h2 className="text-2xl font-semibold">Add an asset</h2>
 
           {rows.map((row, i) => (
@@ -107,7 +107,7 @@ export function AssetsStep({
                 <span className="text-ink-muted">
                   Available: {formatToken(balanceOf(wallet, row.token), row.token)} {row.token}
                 </span>
-                {errors[i] && <span className="text-red-600">{errors[i]}</span>}
+                {errors[i] && <span className="text-red-400">{errors[i]}</span>}
                 {rows.length > 1 && (
                   <button
                     onClick={() => setRows(rows.filter((r) => r.key !== row.key))}
@@ -123,13 +123,13 @@ export function AssetsStep({
           {unusedToken && (
             <button
               onClick={() => setRows([...rows, { key: Date.now(), token: unusedToken, amount: "" }])}
-              className="mt-5 rounded-lg border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch"
+              className="mt-5 rounded-full border border-line bg-surface px-6 py-3 font-semibold text-ink transition hover:border-sketch"
             >
               + Add another asset
             </button>
           )}
 
-          <div className="mt-4 rounded-2xl border border-line bg-seal/40 p-6">
+          <div className="mt-4 rounded-3xl border border-line bg-seal/40 p-6">
             <div className="text-[15px] text-ink-muted">Inside this envelope</div>
             <div className="mt-5 text-3xl font-semibold">{totalText ?? "Nothing yet"}</div>
             <div className="mt-5 text-sm text-ink-muted">Network fee is shown before you send.</div>
@@ -138,14 +138,14 @@ export function AssetsStep({
           <div className="mt-4 flex gap-4">
             <button
               onClick={onBack}
-              className="rounded-lg border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+              className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
             >
               Back
             </button>
             <button
               onClick={onContinue}
               disabled={!canContinue}
-              className="rounded-lg bg-brand px-6 py-3.5 font-semibold text-white transition hover:bg-brand-hover disabled:opacity-50"
+              className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover disabled:opacity-50"
             >
               Continue
             </button>
@@ -153,7 +153,7 @@ export function AssetsStep({
         </div>
       </div>
 
-      <div className="mt-8 rounded-2xl border border-line bg-seal/40 px-6 py-6 text-[15px]">
+      <div className="mt-8 rounded-3xl border border-line bg-seal/40 px-6 py-6 text-[15px]">
         The envelope holds the assets. Sending the envelope also transfers control of everything still inside.
       </div>
     </>

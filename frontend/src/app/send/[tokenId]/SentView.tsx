@@ -23,12 +23,12 @@ export function SentView({
   txHash: string | null;
 }) {
   return (
-    <section className="mx-auto max-w-[1000px] rounded-2xl border border-line bg-surface px-6 py-14 text-center">
+    <section className="mx-auto max-w-[1000px] rounded-3xl border border-line bg-surface px-6 py-14 text-center">
       <p className="text-sm font-semibold uppercase tracking-wide text-brand">Sent ✓</p>
       <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-[42px]">Your Envelope is on its way.</h1>
       <p className="mt-6 text-lg text-ink-muted">A new chapter starts with {displayName(to)}.</p>
 
-      <EnvelopeIllustration className="mx-auto mt-2 w-full max-w-[360px]" />
+      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-2 w-full max-w-[360px]" />
       <h2 className="mt-6 text-3xl font-semibold">{envelopeTitle(envelope)}</h2>
       <div className="mt-5 text-sm font-semibold uppercase tracking-wide text-brand">
         {RARITY_LABEL[envelope.rarity]}
@@ -44,19 +44,19 @@ export function SentView({
       <div className="mt-6 flex flex-wrap justify-center gap-4">
         <Link
           href={`/envelopes/${envelope.token_id}`}
-          className="rounded-lg bg-brand px-6 py-3.5 font-semibold text-white transition hover:bg-brand-hover"
+          className="rounded-full bg-brand shadow-[0_0_32px_-8px_var(--color-brand)] px-6 py-3.5 font-semibold text-on-brand transition hover:bg-brand-hover"
         >
           View Envelope
         </Link>
         <Link
           href="/send"
-          className="rounded-lg border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+          className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
         >
           Send Another Envelope
         </Link>
         <Link
           href="/"
-          className="rounded-lg border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
+          className="rounded-full border border-line bg-surface px-6 py-3.5 font-semibold text-ink transition hover:border-sketch"
         >
           Back Home
         </Link>

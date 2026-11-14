@@ -15,8 +15,8 @@ export function EnvelopeSideCard({
   note?: string;
 }) {
   return (
-    <aside className="rounded-2xl border border-line bg-paper p-6 sm:p-7">
-      <EnvelopeIllustration className="w-full" />
+    <aside className="rounded-3xl border border-line bg-paper p-6 sm:p-7">
+      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
       <h2 className="mt-6 text-2xl font-semibold">
         {envelopeName(envelope)} #{envelope.token_id}
       </h2>

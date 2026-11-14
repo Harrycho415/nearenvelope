@@ -14,3 +14,4 @@
 | 8 | 2026-11-10 | 프런트 `near-api-js` 6.x 고정, 트랜잭션 생성은 `@near-js/transactions` | Meteor SDK가 near-api-js ^6을 peer로 요구. 7.x에서 빌드 실패 | 팀 |
 | 9 | 2026-11-10 | `vault.wasm`은 `contracts/res/`에 커밋, envelope `build.rs`가 포함 | 모든 팀원이 vault 빌드 없이 `cargo check` 가능 | 팀 |
 | 10 | 2026-11-13 | 미션 보상은 강화 티켓만, 희귀도는 레벨로만 결정. 여정(소유자 3/5/10명)·신규 유입(`NewConnection`)·니어 행사 코드(`NearEvent`) 미션 추가. 보상은 자동 지급(claim 없음) | 별도 스탬프·배지 축 없이 기존 레벨 체계로 "많은 손을 거친 봉투가 강해진다"를 표현. 행사 코드는 해시만 저장해 백엔드 없이 온체인 검증 | 팀 |
+| 11 | 2026-11-14 | UI 테마를 어두운 배경 + 라임 강조(Clario 템플릿 참고)로 변경. 봉투 그림은 디자인 3 × 희귀도 4 = SVG 12장(`public/designs/`)을 생성해 앱과 NFT 메타데이터 media가 같은 파일을 쓴다 | 강화·희귀도 연출이 잘 보이고 데모 인상이 강함. 비어 있던 `public/designs/`로 NFT 이미지가 깨지던 문제 해결 | 팀 |

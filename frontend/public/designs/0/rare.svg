@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 230" role="img" aria-label="Envelope">
+<defs>
+<linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f1f1f"/><stop offset="1" stop-color="#111111"/></linearGradient>
+<radialGradient id="seal" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/><stop offset="0.45" stop-color="#4da3ff"/><stop offset="1" stop-color="#4da3ff" stop-opacity="0.75"/></radialGradient>
+<filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<rect x="25" y="25" width="290" height="180" rx="16" fill="none" stroke="#4da3ff" stroke-width="6" opacity="0.45" filter="url(#glow)"/>
+<rect x="25" y="25" width="290" height="180" rx="16" fill="url(#body)" stroke="#4a4a4a" stroke-width="2"/>
+<g fill="none" stroke="#5c5c5c" stroke-width="2.2" stroke-linecap="round">
+<path d="M29 33 L152 120 M311 33 L188 120"/>
+<path d="M29 199 L125 117 M311 199 L215 117"/>
+</g>
+<rect x="26" y="26" width="288" height="178" rx="15" fill="none" stroke="#4da3ff" stroke-opacity="0.45" stroke-width="1.5"/>
+<circle cx="170" cy="124" r="19" fill="url(#seal)" stroke="#111111" stroke-width="2"/>
+<circle cx="170" cy="124" r="11" fill="none" stroke="#000" stroke-opacity="0.25" stroke-width="1.5"/>
+
+</svg>

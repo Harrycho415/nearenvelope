@@ -46,7 +46,7 @@ export function EventCard({
   }
 
   return (
-    <article className="flex flex-col rounded-2xl border border-line bg-surface p-6">
+    <article className="flex flex-col rounded-3xl border border-line bg-surface p-6">
       <div className="flex items-start justify-between gap-3">
         <h3 className="text-xl font-semibold">{event.name}</h3>
         {redeemed && (
@@ -89,7 +89,7 @@ export function EventCard({
         </form>
       )}
       {error && (
-        <p role="alert" className="mt-3 text-sm text-red-600">
+        <p role="alert" className="mt-3 text-sm text-red-400">
           {error}
         </p>
       )}

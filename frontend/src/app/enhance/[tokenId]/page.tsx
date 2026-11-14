@@ -57,7 +57,7 @@ export default function EnhancePage() {
   if (!ready || (accountId && loaded === null)) {
     return (
       <Frame>
-        <div className="mx-auto h-[640px] max-w-[1020px] animate-pulse rounded-2xl border border-line bg-surface" />
+        <div className="mx-auto h-[640px] max-w-[1020px] animate-pulse rounded-3xl border border-line bg-surface" />
       </Frame>
     );
   }
@@ -112,16 +112,16 @@ export default function EnhancePage() {
 
   return (
     <Frame>
-      <section className="mx-auto max-w-[1020px] rounded-2xl border border-line bg-surface px-6 py-12 text-center sm:px-16">
+      <section className="mx-auto max-w-[1020px] rounded-3xl border border-line bg-surface px-6 py-12 text-center sm:px-16">
         <div className="text-sm font-semibold uppercase tracking-wide text-ink-muted">Enhance</div>
         <h1 className="mt-6 text-3xl font-semibold tracking-tight sm:text-[38px]">
           {envelopeName(envelope)} #{envelope.token_id}
         </h1>
-        <EnvelopeIllustration className="mx-auto mt-6 w-[260px] sm:w-[340px]" />
+        <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-6 w-[260px] sm:w-[340px]" />
         <div className="mt-6 text-5xl font-semibold">+{envelope.level}</div>
         <div className="mt-4 text-xl font-semibold uppercase text-brand">{RARITY_LABEL[envelope.rarity]}</div>
 
-        <div className="mx-auto mt-6 grid max-w-[760px] gap-4 rounded-2xl border border-line bg-seal/40 px-6 py-5 text-left text-[17px] sm:grid-cols-2 sm:gap-10">
+        <div className="mx-auto mt-6 grid max-w-[760px] gap-4 rounded-3xl border border-line bg-seal/40 px-6 py-5 text-left text-[17px] sm:grid-cols-2 sm:gap-10">
           <div>
             <div>Success chance</div>
             <div className="mt-1 font-semibold">
@@ -156,7 +156,7 @@ export default function EnhancePage() {
         </div>
         {!isOwner && <p className="mt-4 text-sm text-ink-muted">Only the current owner can enhance this Envelope.</p>}
         {error && (
-          <p role="alert" className="mt-4 text-sm text-red-600">
+          <p role="alert" className="mt-4 text-sm text-red-400">
             {error}
           </p>
         )}

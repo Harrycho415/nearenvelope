@@ -11,8 +11,8 @@ import { BUTTON_PRIMARY, envelopeName } from "../../_components/shared";
 
 export function EnvelopeHero({ envelope, isOwner }: { envelope: EnvelopeView; isOwner: boolean }) {
   return (
-    <section className="flex flex-col gap-6 rounded-2xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:gap-9 sm:p-7">
-      <EnvelopeIllustration className="w-full max-w-[250px] shrink-0" />
+    <section className="flex flex-col gap-6 rounded-3xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:gap-9 sm:p-7">
+      <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full max-w-[250px] shrink-0" />
 
       <div className="min-w-0 flex-1">
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">

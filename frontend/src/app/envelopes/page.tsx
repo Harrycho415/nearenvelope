@@ -107,7 +107,7 @@ export default function MyEnvelopesPage() {
       <div
         role="tablist"
         aria-label="Filter envelopes"
-        className="mt-9 flex gap-6 overflow-x-auto rounded-2xl border border-line bg-surface px-5 py-5 sm:gap-10"
+        className="mt-9 flex gap-6 overflow-x-auto rounded-3xl border border-line bg-surface px-5 py-5 sm:gap-10"
       >
         {FILTERS.map(({ id, label, match }) => (
           <button
@@ -128,7 +128,7 @@ export default function MyEnvelopesPage() {
       <div role="tabpanel" className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {!ready || (accountId && envelopes === null) ? (
           Array.from({ length: 3 }, (_, i) => (
-            <div key={i} className="h-[496px] animate-pulse rounded-2xl border border-line bg-surface" />
+            <div key={i} className="h-[496px] animate-pulse rounded-3xl border border-line bg-surface" />
           ))
         ) : !accountId ? (
           <Wide>
@@ -162,7 +162,7 @@ export default function MyEnvelopesPage() {
         )}
       </div>
 
-      <section className="mt-8 rounded-2xl border border-line bg-seal/40 p-6">
+      <section className="mt-8 rounded-3xl border border-line bg-seal/40 p-6">
         <h2 className="text-[22px] font-semibold">Every envelope is yours to keep or pass on.</h2>
         <p className="mt-5 text-[15px] leading-relaxed text-ink-muted">
           Sending an envelope transfers ownership and control of the assets still inside. Received and Created show

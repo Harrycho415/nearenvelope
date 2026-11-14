@@ -18,9 +18,9 @@ const NAV = [
 
 export function SiteHeader() {
   return (
-    <header className="bg-surface">
+    <header className="sticky top-0 z-40 border-b border-line/70 bg-canvas/80 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-[1312px] items-center gap-12 px-6 sm:px-16">
-        <Link href="/" className="text-[22px] font-semibold tracking-tight text-ink">
+        <Link href="/" className="whitespace-nowrap text-xl font-semibold tracking-tight text-ink sm:text-[22px]">
           NEAR Envelope
         </Link>
         <nav className="hidden flex-1 gap-8 md:flex">
