@@ -4,7 +4,7 @@
 // 소유자: C
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { displayName, type EnvelopeView } from "@/lib/near";
 
 import { envelopeTitle, StepHeader } from "./shared";
@@ -44,7 +44,7 @@ export function PreviewStep({
         <div className="rounded-3xl border border-line bg-paper p-10 text-center">
           <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
           <h3 className="mt-8 text-3xl font-semibold">{envelopeTitle(envelope)}</h3>
-          <div className="mt-5 text-sm font-semibold uppercase tracking-wide text-brand">
+          <div className={`mt-5 text-sm font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
             {RARITY_LABEL[envelope.rarity]}
           </div>
           <p className="mt-6 text-left text-[15px] text-ink-muted">

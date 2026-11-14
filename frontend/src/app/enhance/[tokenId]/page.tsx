@@ -9,7 +9,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { useNear, type EnvelopeView } from "@/lib/near";
 
 import {
@@ -119,7 +119,7 @@ export default function EnhancePage() {
         </h1>
         <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="mx-auto mt-6 w-[260px] sm:w-[340px]" />
         <div className="mt-6 text-5xl font-semibold">+{envelope.level}</div>
-        <div className="mt-4 text-xl font-semibold uppercase text-brand">{RARITY_LABEL[envelope.rarity]}</div>
+        <div className={`mt-4 text-xl font-semibold uppercase ${RARITY_TEXT[envelope.rarity]}`}>{RARITY_LABEL[envelope.rarity]}</div>
 
         <div className="mx-auto mt-6 grid max-w-[760px] gap-4 rounded-3xl border border-line bg-seal/40 px-6 py-5 text-left text-[17px] sm:grid-cols-2 sm:gap-10">
           <div>

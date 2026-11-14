@@ -10,7 +10,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { useNear, type EnvelopeView, type NearEventView } from "@/lib/near";
 
 import {
@@ -186,7 +186,7 @@ function MissionBoard({
                     {envelopeName(e)} +{e.level}
                   </span>
                   <span className="mt-1 block text-sm text-ink-muted">
-                    {RARITY_LABEL[e.rarity]} · #{e.token_id}
+                    <span className={RARITY_TEXT[e.rarity]}>{RARITY_LABEL[e.rarity]}</span> · #{e.token_id}
                   </span>
                   <span className="mt-1 block text-sm font-medium text-brand">
                     {attemptsText(e.enhance_tickets)}
@@ -204,7 +204,7 @@ function MissionBoard({
           <h2 className="text-2xl font-semibold">
             {label} +{selected.level}
           </h2>
-          <div className="mt-1 text-ink-muted">{RARITY_LABEL[selected.rarity]}</div>
+          <div className={`mt-1 ${RARITY_TEXT[selected.rarity]}`}>{RARITY_LABEL[selected.rarity]}</div>
           <div className="mt-2 font-semibold text-brand">{attemptsText(selected.enhance_tickets)} ready</div>
         </div>
         {selected.enhance_tickets > 0 && selected.level < 10 ? (

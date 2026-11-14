@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import { displayName, type EnvelopeView } from "@/lib/near";
 
-import { designName, RARITY_LABEL } from "./designs";
+import { designName, RARITY_LABEL, RARITY_TEXT } from "./designs";
 import { EnvelopeIllustration } from "./EnvelopeIllustration";
 
 export function ReceivedEnvelopeCard({ envelope, opened }: { envelope: EnvelopeView; opened: boolean }) {
@@ -21,7 +21,7 @@ export function ReceivedEnvelopeCard({ envelope, opened }: { envelope: EnvelopeV
         <div className="truncate text-[17px] font-semibold">
           {designName(envelope.design)} Envelope +{envelope.level}
         </div>
-        <div className="mt-2 text-[13px] font-medium text-brand">{RARITY_LABEL[envelope.rarity]}</div>
+        <div className={`mt-2 text-[13px] font-medium ${RARITY_TEXT[envelope.rarity]}`}>{RARITY_LABEL[envelope.rarity]}</div>
         <div className="mt-2 truncate text-sm text-ink-muted">
           {from ? `From ${displayName(from)}` : "Minted by you"} · {opened ? "Opened" : "Unopened"}
         </div>

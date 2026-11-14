@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react";
 
 import { EnvelopeIllustration } from "@/components/envelope/EnvelopeIllustration";
-import { RARITY_LABEL } from "@/components/envelope/designs";
+import { RARITY_LABEL, RARITY_TEXT } from "@/components/envelope/designs";
 import { displayName, isValidAccountId, NETWORK, useNear, type EnvelopeView } from "@/lib/near";
 
 import { envelopeTitle, StepHeader } from "./shared";
@@ -117,7 +117,7 @@ export function RecipientStep({
         <div className="rounded-3xl border border-line bg-paper p-7">
           <EnvelopeIllustration design={envelope.design} rarity={envelope.rarity} className="w-full" />
           <h3 className="mt-6 text-2xl font-semibold">{envelopeTitle(envelope)}</h3>
-          <div className="mt-4 text-xs font-semibold uppercase tracking-wide text-brand">
+          <div className={`mt-4 text-xs font-semibold uppercase tracking-wide ${RARITY_TEXT[envelope.rarity]}`}>
             {RARITY_LABEL[envelope.rarity]}
           </div>
           <div className="mt-6 text-xl">Inside: {totalText ?? "Nothing"}</div>
