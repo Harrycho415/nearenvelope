@@ -6,7 +6,14 @@ import { actionCreators } from "@near-js/transactions";
 
 import { FT_CONTRACT_ID, GAS_TGAS, NFT_CONTRACT_ID, ONE_YOCTO, RPC_URL } from "./config";
 import { nearToYocto } from "./format";
-import type { ContractConfig, EnhanceResult, EnvelopeApi, EnvelopeView, NearEventView } from "./types";
+import type {
+  AddAssetsParams,
+  ContractConfig,
+  EnhanceResult,
+  EnvelopeApi,
+  EnvelopeView,
+  NearEventView,
+} from "./types";
 
 const TGAS = BigInt(10 ** 12);
 const STORAGE_PRICE_PER_BYTE = BigInt(10 ** 19);
@@ -197,42 +204,14 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
         GAS_TGAS.redeemNearEvent,
       );
     },
+    addAssets: async (params) => {
+      if (!wallet) throw new Error("Wallet not connected");
+      const transactions = await fillTransactions(params);
+      if (transactions.length) await wallet.signAndSendTransactions({ transactions });
+    },
     sealAndSend: async ({ tokenId, vaultId, near, usdc, receiverId, message }) => {
       if (!wallet) throw new Error("Wallet not connected");
-      const addNear = BigInt(near) > BigInt(0);
-      const addUsdc = BigInt(usdc) > BigInt(0);
-
-      // 1) NFT 컨트랙트: fill, (필요하면) register_ft
-      const prepare = [];
-      if (addNear) prepare.push(functionCall("fill", { token_id: tokenId }, GAS_TGAS.fill, near));
-      if (addUsdc) {
-        const registered = await viewCall<unknown>(FT_CONTRACT_ID, "storage_balance_of", {
-          account_id: vaultId,
-        }).catch(() => null);
-        if (!registered) {
-          const { ft_storage_deposit } = await config();
-          prepare.push(
-            functionCall(
-              "register_ft",
-              { token_id: tokenId, ft_contract_id: FT_CONTRACT_ID },
-              GAS_TGAS.registerFt,
-              ft_storage_deposit,
-            ),
-          );
-        }
-      }
-
-      const transactions = [];
-      if (prepare.length) transactions.push({ receiverId: NFT_CONTRACT_ID, actions: prepare });
-      // 2) FT 컨트랙트: Vault로 ft_transfer_call
-      if (addUsdc) {
-        transactions.push({
-          receiverId: FT_CONTRACT_ID,
-          actions: [
-            functionCall("ft_transfer_call", { receiver_id: vaultId, amount: usdc, msg: "" }, GAS_TGAS.fillFt, ONE_YOCTO),
-          ],
-        });
-      }
+      const transactions = await fillTransactions({ tokenId, vaultId, near, usdc });
       // 3) 전송
       transactions.push({
         receiverId: NFT_CONTRACT_ID,
@@ -250,4 +229,43 @@ export function createContractApi(wallet: Wallet | null): EnvelopeApi {
       return outcomes?.at(-1)?.transaction_outcome.id ?? null;
     },
   };
+
+  /** 채우기 트랜잭션: NFT 컨트랙트 fill·register_ft → FT 컨트랙트 ft_transfer_call. 넣을 것이 없으면 빈 배열 */
+  async function fillTransactions({ tokenId, vaultId, near, usdc }: AddAssetsParams) {
+    const addNear = BigInt(near) > BigInt(0);
+    const addUsdc = BigInt(usdc) > BigInt(0);
+
+    // 1) NFT 컨트랙트: fill, (필요하면) register_ft
+    const prepare = [];
+    if (addNear) prepare.push(functionCall("fill", { token_id: tokenId }, GAS_TGAS.fill, near));
+    if (addUsdc) {
+      const registered = await viewCall<unknown>(FT_CONTRACT_ID, "storage_balance_of", {
+        account_id: vaultId,
+      }).catch(() => null);
+      if (!registered) {
+        const { ft_storage_deposit } = await config();
+        prepare.push(
+          functionCall(
+            "register_ft",
+            { token_id: tokenId, ft_contract_id: FT_CONTRACT_ID },
+            GAS_TGAS.registerFt,
+            ft_storage_deposit,
+          ),
+        );
+      }
+    }
+
+    const transactions = [];
+    if (prepare.length) transactions.push({ receiverId: NFT_CONTRACT_ID, actions: prepare });
+    // 2) FT 컨트랙트: Vault로 ft_transfer_call
+    if (addUsdc) {
+      transactions.push({
+        receiverId: FT_CONTRACT_ID,
+        actions: [
+          functionCall("ft_transfer_call", { receiver_id: vaultId, amount: usdc, msg: "" }, GAS_TGAS.fillFt, ONE_YOCTO),
+        ],
+      });
+    }
+    return transactions;
+  }
 }

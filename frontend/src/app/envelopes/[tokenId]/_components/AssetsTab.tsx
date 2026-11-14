@@ -1,5 +1,5 @@
-// Assets 탭: Vault 잔액 (api.vaultBalances). Withdraw는 출금 화면(/envelopes/[tokenId]/withdraw)으로 이동.
-// 채우기(Add Assets)는 아직 연결하지 않아 비활성으로 둔다.
+// Assets 탭: Vault 잔액 (api.vaultBalances).
+// Add Assets는 채우기 화면(/envelopes/[tokenId]/add, 누구나), Withdraw는 출금 화면(/envelopes/[tokenId]/withdraw, 소유자만)으로 이동.
 // 소유자: C
 
 import Link from "next/link";
@@ -40,9 +40,9 @@ export function AssetsTab({
             <p className="mt-3 text-[15px] text-ink-muted">These assets belong to the current envelope owner.</p>
           </div>
           <div className="flex gap-4">
-            <button disabled title="Coming soon" className={BUTTON_SECONDARY}>
+            <Link href={`/envelopes/${tokenId}/add`} className={BUTTON_SECONDARY}>
               Add Assets
-            </button>
+            </Link>
             {isOwner && (
               <Link href={`/envelopes/${tokenId}/withdraw`} className={BUTTON_SECONDARY}>
                 Withdraw
