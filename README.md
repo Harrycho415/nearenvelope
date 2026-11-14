@@ -5,6 +5,7 @@ Gift crypto inside an NFT that owns its own NEAR account. Whoever holds the enve
 Built at NEAR HACKATHON · Track: **NFTs That Do Something** (`nfts`)
 
 - Network: NEAR **testnet** · contracts deployed at [`nearenvelope.testnet`](#deployed-contracts-testnet)
+- Live demo: **https://nearenvelope.vercel.app** (testnet)
 - Try it: [step by step on testnet](#try-it-testnet) or [run it locally](#run-locally)
 - Demo video (X): https://x.com/suhyuncho415/status/2121641810443555315
 
@@ -34,7 +35,7 @@ Each envelope is an NFT with its own NEAR account (a "vault") holding the gift:
 
 ## Try it (testnet)
 
-You need a [Meteor wallet](https://wallet.meteorwallet.app) testnet account with ~5 NEAR (free from [near-faucet.io](https://near-faucet.io)). To see the ownership transfer, use **two** accounts (A and B).
+Open **https://nearenvelope.vercel.app** (or [run it locally](#run-locally)). You need a [Meteor wallet](https://wallet.meteorwallet.app) testnet account with ~5 NEAR (free from [near-faucet.io](https://near-faucet.io)). To see the ownership transfer, use **two** accounts (A and B).
 
 Each step is "do X → see Y".
 
@@ -135,7 +136,7 @@ Rewards are enhancement attempts, stored on the envelope and granted automatical
 - **Enhancement randomness** uses the block random seed mixed with the token ID and attempt count. It's fine for a demo but a validator could bias it; a VRF would be needed on mainnet.
 - **Journey missions can be farmed** by passing an envelope between your own accounts. Each mission pays once per envelope.
 - **Locking assets while an envelope is listed for sale** (approval) is not implemented, so a seller could withdraw before a marketplace sale completes.
-- **NFT images in external wallets**: the contract's `base_uri` is not set, so the relative `media` path (`designs/{design}/{rarity}.svg`) only resolves inside this app. Setting it needs a hosted frontend.
+- **NFT images in external wallets**: the contract's `base_uri` is not set, so the relative `media` path (`designs/{design}/{rarity}.svg`) only resolves inside this app. Pointing it at the hosted app needs a contract update (there is no `base_uri` setter yet).
 
 ## Roadmap
 
