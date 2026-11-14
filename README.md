@@ -155,7 +155,11 @@ All code was written during the hackathon window (first commit 2026-11-10).
 ## Team
 
 **blockblock yonsei**
-<!-- Add members and roles here. -->
+
+- Harrycho415
+- cheolwoo
+- Iris1485
+- Chanju Ahn
 
 ## License
 
