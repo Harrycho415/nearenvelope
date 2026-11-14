@@ -1,7 +1,7 @@
 "use client";
 
 // 강화: 결과 쿼리(?result=…)가 있으면 성공/실패 화면, 없으면 강화 버튼이 있는 화면.
-// 미션 화면의 Enhance Envelope 버튼은 강화를 실행한 뒤 결과 쿼리와 함께 이 화면으로 온다.
+// 미션 화면·봉투 상세의 Enhance는 결과 없이 이 화면으로 와서, 확률과 남은 기회를 본 뒤 강화한다.
 // 소유자: D
 
 import Link from "next/link";

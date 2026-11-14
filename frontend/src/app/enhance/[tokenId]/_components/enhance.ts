@@ -1,6 +1,6 @@
 "use client";
 
-// 강화 실행과 결과 URL. 미션 화면의 Enhance Envelope 버튼과 결과 화면의 Try Again이 함께 쓴다.
+// 강화 실행과 결과 URL. 강화 화면의 Enhance Envelope 버튼과 결과 화면의 Try Again이 함께 쓴다.
 // 결과는 `/enhance/[tokenId]?result=success|fail&from=5&to=6&attempts=3`으로 넘긴다 (attempts = 강화 전 남은 기회).
 // 소유자: D
 
