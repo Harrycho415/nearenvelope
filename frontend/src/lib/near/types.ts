@@ -94,6 +94,8 @@ export interface EnvelopeApi {
   walletBalances(accountId: string): Promise<VaultBalances>;
   /** 프런트 전용: 체인에 존재하는 계정인지 */
   accountExists(accountId: string): Promise<boolean>;
+  /** 프런트 전용: Mock USDC faucet (테스트넷 데모용, 최소 단위, 1회 최대 FAUCET_MAX_USDC) */
+  faucet(amount: string): Promise<void>;
 
   mint(design: number): Promise<string | null>;
   fill(tokenId: string, yocto: string): Promise<void>;
